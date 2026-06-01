@@ -1,0 +1,36 @@
+% ============================================================
+% ANEXO Q - TERMO DE INQUIRIÇÃO DE SINDICADO
+% Arquivo: modelos/termo-inquiricao-sindicado.tex
+% ============================================================
+
+\pdfbookmark[1]{Termo de Inquirição de Sindicado \getInqSindicadoNumero}{termo-inquiricao-sindicado-\getInqSindicadoNumero}
+
+\ValidarInquiricaoSindicado
+
+\clearpage
+\thispagestyle{empty}
+
+\cabecalhoInstitucional
+
+\vspace{2.2cm}
+
+\begin{center}
+    \textbf{TERMO DE INQUIRIÇÃO DE SINDICADO}\\
+    (Sindicância NUP: \getNup)
+\end{center}
+
+\vspace{2em}
+
+\begingroup
+\setlength{\parindent}{0pt}%
+\setlength{\parskip}{0pt}%
+\noindent Aos \getInqSindicadoDataAta, nesta cidade de \getCidade, no(a) \getLocalInquiricao, compareceu o sindicado, \getSindicadoNome, \getSindicadoPosto\SeCampoPreenchido{sindicadoNascimento}{, nascido em \getSindicadoNascimento}\SeCampoPreenchido{sindicadoNaturalidade}{, natural de \getSindicadoNaturalidade}\SeCampoPreenchido{sindicadoEstadoCivil}{, \getSindicadoEstadoCivil}\SeCampoPreenchido{sindicadoFiliacao}{, filho de \getSindicadoFiliacao}\SeCampoPreenchido{sindicadoResidencia}{, residente na \getSindicadoResidencia}\SeCampoPreenchido{sindicadoCelular}{, celular: \getSindicadoCelular}\SeCampoPreenchido{sindicadoIdentidade}{, identidade nº \getSindicadoIdentidade}\SeCampoPreenchido{sindicadoCPF}{, CPF \getSindicadoCPF}, o qual, interrogado pelo sindicante sobre os fatos constantes da \getInqSindicadoDocumentoBase\SeCampoPreenchido{inqSindicadoFls}{, de fls. \getInqSindicadoFls}, que lhe foi lida, respondeu que \getInqSindicadoRespostaConhecimento; \getInqSindicadoRelato\getInqSindicadoPerguntas\PergResp{tem algo mais a declarar}{\getInqSindicadoAlgoMais}E como nada mais disse, nem lhe foi perguntado, concedo ao sindicado, a contar desta data, o prazo de \getInqSindicadoPrazoDefesa\ para apresentar defesa prévia, arrolar testemunhas, juntar documentos e requerer o que julgar de direito; e dou por encerrada a presente inquirição, iniciada às \getHoraInicioInquiricao\ e terminada às \getHoraFimInquiricao, que, depois de lida e achada conforme, vai devidamente assinada pelo sindicante, sindicado\SeCampoPreenchido{advogadoNome}{, advogado}\SeCampoPreenchido{testemunhaInquiricaoNome}{ e testemunha que presenciou a inquirição}.
+\par
+\endgroup
+
+\assinaturaCentral{\getSindicanteNome\ -- \getSindicantePosto}{Sindicante}
+\assinaturaCentral{\getSindicadoNome\ -- \getSindicadoPosto}{Sindicado}
+\SeCampoPreenchido{advogadoNome}{\assinaturaCentral{\getAdvogadoNome}{\getAdvogadoOAB}}
+\SeCampoPreenchido{testemunhaInquiricaoNome}{\assinaturaCentral{\getTestemunhaInquiricaoNome\SeCampoPreenchido{testemunhaInquiricaoPosto}{ -- \getTestemunhaInquiricaoPosto}}{Testemunha da inquirição}}
+
+\clearpage

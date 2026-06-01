@@ -1,0 +1,216 @@
+% ============================================================
+% MAIN DE TESTE COMPLETO - TODOS OS ANEXOS C A Y
+% Arquivo: main_todos_anexos_v2_2.tex
+%
+% Objetivo:
+% Compilar uma sindicância fake com TODOS os modelos oficiais
+% já criados no projeto v2.2, deixando todos os anexos
+% descomentados para teste integral.
+%
+% Atenção, porque aparentemente até um teste precisa de logística:
+% - Este main espera que TODOS os arquivos de dados existam em dados/.
+% - Este main espera que documentos/docjuntada1.pdf exista.
+% - Os anexos A, B, Z e AA não entram, conforme definido.
+% - Os modelos genéricos diex.tex e oficio.tex NÃO entram aqui,
+%   porque não são anexos oficiais específicos C-Y.
+% ============================================================
+
+\documentclass{sindicancia}
+
+% ------------------------------------------------------------
+% DADOS GERAIS DA SINDICÂNCIA
+% ------------------------------------------------------------
+\input{dados/dados-sindicancia.tex}
+
+\begin{document}
+
+% ============================================================
+% 1. MEDIDAS INICIAIS
+% ============================================================
+
+% ------------------------------------------------------------
+% ANEXO C - CAPA DOS AUTOS
+% ------------------------------------------------------------
+\input{dados/dados-anexo-c-capa.tex}
+\GerarDocumento{capa}
+
+
+% ------------------------------------------------------------
+% ANEXO D - TERMO DE ABERTURA
+% ------------------------------------------------------------
+\input{dados/dados-anexo-d-termo-abertura.tex}
+\GerarDocumento{termo-abertura}
+
+
+% ------------------------------------------------------------
+% ANEXO E - JUNTADA INICIAL
+% Também usa o mesmo modelo do Anexo L.
+% Requer:
+%   documentos/docjuntada1.pdf
+% ------------------------------------------------------------
+\input{dados/dados-anexo-e-l-juntada1.tex}
+\GerarDocumento{juntada}
+
+
+% ============================================================
+% 2. ESCRIVÃO, SE HOUVER
+% ============================================================
+
+% ------------------------------------------------------------
+% ANEXO F - DESIGNAÇÃO DE ESCRIVÃO
+% ------------------------------------------------------------
+\input{dados/dados-anexo-f-designacao-escrivao.tex}
+\GerarDocumento{designacao-escrivao}
+
+
+% ------------------------------------------------------------
+% ANEXO G - COMPROMISSO DE ESCRIVÃO
+% ------------------------------------------------------------
+\input{dados/dados-anexo-g-compromisso-escrivao.tex}
+\GerarDocumento{compromisso-escrivao}
+
+
+% ============================================================
+% 3. DESPACHOS E NOTIFICAÇÕES INICIAIS
+% ============================================================
+
+% ------------------------------------------------------------
+% ANEXO H - DESPACHO
+% ------------------------------------------------------------
+\input{dados/dados-anexo-h-despacho1.tex}
+\GerarDocumento{despacho}
+
+
+% ------------------------------------------------------------
+% ANEXO I - NOTIFICAÇÃO PRÉVIA
+% ------------------------------------------------------------
+\input{dados/dados-anexo-i-notificacao-previa1.tex}
+\GerarDocumento{notificacao-previa}
+
+
+% ------------------------------------------------------------
+% ANEXO J - NOTIFICAÇÃO DE ENVOLVIDO QUE PASSA À CONDIÇÃO DE SINDICADO
+% ------------------------------------------------------------
+\input{dados/dados-anexo-j-notificacao-novo-sindicado.tex}
+\GerarDocumento{notificacao-novo-sindicado}
+
+
+% ------------------------------------------------------------
+% ANEXO K - NOTIFICAÇÃO DE DILIGÊNCIAS COMPLEMENTARES
+% ------------------------------------------------------------
+\input{dados/dados-anexo-k-notificacao-diligencias-complementares.tex}
+\GerarDocumento{notificacao-diligencias-complementares}
+
+
+% ============================================================
+% 4. DOCUMENTOS DE COMPARECIMENTO E CARTA PRECATÓRIA
+% ============================================================
+
+% ------------------------------------------------------------
+% ANEXO M - DOCUMENTO PARA COMPARECIMENTO DE SINDICADO
+% ------------------------------------------------------------
+\input{dados/dados-anexo-m-comparecimento-sindicado.tex}
+\GerarDocumento{comparecimento-sindicado}
+
+
+% ------------------------------------------------------------
+% ANEXO N - DOCUMENTO PARA COMPARECIMENTO DE TESTEMUNHA
+% ------------------------------------------------------------
+\input{dados/dados-anexo-n-comparecimento-testemunha.tex}
+\GerarDocumento{comparecimento-testemunha}
+
+
+% ------------------------------------------------------------
+% ANEXO O - CARTA PRECATÓRIA
+% ------------------------------------------------------------
+\input{dados/dados-anexo-o-carta-precatoria1.tex}
+\GerarDocumento{carta-precatoria}
+
+
+% ============================================================
+% 5. TERMOS DE INQUIRIÇÃO E ACAREAÇÃO
+% ============================================================
+
+% ------------------------------------------------------------
+% ANEXO P - TERMO DE INQUIRIÇÃO DE TESTEMUNHA
+% ------------------------------------------------------------
+\input{dados/dados-anexo-p-inquiricao-testemunha1.tex}
+\GerarDocumento{termo-inquiricao-testemunha}
+
+
+% ------------------------------------------------------------
+% ANEXO Q - TERMO DE INQUIRIÇÃO DE SINDICADO
+% ------------------------------------------------------------
+\input{dados/dados-anexo-q-inquiricao-sindicado1.tex}
+\GerarDocumento{termo-inquiricao-sindicado}
+
+
+% ------------------------------------------------------------
+% ANEXO S - TERMO DE ACAREAÇÃO
+% ------------------------------------------------------------
+\input{dados/dados-anexo-s-acareacao.tex}
+\GerarDocumento{acareacao}
+
+
+% ============================================================
+% 6. SUBSTITUIÇÃO EVENTUAL DE SINDICANTE
+% ============================================================
+
+% ------------------------------------------------------------
+% ANEXO R - SUBSTITUIÇÃO DE SINDICANTE
+% ------------------------------------------------------------
+\input{dados/dados-anexo-r-substituicao-sindicante.tex}
+\GerarDocumento{substituicao-sindicante}
+
+
+% ============================================================
+% 7. ENCERRAMENTO DA INSTRUÇÃO E ALEGAÇÕES FINAIS
+% ============================================================
+
+% ------------------------------------------------------------
+% ANEXO T - TERMO DE ENCERRAMENTO DE INSTRUÇÃO
+% ------------------------------------------------------------
+\input{dados/dados-anexo-t-encerramento-instrucao.tex}
+\GerarDocumento{termo-encerramento-instrucao}
+
+
+% ------------------------------------------------------------
+% ANEXO U - VISTA PARA ALEGAÇÕES FINAIS
+% ------------------------------------------------------------
+\input{dados/dados-anexo-u-vista-alegacoes-finais.tex}
+\GerarDocumento{vista-alegacoes-finais}
+
+
+% ============================================================
+% 8. CERTIDÃO, RELATÓRIO, ENCERRAMENTO E REMESSA
+% ============================================================
+
+% ------------------------------------------------------------
+% ANEXO V - CERTIDÃO
+% ------------------------------------------------------------
+\input{dados/dados-anexo-v-certidao.tex}
+\GerarDocumento{certidao}
+
+
+% ------------------------------------------------------------
+% ANEXO W - RELATÓRIO
+% ------------------------------------------------------------
+\input{dados/dados-anexo-w-relatorio.tex}
+\GerarDocumento{relatorio}
+
+
+% ------------------------------------------------------------
+% ANEXO X - TERMO DE ENCERRAMENTO
+% ------------------------------------------------------------
+\input{dados/dados-anexo-x-termo-encerramento.tex}
+\GerarDocumento{termo-encerramento}
+
+
+% ------------------------------------------------------------
+% ANEXO Y - DIEx DE REMESSA
+% ------------------------------------------------------------
+\input{dados/dados-anexo-y-diex-remessa.tex}
+\GerarDocumento{diex-remessa}
+
+
+\end{document}

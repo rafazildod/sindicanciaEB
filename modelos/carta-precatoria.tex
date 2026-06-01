@@ -1,0 +1,71 @@
+% ============================================================
+% ANEXO O - CARTA PRECATÓRIA
+% Arquivo: modelos/carta-precatoria.tex
+% Observação: conforme o anexo oficial, a carta precatória é expedida em DIEx.
+% ============================================================
+
+\pdfbookmark[1]{Carta Precatória \getCartaPrecatoriaNumero}{carta-precatoria-\getCartaPrecatoriaNumero}
+
+\ValidarCartaPrecatoria
+
+\clearpage
+\thispagestyle{empty}
+
+\cabecalhoInstitucional
+
+\vspace{0.8em}
+
+\noindent\textbf{DIEx nº \getCartaPrecatoriaNumero\ -- Sindicante}
+
+\vspace{0.5em}
+
+\noindent\textbf{EB:} \getNup
+
+\vspace{1em}
+
+\begin{flushright}
+\SeCampoPreenchido{cartaPrecatoriaLocalData}{\getCartaPrecatoriaLocalData}%
+\SeCampoVazio{cartaPrecatoriaLocalData}{\localData}%
+\end{flushright}
+
+\vspace{1em}
+
+\noindent\textbf{Do} \getSindicantePosto\ \getSindicanteNome
+
+\noindent\textbf{Ao Sr.} \getCartaPrecatoriaAutoridadeDeprecada
+
+\vspace{0.5em}
+
+\noindent\textbf{Assunto:} \getCartaPrecatoriaAssunto
+
+\SeCampoPreenchido{cartaPrecatoriaAnexos}{\noindent\textbf{Anexo:} \getCartaPrecatoriaAnexos\par}
+
+\vspace{1em}
+
+\begin{enumerate}
+  \item Versa a presente sindicância sobre \getObjeto, instaurada por intermédio da \getPortaria.
+
+  \item Solicito a Vossa Senhoria que proceda à \getCartaPrecatoriaFinalidade\ de \getCartaPrecatoriaPessoaOuvida\SeCampoPreenchido{cartaPrecatoriaQualificacaoPessoa}{, \getCartaPrecatoriaQualificacaoPessoa}, a fim de instruir a presente sindicância.
+
+  \item Para orientação do ato, seguem abaixo os quesitos a serem formulados:
+\end{enumerate}
+
+\begin{enumerate}
+\getCartaPrecatoriaQuesitos
+\end{enumerate}
+
+\SeCampoPreenchido{cartaPrecatoriaTextoComplementar}{%
+\vspace{0.8em}
+\getCartaPrecatoriaTextoComplementar
+}
+
+\vspace{0.8em}
+
+\begin{enumerate}
+  \setcounter{enumi}{3}
+  \item Após o cumprimento da presente carta precatória, solicito que o respectivo termo, acompanhado de eventuais documentos produzidos ou apresentados, seja restituído a este sindicante, para juntada aos autos.
+\end{enumerate}
+
+\assinaturaSindicante
+
+\clearpage

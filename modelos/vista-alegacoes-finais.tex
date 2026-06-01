@@ -1,0 +1,67 @@
+% ============================================================
+% ANEXO U - VISTA AO SINDICADO PARA ALEGAÇÕES FINAIS
+% Arquivo: modelos/vista-alegacoes-finais.tex
+% ============================================================
+
+\pdfbookmark[1]{Vista para Alegações Finais \getVistaAlegacoesNumero}{vista-alegacoes-finais-\getVistaAlegacoesNumero}
+
+\ValidarVistaAlegacoes
+
+\clearpage
+\thispagestyle{empty}
+
+\cabecalhoInstitucional
+
+\vspace{0.8em}
+
+\noindent\textbf{DIEx nº \getVistaAlegacoesNumero\ -- Sindicante}
+
+\vspace{0.5em}
+
+\noindent\textbf{EB:} \getNup
+
+\vspace{1em}
+
+\begin{flushright}
+\SeCampoPreenchido{vistaAlegacoesLocalData}{\getVistaAlegacoesLocalData}%
+\SeCampoVazio{vistaAlegacoesLocalData}{\localData}%
+\end{flushright}
+
+\vspace{1em}
+
+\noindent\textbf{Do} \getSindicantePosto\ \getSindicanteNome
+
+\noindent\textbf{Ao Sr.} \getSindicadoPosto\ \getSindicadoNome
+
+\vspace{0.5em}
+
+\noindent\textbf{Assunto:} vista e apresentação de defesa
+
+\vspace{1em}
+
+\begin{enumerate}
+  \item Notifico Vossa Senhoria para, no prazo de \getVistaAlegacoesPrazo, apresentar alegações finais por escrito, caso queira.
+
+  \item Informo, ainda, que os autos da sindicância encontram-se à sua disposição para vista no \getVistaAlegacoesLocal.
+\end{enumerate}
+
+\SeCampoPreenchido{vistaAlegacoesTextoComplementar}{%
+\vspace{0.6em}
+\getVistaAlegacoesTextoComplementar
+}
+
+\assinaturaSindicante
+
+\vspace{0.8cm}
+
+\noindent Declaro ter ciência do que consta dos autos, bem como do prazo para apresentação das razões de defesa.\\[0.8em]
+\noindent Data: \rule{1.2cm}{0.4pt}/\rule{1.2cm}{0.4pt}/\rule{1.8cm}{0.4pt}
+
+\vspace{1.4cm}
+
+\begin{center}
+\rule{8cm}{0.4pt}\\
+\getSindicadoPosto\ \getSindicadoNome
+\end{center}
+
+\clearpage

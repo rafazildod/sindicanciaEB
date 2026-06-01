@@ -1,0 +1,45 @@
+% ============================================================
+% ANEXO C - CAPA DOS AUTOS
+% Arquivo: modelos/capa.tex
+% ============================================================
+
+\OcultarCaixaFolha
+
+\pdfbookmark[1]{Capa - Autos de Sindicância}{capa-autos}
+
+\CampoObrigatorio{nup}{NUP da sindicância}
+\CampoObrigatorio{sindicanteNome}{nome do sindicante}
+\CampoObrigatorio{sindicantePosto}{posto/graduação do sindicante}
+\CampoObrigatorio{objeto}{objeto da sindicância}
+
+\clearpage
+\thispagestyle{empty}
+
+\cabecalhoInstitucional
+
+\vspace{3.5cm}
+
+\begin{center}
+    \textbf{AUTOS DE SINDICÂNCIA}
+\end{center}
+
+\vspace{3em}
+
+\noindent\textbf{NUP (NÚMERO ÚNICO DE PROTOCOLO):} \getNup
+
+\vspace{3em}
+
+\noindent\textbf{SINDICANTE:} \getSindicantePosto\ \getSindicanteNome
+
+\vspace{3em}
+
+\SeCampoPreenchido{sindicadoNome}{%
+\noindent\textbf{SINDICADO:} \SeCampoPreenchido{sindicadoPosto}{\getSindicadoPosto\ }\getSindicadoNome
+
+\vspace{3em}
+}
+
+\noindent\textbf{OBJETO:} \getObjeto
+
+\clearpage
+\MostrarCaixaFolha

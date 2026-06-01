@@ -1,0 +1,46 @@
+% ============================================================
+% MODELO: ANEXO K - NOTIFICAÇÃO DE DILIGÊNCIAS COMPLEMENTARES
+% Arquivo: modelos/notificacao-diligencias-complementares.tex
+% ============================================================
+
+\pdfbookmark[1]{Notificação de Diligências Complementares}{notificacao-diligencias-complementares-\getNotificacaoDiligenciasNumero}
+
+\ValidarNotificacaoDiligencias
+
+\clearpage
+\thispagestyle{empty}
+
+\noindent\textbf{DIEx nº \getNotificacaoDiligenciasNumero\ -- \getNotificacaoDiligenciasOrigem}\\
+\textbf{EB:} \getNup
+
+\vspace{1.2cm}
+
+\cabecalhoInstitucional
+
+\vspace{1cm}
+
+\begin{flushright}
+\ifstrempty{\getNotificacaoDiligenciasLocalData}{\localData}{\getNotificacaoDiligenciasLocalData}
+\end{flushright}
+
+\vspace{1cm}
+
+\noindent Do \getSindicantePosto\ \getSindicanteNome\\
+Ao Sr. \getNotificacaoDiligenciasDestinatario\\
+Assunto: notificação prévia
+
+\vspace{1cm}
+
+\noindent 1. Notifico Vossa Senhoria de que o \getNotificacaoDiligenciasAutoridadeFuncao\ determinou a realização de diligências complementares à sindicância instaurada para apurar os fatos (ou irregularidades) a que se refere a \getPortaria, na qual V. Sa. figurou na condição de sindicado, razão pela qual lhe é facultada, a partir da data de ciência (ou recebimento) deste documento, vista dos respectivos autos, no local \getNotificacaoDiligenciasLocalVista, bem como assegurado o direito de, pessoalmente ou por intermédio de advogado constituído, acompanhar a realização das diligências complementares determinadas (\getNotificacaoDiligenciasDescricao), bem como praticar todos os demais atos necessários ao exercício do contraditório e da ampla defesa.
+
+\SeCampoPreenchido{notDilDataAudiencia}{%
+\vspace{1em}
+
+\noindent 2. A audiência para \getNotificacaoDiligenciasTipoAudiencia\ está marcada para o dia \getNotificacaoDiligenciasDataAudiencia, às \getNotificacaoDiligenciasHoraAudiencia, no \getNotificacaoDiligenciasLocalAudiencia.
+}
+
+\reciboCienciaSindicado
+
+\assinaturaSindicante
+
+\clearpage

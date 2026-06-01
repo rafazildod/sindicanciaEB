@@ -1,0 +1,75 @@
+% ============================================================
+% ANEXO I - NOTIFICAÇÃO PRÉVIA
+% Arquivo: modelos/notificacao-previa.tex
+% ============================================================
+
+\pdfbookmark[1]{Notificação Prévia \getNotificacaoNumero}{notificacao-previa-\getNotificacaoNumero}
+
+\ValidarNotificacaoPrevia
+
+\clearpage
+\thispagestyle{empty}
+
+\cabecalhoInstitucional
+
+\vspace{0.8em}
+
+\diex{\getNotificacaoNumero}[Sindicante]
+
+\vspace{0.8em}
+
+\begin{flushright}
+\SeCampoPreenchido{notificacaoLocalData}{\getNotificacaoLocalData}%
+\SeCampoVazio{notificacaoLocalData}{\localData}%
+\end{flushright}
+
+\vspace{0.8em}
+
+\noindent\textbf{Do} \getSindicantePosto\ \getSindicanteNome
+
+\noindent\textbf{Ao Sr.} \getSindicadoPosto\ \getSindicadoNome\SeCampoPreenchido{sindicadoSU}{ -- \getSindicadoSU}\SeCampoPreenchido{sindicadoOM}{/\getSindicadoOM}
+
+\vspace{0.5em}
+
+\noindent\textbf{Assunto:} notificação prévia
+
+\noindent\textbf{Anexo:} \getNotificacaoAnexos
+
+\vspace{0.8em}
+
+\begin{enumerate}
+  \item Venho, por meio deste, notificar Vossa Senhoria sobre os fatos (ou irregularidades) a que se refere a sindicância instaurada para apurar \getObjeto, razão pela qual lhe é facultada, a partir da data de ciência (ou recebimento) deste documento, vista dos respectivos autos, no local \getNotificacaoLocalVista, bem como assegurado o direito de, pessoalmente ou por intermédio de advogado constituído, no prazo de três dias úteis contados de sua inquirição, oferecer defesa prévia, arrolar testemunhas, juntar documentos e requerer o que julgar de direito; podendo, ainda, assistir a depoimentos, oferecer alegações finais e praticar todos os demais atos necessários ao exercício do contraditório e da ampla defesa.
+
+  \item A audiência para sua inquirição está marcada para o dia \getDataInquiricao, às \getHoraInquiricao, no \getLocalInquiricao.
+
+  \SeCampoPreenchido{notificacaoTestemunhas}{%
+  \item A audiência para inquirição do denunciante/ofendido e das testemunhas a seguir relacionadas dar-se-á conforme previsto no quadro abaixo, sendo-lhe facultado assistir aos referidos depoimentos:%
+  }
+\end{enumerate}
+
+\SeCampoPreenchido{notificacaoTestemunhas}{%
+\vspace{0.8em}
+\begin{center}
+\begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}p{1.4cm}|X|>{\centering\arraybackslash}p{4cm}|>{\centering\arraybackslash}p{4cm}|}
+\hline
+\textbf{Nº Ord} & \textbf{Testemunha} & \textbf{Local} & \textbf{Data-hora} \\ \hline
+\getNotificacaoTestemunhas
+\end{tabularx}
+\end{center}
+}
+
+\SeCampoPreenchido{notificacaoTextoComplementar}{%
+\vspace{0.6em}
+\getNotificacaoTextoComplementar
+}
+
+\vspace{0.7cm}
+
+\begin{center}
+\textbf{\getSindicanteNome} -- \getSindicantePosto\\
+Sindicante
+\end{center}
+
+\reciboCienciaSindicado
+
+\clearpage

@@ -1,0 +1,38 @@
+% ============================================================
+% ANEXO V - CERTIDÃO
+% Arquivo: modelos/certidao.tex
+% ============================================================
+
+\pdfbookmark[1]{Certidão}{certidao}
+
+\ValidarCertidao
+
+\clearpage
+\thispagestyle{empty}
+
+\cabecalhoInstitucional
+
+\vspace{3.5cm}
+
+\begin{center}
+    \textbf{CERTIDÃO}
+\end{center}
+
+\vspace{2.5cm}
+
+Certifico que, em \getCertidaoDataTerminoPrazo, decorreu o prazo concedido por meio do \getCertidaoTipoDocumento\ nº \getCertidaoNumeroDocumento, de \getCertidaoDataDocumento, sem que o sindicado apresentasse suas razões de defesa escritas.
+
+\vspace{1em}
+
+Do que para constar, lavrei o presente termo.
+
+\vspace{2em}
+
+\begin{flushright}
+\SeCampoPreenchido{certidaoLocalData}{\getCertidaoLocalData}%
+\SeCampoVazio{certidaoLocalData}{\localData}%
+\end{flushright}
+
+\assinaturaSindicante
+
+\clearpage

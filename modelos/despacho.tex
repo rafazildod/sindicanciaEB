@@ -1,0 +1,34 @@
+% ============================================================
+% ANEXO H - DESPACHO
+% Arquivo: modelos/despacho.tex
+% ============================================================
+
+\pdfbookmark[1]{Despacho \getDespachoNumero}{despacho-\getDespachoNumero}
+
+\ValidarDespacho
+
+\clearpage
+\thispagestyle{empty}
+
+\cabecalhoInstitucional
+
+\vspace{3.5cm}
+
+\begin{center}
+    \textbf{DESPACHO}
+\end{center}
+
+\vspace{3em}
+
+\getDespachoTexto
+
+\vspace{3em}
+
+\begin{center}
+\SeCampoPreenchido{despachoLocalData}{\getDespachoLocalData}
+\SeCampoVazio{despachoLocalData}{\localData}
+\end{center}
+
+\assinaturaSindicante
+
+\clearpage

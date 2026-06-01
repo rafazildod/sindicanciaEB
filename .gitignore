@@ -1,0 +1,48 @@
+# ============================================================
+# LaTeX
+# ============================================================
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.idx
+*.ilg
+*.ind
+*.lof
+*.log
+*.lot
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+*.xdv
+
+# PDFs gerados na raiz
+/main.pdf
+/*.pdf
+
+# Saídas de compilação
+/saida/
+/build/
+/dist/
+
+# Temporários
+*.tmp
+*.bak
+*~
+.DS_Store
+Thumbs.db
+
+# Python futuro
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# Dados reais de sindicância
+# Mantenha PDFs reais fora do repositório público.
+documentos/*.pdf
+!documentos/docjuntada1.pdf

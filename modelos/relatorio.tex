@@ -1,0 +1,54 @@
+% ============================================================
+% ANEXO W - RELATÓRIO
+% Arquivo: modelos/relatorio.tex
+% ============================================================
+
+\pdfbookmark[1]{Relatório}{relatorio}
+
+\ValidarRelatorio
+
+\clearpage
+\thispagestyle{empty}
+
+\cabecalhoInstitucional
+
+\vspace{2.5cm}
+
+\begin{center}
+    \textbf{RELATÓRIO}
+\end{center}
+
+\vspace{1.5cm}
+
+\noindent\textbf{I -- INTRODUÇÃO}
+
+\getRelatorioIntroducao
+
+\vspace{1em}
+
+\noindent\textbf{II -- DILIGÊNCIAS REALIZADAS}
+
+\getRelatorioDiligencias
+
+\vspace{1em}
+
+\noindent\textbf{III -- PARTE EXPOSITIVA}
+
+\getRelatorioParteExpositiva
+
+\vspace{1em}
+
+\noindent\textbf{IV -- PARTE CONCLUSIVA}
+
+\getRelatorioParteConclusiva
+
+\vspace{2em}
+
+\begin{flushright}
+\SeCampoPreenchido{relatorioLocalData}{\getRelatorioLocalData}%
+\SeCampoVazio{relatorioLocalData}{\localData}%
+\end{flushright}
+
+\assinaturaSindicante
+
+\clearpage

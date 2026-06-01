@@ -1,0 +1,54 @@
+% ============================================================
+% ANEXO Y - DIEx DE REMESSA
+% Arquivo: modelos/diex-remessa.tex
+% ============================================================
+
+\pdfbookmark[1]{DIEx de Remessa \getDiexRemessaNumero}{diex-remessa-\getDiexRemessaNumero}
+
+\ValidarDiexRemessa
+
+\clearpage
+\thispagestyle{empty}
+
+\cabecalhoInstitucional
+
+\vspace{0.8em}
+
+\noindent\textbf{DIEx nº \getDiexRemessaNumero\ -- \getDiexRemessaOrigem}
+
+\vspace{0.5em}
+
+\noindent\textbf{EB:} \getNup
+
+\vspace{1em}
+
+\begin{flushright}
+\SeCampoPreenchido{diexRemessaLocalData}{\getDiexRemessaLocalData}%
+\SeCampoVazio{diexRemessaLocalData}{\localData}%
+\end{flushright}
+
+\vspace{1em}
+
+\noindent\textbf{Do} \getSindicantePosto\ \getSindicanteNome
+
+\noindent\textbf{Ao Sr.} \getDiexRemessaDestinatario
+
+\vspace{0.5em}
+
+\noindent\textbf{Assunto:} sindicância com \getDiexRemessaFolhas\ folhas
+
+\noindent\textbf{Referência:} \SeCampoPreenchido{diexRemessaReferencia}{\getDiexRemessaReferencia}\SeCampoVazio{diexRemessaReferencia}{\getPortaria}
+
+\vspace{1em}
+
+Remeto os autos da sindicância instaurada por intermédio da \getPortaria, em que figura como sindicado \getSindicadoPosto\ \getSindicadoNome, integrante do(a) \getSindicadoOM.
+
+\SeCampoPreenchido{diexRemessaTextoComplementar}{%
+\vspace{0.8em}
+
+\getDiexRemessaTextoComplementar
+}
+
+\assinaturaSindicante
+
+\clearpage

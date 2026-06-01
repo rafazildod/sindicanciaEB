@@ -1,0 +1,49 @@
+% ============================================================
+% MODELO AUXILIAR: OFÍCIO GENÉRICO
+% Arquivo: modelos/oficio.tex
+% Usar para destinatário externo ou quando não houver anexo oficial específico.
+% ============================================================
+
+\pdfbookmark[1]{Ofício \getOficioNumero}{oficio-\getOficioNumero}
+
+\ValidarOficio
+
+\clearpage
+\thispagestyle{empty}
+
+\cabecalhoInstitucional
+
+\vspace{0.8em}
+
+\noindent\textbf{Ofício nº \getOficioNumero\ -- \getOficioOrigem}
+
+\vspace{0.5em}
+
+\noindent\textbf{EB:} \getNup
+
+\vspace{1em}
+
+\begin{flushright}
+\SeCampoPreenchido{oficioLocalData}{\getOficioLocalData}
+\SeCampoVazio{oficioLocalData}{\localData}
+\end{flushright}
+
+\vspace{1em}
+
+\noindent\textbf{Ao(À):} \getOficioDestinatario
+\SeCampoPreenchido{oficioCargoDestinatario}{\par\noindent\textbf{Cargo/Função:} \getOficioCargoDestinatario}
+\SeCampoPreenchido{oficioEnderecoDestinatario}{\par\noindent\textbf{Endereço:} \getOficioEnderecoDestinatario}
+
+\vspace{0.5em}
+
+\noindent\textbf{Assunto:} \getOficioAssunto
+\SeCampoPreenchido{oficioReferencia}{\par\noindent\textbf{Referência:} \getOficioReferencia}
+\SeCampoPreenchido{oficioAnexos}{\par\noindent\textbf{Anexo:} \getOficioAnexos}
+
+\vspace{1em}
+
+\getOficioTexto
+
+\assinaturaSindicante
+
+\clearpage

@@ -1,0 +1,44 @@
+% ============================================================
+% ANEXOS E e L - JUNTADA
+% Arquivo: modelos/juntada.tex
+% Observação: o modelo também anexa automaticamente o PDF indicado.
+% ============================================================
+
+\pdfbookmark[1]{Juntada \getJuntadaNumero}{juntada-\getJuntadaNumero}
+
+\ValidarJuntada
+
+\clearpage
+\thispagestyle{empty}
+
+\cabecalhoInstitucional
+
+\vspace{3.5cm}
+
+\begin{center}
+    \textbf{JUNTADA}
+\end{center}
+
+\vspace{2.5cm}
+
+Aos \getDia\ dias do mês de \getMes\ do ano de \getAno, nesta cidade de \getCidade,
+no quartel do(a) \getOm, faço a juntada aos autos da presente sindicância dos documentos
+a seguir especificados, do que, para constar, lavrei o presente termo.
+
+\vspace{0.5cm}
+
+\begin{enumerate}
+\getJuntadaItens
+\end{enumerate}
+
+\assinaturaSindicante
+
+\clearpage
+
+\IfFileExists{\getJuntadaArquivo}{%
+  \incluirDocumento{\getJuntadaArquivo}%
+}{%
+  \ClassError{sindicancia}
+    {Arquivo de juntada nao encontrado: \getJuntadaArquivo}
+    {Coloque o PDF correspondente em documentos/docjuntada\getJuntadaNumero.pdf ou redefina com \string\juntadaArquivo.}%
+}

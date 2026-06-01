@@ -1,0 +1,43 @@
+% ============================================================
+% MODELO: ANEXO R - SUBSTITUIÇÃO DE SINDICANTE
+% Arquivo: modelos/substituicao-sindicante.tex
+% ============================================================
+
+\pdfbookmark[1]{Substituição de Sindicante}{substituicao-sindicante-\getSubstituicaoSindicanteNumero}
+
+\ValidarSubstituicaoSindicante
+
+\clearpage
+\thispagestyle{empty}
+
+\cabecalhoInstitucional
+
+\vspace{1cm}
+
+\noindent\textbf{DIEx nº \getSubstituicaoSindicanteNumero\ -- \getSubstituicaoSindicanteOrigem}\\
+\textbf{EB:} \getNup
+
+\vspace{1cm}
+
+\begin{flushright}
+\ifstrempty{\getSubstituicaoSindicanteLocalData}{\localData}{\getSubstituicaoSindicanteLocalData}
+\end{flushright}
+
+\vspace{1cm}
+
+\noindent Do \getSindicantePosto\ \getSindicanteNome\\
+Ao Sr. \getSubstituicaoSindicanteDestinatario\\
+Assunto: substituição de sindicante\\
+Anexo: autos de sindicância
+
+\vspace{1cm}
+
+Estando encarregado(a) de proceder a uma sindicância instaurada pela \getPortaria, para apurar \getSubstituicaoSindicanteRelatoSucinto\ e tendo constatado, de acordo com o documento de fls. \getSubstituicaoSindicanteFls, que \getSubstituicaoSindicanteMotivo, solicito minha substituição para o prosseguimento do feito, entendendo encontrar-me impedido para tal.
+
+\vspace{1em}
+
+Remeto, anexos, os autos da aludida sindicância.
+
+\assinaturaSindicante
+
+\clearpage

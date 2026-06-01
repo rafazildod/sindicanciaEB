@@ -1,0 +1,46 @@
+% ============================================================
+% ANEXO M - DOCUMENTO PARA COMPARECIMENTO DE SINDICADO
+% Arquivo: modelos/comparecimento-sindicado.tex
+% ============================================================
+
+\pdfbookmark[1]{Comparecimento de Sindicado \getComparecimentoSindicadoNumero}{comparecimento-sindicado-\getComparecimentoSindicadoNumero}
+
+\ValidarComparecimentoSindicado
+
+\clearpage
+\thispagestyle{empty}
+
+\cabecalhoInstitucional
+
+\vspace{0.8em}
+
+\noindent\textbf{DIEx nº \getComparecimentoSindicadoNumero\ -- \getComparecimentoSindicadoOrigem}
+
+\vspace{0.5em}
+
+\noindent\textbf{EB:} \getNup
+
+\vspace{1em}
+
+\begin{flushright}
+\SeCampoPreenchido{compSindLocalData}{\getComparecimentoSindicadoLocalData}%
+\SeCampoVazio{compSindLocalData}{\localData}%
+\end{flushright}
+
+\vspace{1em}
+
+\noindent\textbf{Do} \getSindicantePosto\ \getSindicanteNome
+
+\noindent\textbf{Ao Sr.} \getComparecimentoSindicadoComandante
+
+\vspace{0.5em}
+
+\noindent\textbf{Assunto:} comparecimento de sindicado
+
+\vspace{1em}
+
+Solicito-vos autorizar o comparecimento do(a) \getSindicadoPosto\ \getSindicadoNome, dessa OM, no dia \getComparecimentoSindicadoData, às \getComparecimentoSindicadoHora, no quartel do(a) \getComparecimentoSindicadoLocal, a fim de ser inquirido em sindicância da qual sou encarregado(a).
+
+\assinaturaSindicante
+
+\clearpage
