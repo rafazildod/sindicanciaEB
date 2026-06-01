@@ -7,7 +7,7 @@
 % ============================================================
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{sindicancia}[2026/05/31 v2.2 Sindicancias EB - terceiro lote - segundo lote de anexos]
+\ProvidesClass{sindicancia}[2026/06/01 v2.3 Sindicancias EB - condicionais seguras]
 
 % ============================================================
 % 1. OPÇÕES DA CLASSE
@@ -486,7 +486,7 @@
   \ifcsundef{@#1}{%
     \ClassError{sindicancia}{Campo obrigatorio inexistente: #1}{O campo #1 nao foi definido na classe.}%
   }{%
-    \expandafter\sind@ifempty\expandafter{\csname @#1\endcsname}{%
+    \ifcsempty{@#1}{%
       \ClassError{sindicancia}{Campo obrigatorio ausente: #2}{Preencha o campo usando o comando adequado antes de gerar este documento.}%
     }{}%
   }%
@@ -494,13 +494,13 @@
 
 \newcommand{\SeCampoPreenchido}[2]{%
   \ifcsundef{@#1}{}{%
-    \expandafter\sind@ifempty\expandafter{\csname @#1\endcsname}{}{#2}%
+    \ifcsempty{@#1}{}{#2}%
   }%
 }
 
 \newcommand{\SeCampoVazio}[2]{%
   \ifcsundef{@#1}{#2}{%
-    \expandafter\sind@ifempty\expandafter{\csname @#1\endcsname}{#2}{}%
+    \ifcsempty{@#1}{#2}{}%
   }%
 }
 
