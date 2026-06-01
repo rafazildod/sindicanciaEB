@@ -91,7 +91,18 @@ Ele concentra os dados gerais reutilizados por vários modelos:
 - objeto;
 - autoridade instauradora;
 - sindicante;
-- sindicado.
+- sindicado;
+- escrivão, quando houver.
+
+### Regra de organização dos dados
+
+Para evitar sobreposição silenciosa de macros, siga esta regra:
+
+- `dados/dados-sindicancia.tex` deve conter tudo que é comum a mais de um documento;
+- `dados/dados-anexo-*.tex` deve conter apenas informações exclusivas daquele anexo;
+- não redefina em arquivos de anexo macros gerais como `\nup`, `\portaria`, `\objeto`, `\sindicanteNome`, `\sindicadoNome`, `\dia`, `\mes`, `\ano`, `\cidade` ou `\om`, salvo quando a intenção for deliberadamente mudar o valor para todos os documentos seguintes.
+
+O LaTeX usa o último valor carregado pelo `main.tex`. Ou seja: uma macro redefinida em um anexo continua valendo nos documentos seguintes até ser redefinida novamente. Sim, é exatamente o tipo de detalhe que transforma um PDF inocente em um duende processual.
 
 Os demais arquivos seguem o padrão:
 
@@ -350,77 +361,57 @@ ou, para perguntas abertas:
 \PergRespAberta{como os fatos ocorreram}{relatou que...}
 ```
 
-Essas macros geram texto corrido no estilo de ata.
-
-### Juntada
-
-No arquivo de dados da juntada:
+### Juntadas
 
 ```latex
 \juntadaNumero{1}
 
 \juntadaItens{%
-    \item Portaria nº ...
-    \item DIEx nº ...
+  \item Portaria nº ...
+  \item DIEx nº ...
 }
 ```
 
-O PDF anexado será:
+A macro `\juntadaNumero{1}` faz o modelo procurar automaticamente:
 
 ```text
 documentos/docjuntada1.pdf
 ```
 
----
+### Assinaturas
 
-## Fluxo recomendado de uso
+A classe contém comandos como:
 
-Uma sindicância ordinária simples costuma seguir esta sequência:
+```latex
+\assinaturaSindicante
+\assinaturaSindicado
+\assinaturaTestemunha
+\assinaturaAutoridade
+```
 
-1. Anexo C: capa;
-2. Anexo D: termo de abertura;
-3. Anexo E/L: juntada da portaria e documentos iniciais;
-4. Anexo I: notificação prévia;
-5. Anexo H: despacho;
-6. Anexo M/N/O, conforme necessário;
-7. Anexo Q: inquirição do sindicado;
-8. Anexo P: inquirição de testemunhas;
-9. novas juntadas, se necessário;
-10. Anexo T: termo de encerramento de instrução;
-11. Anexo U: vista para alegações finais;
-12. Anexo V: certidão, se não houver manifestação;
-13. Anexo W: relatório;
-14. Anexo X: termo de encerramento;
-15. Anexo Y: DIEx de remessa.
-
-Documentos eventuais:
-
-- Anexo F/G: escrivão;
-- Anexo J: envolvido que passa a sindicado;
-- Anexo K: diligências complementares;
-- Anexo R: substituição de sindicante;
-- Anexo S: acareação.
+Normalmente você não precisa chamá-los nos arquivos de dados, pois os modelos já fazem isso.
 
 ---
 
-## Cuidados com dados reais
+## Observações sobre segurança e sigilo
 
-Não suba autos reais, documentos pessoais, laudos, CPF, identidade, telefone, endereço ou PDFs de sindicância real para repositório público.
+Este repositório deve ser usado com cuidado.
 
-Para uso no GitHub, recomenda-se manter apenas:
+Não suba autos reais, nomes reais, documentos médicos, documentos pessoais, depoimentos ou qualquer dado sensível em repositório público.
 
-- modelos;
-- dados fictícios;
-- documentos de exemplo sem dados reais;
-- bases normativas públicas.
+Para uso em sindicâncias reais, recomenda-se:
 
-Se for trabalhar com uma sindicância real, use uma cópia local fora do repositório público.
+- manter o repositório como **privado**;
+- usar dados fictícios em exemplos;
+- remover PDFs reais de `documentos/` antes de publicar;
+- evitar commitar arquivos gerados (`.pdf`, `.aux`, `.log`, `.out`, etc.);
+- revisar todos os documentos antes da impressão ou assinatura.
 
 ---
 
-## Arquivos que não devem ir para o GitHub
+## Arquivos ignorados pelo Git
 
-O projeto deve ignorar arquivos auxiliares de compilação, como:
+O `.gitignore` deve excluir arquivos temporários de compilação LaTeX, como:
 
 ```text
 *.aux
@@ -430,89 +421,31 @@ O projeto deve ignorar arquivos auxiliares de compilação, como:
 *.synctex.gz
 *.fls
 *.fdb_latexmk
-main.pdf
 ```
 
-Também é recomendável não versionar PDFs reais dentro de `documentos/`.
+Também é recomendável não versionar PDFs finais reais de sindicância.
 
 ---
 
-## Solução de problemas
+## Limitações atuais
 
-### `LaTeX Error: File 'dados/dados-sindicancia.tex' not found`
-
-O arquivo de dados gerais não existe. Crie ou restaure:
-
-```text
-dados/dados-sindicancia.tex
-```
-
-### `LaTeX Error: File 'documentos/docjuntada1.pdf' not found`
-
-A juntada está ativa, mas o PDF correspondente não existe. Coloque o arquivo em:
-
-```text
-documentos/docjuntada1.pdf
-```
-
-ou comente o bloco da juntada no `main.tex`.
-
-### Aviso `Rerun to get outlines right`
-
-Compile novamente:
-
-```powershell
-lualatex .\main.tex
-```
-
-### A fonte Times New Roman não aparece
-
-No Windows, use LuaLaTeX com a fonte Times New Roman instalada. Em Linux, a classe usa Liberation Serif como fallback.
-
-### O PDF compilou, mas há avisos `Underfull \hbox`
-
-Normalmente são avisos de espaçamento. Se o documento estiver visualmente aceitável, não impedem o uso.
+- O projeto ainda depende de edição manual dos arquivos em `dados/`.
+- O `main.tex` precisa ser comentado/descomentado manualmente.
+- A interface gráfica ainda não existe.
+- A futura aplicação deverá usar estes modelos como motor LaTeX, provavelmente preenchendo dados estruturados e chamando LuaLaTeX por trás.
 
 ---
 
-## Comandos Git sugeridos
+## Fluxo futuro pretendido
 
-Para criar o primeiro commit local:
+A etapa futura será criar um programa simples com interface gráfica para:
 
-```powershell
-git init
-git add .
-git commit -m "Versão inicial dos modelos de sindicância EB em LaTeX"
-```
+1. cadastrar dados gerais da sindicância;
+2. selecionar documentos desejados;
+3. preencher dados específicos de cada anexo;
+4. anexar PDFs de juntada;
+5. gerar automaticamente o `main.tex` e os arquivos de dados;
+6. chamar LuaLaTeX;
+7. entregar o PDF final.
 
-Para conectar a um repositório remoto já criado:
-
-```powershell
-git remote add origin https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git
-git branch -M main
-git push -u origin main
-```
-
-Se usar GitHub CLI:
-
-```powershell
-gh repo create sindicancia-eb --private --source . --remote origin --push
-```
-
-Use `--private` se houver qualquer risco de dados sensíveis. A internet não precisa de uma sindicância real para se entreter.
-
----
-
-## Próximas etapas planejadas
-
-1. Testar uma sindicância fake completa;
-2. Separar `main.tex` de demonstração e `main-template.tex` para uso real;
-3. Criar scripts de apoio para limpeza e compilação;
-4. Criar camada futura em Python para preencher dados;
-5. Criar interface gráfica simples usando o LaTeX como motor de geração de PDFs.
-
----
-
-## Observação
-
-Este projeto é uma ferramenta de apoio à elaboração documental. A conformidade final dos autos deve ser sempre conferida pelo sindicante e, quando necessário, pela assessoria jurídica competente.
+Por enquanto, este repositório é a base LaTeX limpa e funcional. Primeiro o motor, depois o painel. Uma ordem rara e civilizada, portanto suspeita.
