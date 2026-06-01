@@ -1,0 +1,45 @@
+% ============================================================
+% DADOS: TERMO DE CONSENTIMENTO PARA ACESSO A PRONTUÁRIO
+% Arquivo: dados/dados-termo-consentimento-prontuario.tex
+%
+% Peça auxiliar, fora dos anexos C-Y.
+% Preencha conforme o caso concreto.
+% ============================================================
+
+% ------------------------------------------------------------
+% Identificação do militar que autoriza.
+% Por padrão, usa os dados gerais do sindicado.
+% ------------------------------------------------------------
+\newcommand{\tcpNome}{\getSindicadoNome}
+\newcommand{\tcpPostoGraduacao}{\getSindicadoPosto}
+\newcommand{\tcpIdentidade}{\getSindicadoIdentidade}
+\newcommand{\tcpCpf}{\getSindicadoCPF}
+
+% Exemplo: "Militar", "Soldado do Efetivo Variável", "Sd EV", etc.
+\newcommand{\tcpQualificacao}{Militar}
+
+% Exemplo: "sindicado", "interessado" etc.
+\newcommand{\tcpCondicaoProcessual}{sindicado}
+
+% ------------------------------------------------------------
+% Objeto médico delimitado.
+% Evite autorização ampla demais. Descreva somente o necessário.
+% ------------------------------------------------------------
+\newcommand{\tcpObjetoMedico}{queixas, atendimentos, exames e registros médicos relativos a dores ou lesões nos joelhos, no contexto dos fatos apurados}
+
+% ------------------------------------------------------------
+% DATA DO TERMO
+%
+% Opção 1, padrão: usa a data geral de dados-sindicancia.tex
+% \newcommand{\tcpLocalData}{\localData}
+%
+% Opção 2, recomendada quando o termo tiver data própria:
+% edite diretamente a linha abaixo.
+% ------------------------------------------------------------
+\newcommand{\tcpLocalData}{Petrolina/PE, 01 de junho de 2026}
+
+% ------------------------------------------------------------
+% Linha complementar abaixo da assinatura.
+% Exemplo: "IDT nº 000000000 ÓRGÃO/UF" ou "CPF nº ..."
+% ------------------------------------------------------------
+\newcommand{\tcpIdentificacaoAssinatura}{IDT nº \tcpIdentidade}
