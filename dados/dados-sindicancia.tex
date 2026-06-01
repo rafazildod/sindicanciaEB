@@ -3,8 +3,14 @@
 % Arquivo: dados/dados-sindicancia.tex
 %
 % Este arquivo deve existir sempre.
-% Ele concentra dados reutilizados por vários anexos/modelos.
-% Ajuste os campos abaixo para cada sindicância real.
+% Ele concentra SOMENTE os dados gerais reutilizados por mais
+% de um modelo/anexo.
+%
+% Regra do projeto:
+% - Dados comuns ficam aqui.
+% - Dados exclusivos de uma peça ficam em dados-anexo-*.tex.
+% - Evite redefinir estas macros nos arquivos de anexos, pois
+%   o LaTeX usa sempre o último valor carregado no main.tex.
 % ============================================================
 
 % ------------------------------------------------------------
@@ -31,7 +37,7 @@
 \objeto{apurar os fatos constantes da portaria instauradora e seus anexos}
 
 % ------------------------------------------------------------
-% Autoridade instauradora
+% Autoridade instauradora / nomeante
 % ------------------------------------------------------------
 \autoridadeNome{NOME DA AUTORIDADE INSTAURADORA}
 \autoridadePosto{Cel}
@@ -54,7 +60,8 @@
 \sindicadoSU{Subunidade/Seção}
 \sindicadoOM{72º BI Caat}
 
-% Dados complementares do sindicado, usados principalmente no Anexo Q.
+% Dados complementares do sindicado, usados principalmente no Anexo Q
+% e também por outros modelos que precisem qualificar o sindicado.
 \sindicadoIdentidade{000000000 ÓRGÃO/UF}
 \sindicadoCPF{000.000.000-00}
 \sindicadoNascimento{00 de mês de 0000}
@@ -63,6 +70,13 @@
 \sindicadoFiliacao{NOME DO PAI e NOME DA MÃE}
 \sindicadoResidencia{endereço completo}
 \sindicadoCelular{(00) 00000-0000}
+
+% ------------------------------------------------------------
+% Escrivão
+% Usado pelos Anexos F e G, quando houver designação de escrivão.
+% ------------------------------------------------------------
+\escrivaoNome{NOME COMPLETO DO ESCRIVÃO}
+\escrivaoPosto{POSTO/GRADUAÇÃO}
 
 % ------------------------------------------------------------
 % Campos genéricos opcionais
