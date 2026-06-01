@@ -1,24 +1,37 @@
 % ============================================================
-% MAIN DE TESTE COMPLETO - TODOS OS ANEXOS C A Y
-% Arquivo: main_todos_anexos_v2_2.tex
+% MAIN PADRÃO DA SINDICÂNCIA
+% Arquivo: main.tex
 %
 % Objetivo:
-% Compilar uma sindicância fake com TODOS os modelos oficiais
-% já criados no projeto v2.2, deixando todos os anexos
-% descomentados para teste integral.
+% Este arquivo funciona como painel de controle da sindicância.
+% Por padrão, todos os documentos ficam comentados.
 %
-% Atenção, porque aparentemente até um teste precisa de logística:
-% - Este main espera que TODOS os arquivos de dados existam em dados/.
-% - Este main espera que documentos/docjuntada1.pdf exista.
-% - Os anexos A, B, Z e AA não entram, conforme definido.
-% - Os modelos genéricos diex.tex e oficio.tex NÃO entram aqui,
-%   porque não são anexos oficiais específicos C-Y.
+% Como usar:
+% - Preencha dados/dados-sindicancia.tex.
+% - Preencha o arquivo de dados específico do anexo que será usado.
+% - Descomente APENAS o bloco do documento que quiser gerar.
+% - Compile com LuaLaTeX.
+%
+% Regra prática:
+% Para ativar um documento, descomente sempre o par:
+%   \input{dados/arquivo-de-dados.tex}
+%   \GerarDocumento{modelo}
+%
+% Exemplo:
+%   \input{dados/dados-anexo-q-inquiricao-sindicado1.tex}
+%   \GerarDocumento{termo-inquiricao-sindicado}
+%
+% Atenção:
+% - dados/dados-sindicancia.tex fica sempre ativo.
+% - Todos os demais documentos começam comentados.
+% - Anexos A, B, Z e AA estão fora do escopo atual.
 % ============================================================
 
 \documentclass{sindicancia}
 
 % ------------------------------------------------------------
 % DADOS GERAIS DA SINDICÂNCIA
+% Sempre manter ativo.
 % ------------------------------------------------------------
 \input{dados/dados-sindicancia.tex}
 
@@ -31,26 +44,21 @@
 % ------------------------------------------------------------
 % ANEXO C - CAPA DOS AUTOS
 % ------------------------------------------------------------
-\input{dados/dados-anexo-c-capa.tex}
-\GerarDocumento{capa}
-
+% \input{dados/dados-anexo-c-capa.tex}
+% \GerarDocumento{capa}
 
 % ------------------------------------------------------------
 % ANEXO D - TERMO DE ABERTURA
 % ------------------------------------------------------------
-\input{dados/dados-anexo-d-termo-abertura.tex}
-\GerarDocumento{termo-abertura}
-
+% \input{dados/dados-anexo-d-termo-abertura.tex}
+% \GerarDocumento{termo-abertura}
 
 % ------------------------------------------------------------
-% ANEXO E - JUNTADA INICIAL
-% Também usa o mesmo modelo do Anexo L.
-% Requer:
-%   documentos/docjuntada1.pdf
+% ANEXO E/L - JUNTADA 1
+% Requer: documentos/docjuntada1.pdf
 % ------------------------------------------------------------
-\input{dados/dados-anexo-e-l-juntada1.tex}
-\GerarDocumento{juntada}
-
+% \input{dados/dados-anexo-e-l-juntada1.tex}
+% \GerarDocumento{juntada}
 
 % ============================================================
 % 2. ESCRIVÃO, SE HOUVER
@@ -59,98 +67,94 @@
 % ------------------------------------------------------------
 % ANEXO F - DESIGNAÇÃO DE ESCRIVÃO
 % ------------------------------------------------------------
-\input{dados/dados-anexo-f-designacao-escrivao.tex}
-\GerarDocumento{designacao-escrivao}
-
+% \input{dados/dados-anexo-f-designacao-escrivao.tex}
+% \GerarDocumento{designacao-escrivao}
 
 % ------------------------------------------------------------
 % ANEXO G - COMPROMISSO DE ESCRIVÃO
 % ------------------------------------------------------------
-\input{dados/dados-anexo-g-compromisso-escrivao.tex}
-\GerarDocumento{compromisso-escrivao}
-
+% \input{dados/dados-anexo-g-compromisso-escrivao.tex}
+% \GerarDocumento{compromisso-escrivao}
 
 % ============================================================
-% 3. DESPACHOS E NOTIFICAÇÕES INICIAIS
+% 3. DESPACHOS E NOTIFICAÇÕES
 % ============================================================
 
 % ------------------------------------------------------------
-% ANEXO H - DESPACHO
+% ANEXO H - DESPACHO 1
 % ------------------------------------------------------------
-\input{dados/dados-anexo-h-despacho1.tex}
-\GerarDocumento{despacho}
-
+% \input{dados/dados-anexo-h-despacho1.tex}
+% \GerarDocumento{despacho}
 
 % ------------------------------------------------------------
 % ANEXO I - NOTIFICAÇÃO PRÉVIA
 % ------------------------------------------------------------
-\input{dados/dados-anexo-i-notificacao-previa1.tex}
-\GerarDocumento{notificacao-previa}
-
+% \input{dados/dados-anexo-i-notificacao-previa1.tex}
+% \GerarDocumento{notificacao-previa}
 
 % ------------------------------------------------------------
 % ANEXO J - NOTIFICAÇÃO DE ENVOLVIDO QUE PASSA À CONDIÇÃO DE SINDICADO
 % ------------------------------------------------------------
-\input{dados/dados-anexo-j-notificacao-novo-sindicado.tex}
-\GerarDocumento{notificacao-novo-sindicado}
-
+% \input{dados/dados-anexo-j-notificacao-novo-sindicado.tex}
+% \GerarDocumento{notificacao-novo-sindicado}
 
 % ------------------------------------------------------------
 % ANEXO K - NOTIFICAÇÃO DE DILIGÊNCIAS COMPLEMENTARES
 % ------------------------------------------------------------
-\input{dados/dados-anexo-k-notificacao-diligencias-complementares.tex}
-\GerarDocumento{notificacao-diligencias-complementares}
-
+% \input{dados/dados-anexo-k-notificacao-diligencias-complementares.tex}
+% \GerarDocumento{notificacao-diligencias-complementares}
 
 % ============================================================
 % 4. DOCUMENTOS DE COMPARECIMENTO E CARTA PRECATÓRIA
 % ============================================================
 
 % ------------------------------------------------------------
-% ANEXO M - DOCUMENTO PARA COMPARECIMENTO DE SINDICADO
+% ANEXO M - COMPARECIMENTO DE SINDICADO
 % ------------------------------------------------------------
-\input{dados/dados-anexo-m-comparecimento-sindicado.tex}
-\GerarDocumento{comparecimento-sindicado}
-
+% \input{dados/dados-anexo-m-comparecimento-sindicado.tex}
+% \GerarDocumento{comparecimento-sindicado}
 
 % ------------------------------------------------------------
-% ANEXO N - DOCUMENTO PARA COMPARECIMENTO DE TESTEMUNHA
+% ANEXO N - COMPARECIMENTO DE TESTEMUNHA
 % ------------------------------------------------------------
-\input{dados/dados-anexo-n-comparecimento-testemunha.tex}
-\GerarDocumento{comparecimento-testemunha}
-
+% \input{dados/dados-anexo-n-comparecimento-testemunha.tex}
+% \GerarDocumento{comparecimento-testemunha}
 
 % ------------------------------------------------------------
 % ANEXO O - CARTA PRECATÓRIA
 % ------------------------------------------------------------
-\input{dados/dados-anexo-o-carta-precatoria1.tex}
-\GerarDocumento{carta-precatoria}
-
+% \input{dados/dados-anexo-o-carta-precatoria1.tex}
+% \GerarDocumento{carta-precatoria}
 
 % ============================================================
-% 5. TERMOS DE INQUIRIÇÃO E ACAREAÇÃO
+% 5. INQUIRIÇÕES E ACAREAÇÃO
 % ============================================================
 
 % ------------------------------------------------------------
-% ANEXO P - TERMO DE INQUIRIÇÃO DE TESTEMUNHA
+% ANEXO P - TERMO DE INQUIRIÇÃO DE TESTEMUNHA 1
 % ------------------------------------------------------------
-\input{dados/dados-anexo-p-inquiricao-testemunha1.tex}
-\GerarDocumento{termo-inquiricao-testemunha}
+% \input{dados/dados-anexo-p-inquiricao-testemunha1.tex}
+% \GerarDocumento{termo-inquiricao-testemunha}
 
+% ------------------------------------------------------------
+% ANEXO P - TERMO DE INQUIRIÇÃO DE TESTEMUNHA 2
+% Para usar, copie dados-anexo-p-inquiricao-testemunha1.tex
+% para dados-anexo-p-inquiricao-testemunha2.tex e ajuste os dados.
+% ------------------------------------------------------------
+% \input{dados/dados-anexo-p-inquiricao-testemunha2.tex}
+% \GerarDocumento{termo-inquiricao-testemunha}
 
 % ------------------------------------------------------------
 % ANEXO Q - TERMO DE INQUIRIÇÃO DE SINDICADO
 % ------------------------------------------------------------
-\input{dados/dados-anexo-q-inquiricao-sindicado1.tex}
-\GerarDocumento{termo-inquiricao-sindicado}
-
+% \input{dados/dados-anexo-q-inquiricao-sindicado1.tex}
+% \GerarDocumento{termo-inquiricao-sindicado}
 
 % ------------------------------------------------------------
 % ANEXO S - TERMO DE ACAREAÇÃO
 % ------------------------------------------------------------
-\input{dados/dados-anexo-s-acareacao.tex}
-\GerarDocumento{acareacao}
-
+% \input{dados/dados-anexo-s-acareacao.tex}
+% \GerarDocumento{acareacao}
 
 % ============================================================
 % 6. SUBSTITUIÇÃO EVENTUAL DE SINDICANTE
@@ -159,9 +163,8 @@
 % ------------------------------------------------------------
 % ANEXO R - SUBSTITUIÇÃO DE SINDICANTE
 % ------------------------------------------------------------
-\input{dados/dados-anexo-r-substituicao-sindicante.tex}
-\GerarDocumento{substituicao-sindicante}
-
+% \input{dados/dados-anexo-r-substituicao-sindicante.tex}
+% \GerarDocumento{substituicao-sindicante}
 
 % ============================================================
 % 7. ENCERRAMENTO DA INSTRUÇÃO E ALEGAÇÕES FINAIS
@@ -170,16 +173,22 @@
 % ------------------------------------------------------------
 % ANEXO T - TERMO DE ENCERRAMENTO DE INSTRUÇÃO
 % ------------------------------------------------------------
-\input{dados/dados-anexo-t-encerramento-instrucao.tex}
-\GerarDocumento{termo-encerramento-instrucao}
-
+% \input{dados/dados-anexo-t-encerramento-instrucao.tex}
+% \GerarDocumento{termo-encerramento-instrucao}
 
 % ------------------------------------------------------------
 % ANEXO U - VISTA PARA ALEGAÇÕES FINAIS
 % ------------------------------------------------------------
-\input{dados/dados-anexo-u-vista-alegacoes-finais.tex}
-\GerarDocumento{vista-alegacoes-finais}
+% \input{dados/dados-anexo-u-vista-alegacoes-finais.tex}
+% \GerarDocumento{vista-alegacoes-finais}
 
+% ------------------------------------------------------------
+% ANEXO E/L - JUNTADA DAS ALEGAÇÕES FINAIS OU OUTROS DOCUMENTOS
+% Para usar como nova juntada, crie o arquivo de dados correspondente
+% e o PDF documentos/docjuntada2.pdf, documentos/docjuntada3.pdf etc.
+% ------------------------------------------------------------
+% \input{dados/dados-anexo-e-l-juntada2.tex}
+% \GerarDocumento{juntada}
 
 % ============================================================
 % 8. CERTIDÃO, RELATÓRIO, ENCERRAMENTO E REMESSA
@@ -188,29 +197,41 @@
 % ------------------------------------------------------------
 % ANEXO V - CERTIDÃO
 % ------------------------------------------------------------
-\input{dados/dados-anexo-v-certidao.tex}
-\GerarDocumento{certidao}
-
+% \input{dados/dados-anexo-v-certidao.tex}
+% \GerarDocumento{certidao}
 
 % ------------------------------------------------------------
 % ANEXO W - RELATÓRIO
 % ------------------------------------------------------------
-\input{dados/dados-anexo-w-relatorio.tex}
-\GerarDocumento{relatorio}
-
+% \input{dados/dados-anexo-w-relatorio.tex}
+% \GerarDocumento{relatorio}
 
 % ------------------------------------------------------------
 % ANEXO X - TERMO DE ENCERRAMENTO
 % ------------------------------------------------------------
-\input{dados/dados-anexo-x-termo-encerramento.tex}
-\GerarDocumento{termo-encerramento}
-
+% \input{dados/dados-anexo-x-termo-encerramento.tex}
+% \GerarDocumento{termo-encerramento}
 
 % ------------------------------------------------------------
 % ANEXO Y - DIEx DE REMESSA
 % ------------------------------------------------------------
-\input{dados/dados-anexo-y-diex-remessa.tex}
-\GerarDocumento{diex-remessa}
+% \input{dados/dados-anexo-y-diex-remessa.tex}
+% \GerarDocumento{diex-remessa}
 
+% ============================================================
+% 9. MODELOS AUXILIARES, USAR APENAS SE NÃO HOUVER ANEXO ESPECÍFICO
+% ============================================================
+
+% ------------------------------------------------------------
+% DIEx GENÉRICO
+% ------------------------------------------------------------
+% \input{dados/dados-diex1.tex}
+% \GerarDocumento{diex}
+
+% ------------------------------------------------------------
+% OFÍCIO GENÉRICO
+% ------------------------------------------------------------
+% \input{dados/dados-oficio1.tex}
+% \GerarDocumento{oficio}
 
 \end{document}
