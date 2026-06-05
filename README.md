@@ -2,25 +2,22 @@
 
 Modelos em LaTeX para elaboração de documentos de sindicância no âmbito do Exército Brasileiro, estruturados a partir dos anexos oficiais da **EB10-IG-09.001**.
 
-Este projeto usa o LaTeX como motor de formatação para gerar documentos padronizados em PDF, preservando uma estrutura modular: dados em arquivos separados, modelos por anexo e uma classe central (`sindicancia.cls`) com a configuração visual do projeto.
-
-A ideia é simples, o que já é uma afronta à burocracia: você preenche os arquivos em `dados/`, escolhe no `main.tex` quais documentos serão gerados e compila com LuaLaTeX.
+O projeto usa LaTeX como motor de formatação para gerar PDFs padronizados. Os dados ficam em arquivos separados, os modelos ficam em `modelos/`, e a classe central `sindicancia.cls` concentra a configuração visual e a API de preenchimento.
 
 ---
 
 ## Situação atual do projeto
 
-O projeto já contém modelos para os anexos **C a Y**, exceto os anexos **A, B, Z e AA**, que foram deliberadamente excluídos do escopo.
+O projeto contém modelos para os anexos **C a Y**, exceto os anexos **A, B, Z e AA**, que estão fora do escopo atual.
 
-Os modelos foram organizados para permitir:
+Também há modelos auxiliares para:
 
-- geração de uma sindicância completa de teste;
-- ativação/desativação de documentos pelo `main.tex`;
-- reutilização de dados comuns da sindicância;
-- inclusão de PDFs externos por juntada;
-- uso de cabeçalho institucional com brasão;
-- carimbo `Fl. ____` nas páginas dos autos, exceto na capa;
-- padronização em A4, Times 12 e margens de 2,5 cm.
+- DIEx genérico;
+- Ofício genérico;
+- termo de consentimento para acesso a prontuário;
+- solicitação de prorrogação de prazo.
+
+O `main.tex` é o arquivo de uso real: por padrão, todos os documentos específicos ficam comentados. Para validar a compilação de todos os modelos implementados, use `tests/all-models.tex`.
 
 ---
 
@@ -30,6 +27,7 @@ Os modelos foram organizados para permitir:
 sindicanciaEB/
 ├── main.tex
 ├── sindicancia.cls
+├── .gitattributes
 ├── bases/
 │   ├── anexo_c_capa.docx
 │   ├── ...
@@ -38,155 +36,32 @@ sindicanciaEB/
 │   ├── dados-sindicancia.tex
 │   ├── dados-anexo-c-capa.tex
 │   ├── ...
-│   └── dados-anexo-y-diex-remessa.tex
+│   ├── dados-anexo-y-diex-remessa.tex
+│   ├── dados-diex1.tex
+│   ├── dados-oficio1.tex
+│   └── dados-solicitacao-prorrogacao.tex
 ├── documentos/
 │   └── docjuntada1.pdf
 ├── figs/
 │   └── Coat.pdf
-└── modelos/
-    ├── capa.tex
-    ├── ...
-    └── diex-remessa.tex
+├── modelos/
+│   ├── capa.tex
+│   ├── ...
+│   ├── diex-remessa.tex
+│   └── solicitacao-prorrogacao.tex
+└── tests/
+    └── all-models.tex
 ```
-
-### `sindicancia.cls`
-
-Classe LaTeX central do projeto. Define:
-
-- papel A4;
-- margens de 2,5 cm;
-- fonte Times New Roman, com fallback para Liberation Serif;
-- cabeçalho institucional;
-- caixa `Fl. ____`;
-- macros de dados comuns;
-- comandos de validação;
-- comandos de assinatura;
-- comandos específicos por anexo.
-
-### `main.tex`
-
-Arquivo principal de compilação.
-
-No estado atual, o `main.tex` é um **main de teste completo**, com todos os anexos implementados descomentados. Ele serve para validar se o projeto inteiro compila.
-
-Para uma sindicância real, comente os blocos que não serão usados.
-
-### `dados/`
-
-Contém os arquivos com os dados variáveis de cada peça.
-
-O arquivo mais importante é:
-
-```text
-dados/dados-sindicancia.tex
-```
-
-Ele concentra os dados gerais reutilizados por vários modelos:
-
-- data;
-- cidade;
-- OM;
-- NUP;
-- portaria;
-- objeto;
-- autoridade instauradora;
-- sindicante;
-- sindicado;
-- escrivão, quando houver.
-
-### Regra de organização dos dados
-
-Para evitar sobreposição silenciosa de macros, siga esta regra:
-
-- `dados/dados-sindicancia.tex` deve conter tudo que é comum a mais de um documento;
-- `dados/dados-anexo-*.tex` deve conter apenas informações exclusivas daquele anexo;
-- não redefina em arquivos de anexo macros gerais como `\nup`, `\portaria`, `\objeto`, `\sindicanteNome`, `\sindicadoNome`, `\dia`, `\mes`, `\ano`, `\cidade` ou `\om`, salvo quando a intenção for deliberadamente mudar o valor para todos os documentos seguintes.
-
-O LaTeX usa o último valor carregado pelo `main.tex`. Ou seja: uma macro redefinida em um anexo continua valendo nos documentos seguintes até ser redefinida novamente. Sim, é exatamente o tipo de detalhe que transforma um PDF inocente em um duende processual.
-
-Os demais arquivos seguem o padrão:
-
-```text
-dados-anexo-<letra>-<nome>.tex
-```
-
-Exemplos:
-
-```text
-dados-anexo-c-capa.tex
-dados-anexo-i-notificacao-previa1.tex
-dados-anexo-q-inquiricao-sindicado1.tex
-```
-
-### `modelos/`
-
-Contém os modelos LaTeX de cada documento.
-
-Em regra, você não deve editar estes arquivos em uma sindicância comum. Edite os arquivos em `dados/`.
-
-### `documentos/`
-
-Pasta destinada aos PDFs externos juntados aos autos.
-
-O modelo de juntada usa este padrão:
-
-```text
-documentos/docjuntada1.pdf
-documentos/docjuntada2.pdf
-documentos/docjuntada3.pdf
-```
-
-O número do arquivo deve corresponder ao número informado no arquivo de dados da juntada.
-
-### `figs/`
-
-Contém o brasão usado no cabeçalho.
-
-O arquivo esperado é:
-
-```text
-figs/Coat.pdf
-```
-
-### `bases/`
-
-Contém os anexos oficiais usados como referência textual. Esta pasta serve como lastro normativo para comparação e manutenção dos modelos.
 
 ---
 
 ## Requisitos
 
-### Obrigatórios
+- LuaLaTeX ou XeLaTeX;
+- TeX Live recente;
+- fonte Times New Roman instalada, quando disponível.
 
-- TeX Live 2025 ou superior, preferencialmente TeX Live 2026;
-- LuaLaTeX;
-- fonte Times New Roman instalada, especialmente no Windows.
-
-### Recomendados
-
-- Windows 11 com PowerShell;
-- VS Code ou TeXstudio;
-- Git;
-- GitHub CLI (`gh`), se for publicar no GitHub pela linha de comando.
-
----
-
-## Como compilar
-
-Na raiz do projeto, execute:
-
-```powershell
-lualatex .\main.tex
-lualatex .\main.tex
-```
-
-Duas compilações são recomendadas porque o `hyperref` pode precisar atualizar bookmarks e referências internas. Sim, o LaTeX pede confirmação duas vezes como se fosse repartição pública.
-
-O PDF será gerado como:
-
-```text
-main.pdf
-```
+A classe usa `fontspec`, portanto **não compile com pdfLaTeX**. Se Times New Roman não estiver instalada, a classe tenta usar Liberation Serif.
 
 ---
 
@@ -200,98 +75,118 @@ Abra:
 dados/dados-sindicancia.tex
 ```
 
-Preencha:
+Preencha os dados comuns da sindicância, como data, cidade, OM, NUP, portaria, objeto, autoridade instauradora, sindicante, sindicado e escrivão.
 
-```latex
-\dia{31}
-\mes{maio}
-\ano{2026}
-\cidade{Petrolina/PE}
+### 2. Edite o arquivo de dados do documento desejado
 
-\om{72º Batalhão de Infantaria de Caatinga}
-\nup{64108.000000/2026-00}
-
-\portaria{Portaria nº 000 -- Seç Ap Ass Jurd/72º BI Caat, de 00 de mês de 2026, do Comandante do 72º Batalhão de Infantaria de Caatinga}
-
-\objeto{apurar os fatos constantes da portaria instauradora e seus anexos}
-
-\sindicanteNome{NOME DO SINDICANTE}
-\sindicantePosto{POSTO/GRADUAÇÃO}
-
-\sindicadoNome{NOME DO SINDICADO}
-\sindicadoPosto{POSTO/GRADUAÇÃO}
-```
-
-### 2. Edite os dados de cada anexo
-
-Cada documento tem seu próprio arquivo em `dados/`.
-
-Exemplo para uma inquirição de sindicado:
+Cada peça tem um arquivo em `dados/`. Exemplos:
 
 ```text
 dados/dados-anexo-q-inquiricao-sindicado1.tex
-```
-
-Exemplo para testemunha:
-
-```text
 dados/dados-anexo-p-inquiricao-testemunha1.tex
-```
-
-Exemplo para juntada:
-
-```text
 dados/dados-anexo-e-l-juntada1.tex
+dados/dados-solicitacao-prorrogacao.tex
 ```
 
-### 3. Ative ou desative os documentos no `main.tex`
+### 3. Ative o documento no `main.tex`
 
-Cada documento costuma aparecer como um bloco:
+Cada bloco segue este padrão:
 
 ```latex
 \input{dados/dados-anexo-q-inquiricao-sindicado1.tex}
 \GerarDocumento{termo-inquiricao-sindicado}
 ```
 
-Para remover o documento da compilação, comente as duas linhas:
+Descomente sempre o par inteiro: o arquivo de dados e o modelo.
 
-```latex
-% \input{dados/dados-anexo-q-inquiricao-sindicado1.tex}
-% \GerarDocumento{termo-inquiricao-sindicado}
-```
+### 4. Compile
 
-### 4. Coloque os PDFs de juntada em `documentos/`
-
-Se a juntada estiver configurada como:
-
-```latex
-\juntadaNumero{1}
-```
-
-o arquivo esperado será:
-
-```text
-documentos/docjuntada1.pdf
-```
-
-Para uma segunda juntada:
-
-```latex
-\juntadaNumero{2}
-```
-
-o arquivo esperado será:
-
-```text
-documentos/docjuntada2.pdf
-```
-
-### 5. Compile
+Na raiz do projeto:
 
 ```powershell
 lualatex .\main.tex
 lualatex .\main.tex
 ```
+
+Ou, em shells Unix-like:
+
+```bash
+lualatex main.tex
+lualatex main.tex
+```
+
+O PDF será gerado como `main.pdf`.
+
+---
+
+## Como validar todos os modelos
+
+O arquivo `main.tex` pode gerar zero páginas se todos os blocos estiverem comentados. Para teste de regressão, compile:
+
+```bash
+latexmk -lualatex -halt-on-error -interaction=nonstopmode -outdir=build tests/all-models.tex
+```
+
+Esse teste carrega todos os modelos implementados com os dados de exemplo do repositório.
+
+---
+
+## Regra importante para arquivos de dados
+
+Use os comandos públicos da classe. Não redefina getters.
+
+Correto:
+
+```latex
+\certidaoLocalData{Petrolina/PE, 03 de junho de 2026}
+\certidaoTexto{Texto da certidão...}
+```
+
+Evite:
+
+```latex
+\newcommand{\getCertidaoLocalData}{Petrolina/PE, 03 de junho de 2026}
+```
+
+O padrão da classe é:
+
+```latex
+\campo{valor}      % setter usado nos dados
+\getCampo          % getter usado internamente pelos modelos
+```
+
+Para documentos que podem se repetir, os arquivos de dados usam um reset explícito no início:
+
+```latex
+\novoDiex
+\diexNumero{001}
+```
+
+Isso evita que campos opcionais de uma peça contaminem a próxima.
+
+---
+
+## Juntadas
+
+O modelo de juntada usa este padrão:
+
+```latex
+\juntadaNumero{1}
+```
+
+e procura automaticamente:
+
+```text
+documentos/docjuntada1.pdf
+```
+
+Para uma segunda juntada, use `\juntadaNumero{2}` e coloque o arquivo correspondente em:
+
+```text
+documentos/docjuntada2.pdf
+```
+
+No `main.tex`, o segundo exemplo permanece comentado porque o PDF `docjuntada2.pdf` não existe no repositório.
 
 ---
 
@@ -332,16 +227,14 @@ A, B, Z, AA
 
 ## Modelos auxiliares
 
-Além dos modelos por anexo, existem dois modelos auxiliares:
+| Documento | Modelo | Dados |
+|---|---|---|
+| DIEx genérico | `modelos/diex.tex` | `dados/dados-diex1.tex` |
+| Ofício genérico | `modelos/oficio.tex` | `dados/dados-oficio1.tex` |
+| Termo de consentimento para acesso a prontuário | `modelos/termo-consentimento-prontuario.tex` | `dados/dados-termo-consentimento-prontuario.tex` |
+| Solicitação de prorrogação de prazo | `modelos/solicitacao-prorrogacao.tex` | `dados/dados-solicitacao-prorrogacao.tex` |
 
-| Documento | Modelo |
-|---|---|
-| DIEx genérico | `modelos/diex.tex` |
-| Ofício genérico | `modelos/oficio.tex` |
-
-Use estes apenas quando não houver anexo específico aplicável.
-
-Se houver anexo oficial específico, use o modelo do anexo. O EB não premia improviso documental, infelizmente para a criatividade e felizmente para a sindicância.
+Use modelos auxiliares apenas quando não houver anexo específico aplicável.
 
 ---
 
@@ -349,33 +242,16 @@ Se houver anexo oficial específico, use o modelo do anexo. O EB não premia imp
 
 ### Perguntas e respostas
 
-Nos termos de inquirição, use:
+Nos termos de inquirição:
 
 ```latex
 \PergResp{tinha conhecimento dos fatos}{sim, tomou conhecimento após ser notificado}
 ```
 
-ou, para perguntas abertas:
+ou:
 
 ```latex
 \PergRespAberta{como os fatos ocorreram}{relatou que...}
-```
-
-### Juntadas
-
-```latex
-\juntadaNumero{1}
-
-\juntadaItens{%
-  \item Portaria nº ...
-  \item DIEx nº ...
-}
-```
-
-A macro `\juntadaNumero{1}` faz o modelo procurar automaticamente:
-
-```text
-documentos/docjuntada1.pdf
 ```
 
 ### Assinaturas
@@ -389,63 +265,27 @@ A classe contém comandos como:
 \assinaturaAutoridade
 ```
 
-Normalmente você não precisa chamá-los nos arquivos de dados, pois os modelos já fazem isso.
+Normalmente eles já são chamados pelos modelos.
 
 ---
 
-## Observações sobre segurança e sigilo
-
-Este repositório deve ser usado com cuidado.
+## Segurança e sigilo
 
 Não suba autos reais, nomes reais, documentos médicos, documentos pessoais, depoimentos ou qualquer dado sensível em repositório público.
 
-Para uso em sindicâncias reais, recomenda-se:
+Para uso real:
 
-- manter o repositório como **privado**;
-- usar dados fictícios em exemplos;
-- remover PDFs reais de `documentos/` antes de publicar;
-- evitar commitar arquivos gerados (`.pdf`, `.aux`, `.log`, `.out`, etc.);
-- revisar todos os documentos antes da impressão ou assinatura.
-
----
-
-## Arquivos ignorados pelo Git
-
-O `.gitignore` deve excluir arquivos temporários de compilação LaTeX, como:
-
-```text
-*.aux
-*.log
-*.out
-*.toc
-*.synctex.gz
-*.fls
-*.fdb_latexmk
-```
-
-Também é recomendável não versionar PDFs finais reais de sindicância.
+- mantenha o repositório privado;
+- use dados fictícios em exemplos públicos;
+- remova PDFs reais de `documentos/` antes de publicar;
+- não versione PDFs finais reais, `.aux`, `.log`, `.out` ou outros arquivos gerados;
+- revise todos os PDFs antes da impressão ou assinatura.
 
 ---
 
-## Limitações atuais
+## Notas de manutenção
 
-- O projeto ainda depende de edição manual dos arquivos em `dados/`.
-- O `main.tex` precisa ser comentado/descomentado manualmente.
-- A interface gráfica ainda não existe.
-- A futura aplicação deverá usar estes modelos como motor LaTeX, provavelmente preenchendo dados estruturados e chamando LuaLaTeX por trás.
-
----
-
-## Fluxo futuro pretendido
-
-A etapa futura será criar um programa simples com interface gráfica para:
-
-1. cadastrar dados gerais da sindicância;
-2. selecionar documentos desejados;
-3. preencher dados específicos de cada anexo;
-4. anexar PDFs de juntada;
-5. gerar automaticamente o `main.tex` e os arquivos de dados;
-6. chamar LuaLaTeX;
-7. entregar o PDF final.
-
-Por enquanto, este repositório é a base LaTeX limpa e funcional. Primeiro o motor, depois o painel. Uma ordem rara e civilizada, portanto suspeita.
+- `.gitattributes` normaliza arquivos de texto com LF para evitar diffs falsos por CRLF/LF.
+- `sindicancia.cls` removeu dependências desnecessárias e não usa mais TikZ para desenhar a caixa `Fl. ____`.
+- `hyperref` é carregado depois dos pacotes de layout.
+- A validação de certidão agora usa `\certidaoTexto{...}` e `\certidaoCiencia{...}` em vez de redefinir getters.

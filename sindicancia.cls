@@ -7,7 +7,7 @@
 % ============================================================
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{sindicancia}[2026/06/01 v2.3 Sindicancias EB - condicionais seguras]
+\ProvidesClass{sindicancia}[2026/06/05 v2.4 Sindicancias EB - build validado]
 
 % ============================================================
 % 1. OPÇÕES DA CLASSE
@@ -21,6 +21,11 @@
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
 \ProcessOptions\relax
 
+% API pública para opções da classe.
+\newcommand{\getTipoSindicancia}{%
+  \ifsind@sumario sumária\else ordinária\fi
+}
+
 % ============================================================
 % 2. CLASSE BASE
 % ============================================================
@@ -30,10 +35,21 @@
 % ============================================================
 % 3. PACOTES ESSENCIAIS
 % ============================================================
+\RequirePackage{iftex}
+
+\ifPDFTeX
+  \ClassError{sindicancia}
+    {Compile este documento com LuaLaTeX ou XeLaTeX}
+    {Esta classe usa fontspec e nao e compativel com pdfLaTeX.}
+\fi
+
 \RequirePackage{fontspec}
 \RequirePackage[brazilian]{babel}
+\RequirePackage[
+  a4paper,
+  margin=2.5cm
+]{geometry}
 \RequirePackage{microtype}
-\RequirePackage{xcolor}
 \RequirePackage{graphicx}
 \RequirePackage{enumitem}
 \RequirePackage{titlesec}
@@ -41,12 +57,11 @@
 \RequirePackage{ragged2e}
 \RequirePackage{tabularx}
 \RequirePackage{array}
-\RequirePackage{booktabs}
 \RequirePackage{pdfpages}
-\RequirePackage{xparse}
-\RequirePackage{multirow}
+\@ifundefined{NewDocumentCommand}{\RequirePackage{xparse}}{}
 \RequirePackage{etoolbox}
-\RequirePackage{tikz}
+
+% Carregar hyperref por último reduz conflitos com layout e âncoras.
 \RequirePackage[hidelinks]{hyperref}
 
 % ============================================================
@@ -61,10 +76,6 @@
   \setmainfont{Liberation Serif}%
 }
 
-\RequirePackage[
-  a4paper,
-  margin=2.5cm
-]{geometry}
 
 \setstretch{1.15}
 \justifying
@@ -119,37 +130,25 @@
 \newcommand{\MostrarCaixaFolha}{\sind@mostrarflboxtrue}
 \newcommand{\OcultarCaixaFolha}{\sind@mostrarflboxfalse}
 
-% Caixa com dimensão externa controlada: 2 cm x 1.5 cm.
+% Caixa com dimensão externa controlada: 2 cm x 1.5 cm, sem TikZ.
 \newcommand{\flbox}{%
-  \tikz[baseline=(F.base)]{%
-    \node[
-      draw=black,
-      line width=0.4pt,
-      minimum width=2cm,
-      minimum height=1.5cm,
-      inner sep=0pt,
-      align=left,
-      font=\footnotesize
-    ] (F) {Fl.\,\rule{1cm}{0.4pt}};%
-  }%
+  \begingroup
+  \setlength{\unitlength}{1cm}%
+  \begin{picture}(2,1.5)
+    \linethickness{0.4pt}%
+    \put(0,0){%
+      \framebox(2,1.5)[l]{%
+        \hspace{2pt}\footnotesize Fl.\,\rule{1cm}{0.4pt}%
+      }%
+    }%
+  \end{picture}%
+  \endgroup
 }
 
 % Desenho da caixa em páginas normais geradas pelo LaTeX.
 \newcommand{\sind@desenharflbox}{%
   \ifsind@mostrarflbox
-    \begin{tikzpicture}[remember picture,overlay]
-      \node[
-        anchor=north east,
-        draw=black,
-        line width=0.4pt,
-        minimum width=2cm,
-        minimum height=1.5cm,
-        inner sep=0pt,
-        align=left,
-        font=\footnotesize
-      ] at ([xshift=-2.5cm,yshift=-1.0cm]current page.north east)
-      {Fl.\,\rule{1cm}{0.4pt}};
-    \end{tikzpicture}%
+    \put(\strip@pt\dimexpr\paperwidth-4.5cm\relax,\strip@pt\dimexpr\paperheight-2.5cm\relax){\flbox}%
   \fi
 }
 
@@ -228,7 +227,7 @@
 
 % \sind@ifempty é definido adiante; aqui só fica registrado para uso após o carregamento da classe.
 \newcommand{\localDataX}[1]{%
-  \sind@ifempty{\getDataCidade{#1}}%
+  \ifcsempty{#1@cidade}%
     {\dataExtensoX{#1}}%
     {\getDataCidade{#1}, \dataExtensoX{#1}}%
 }
@@ -472,14 +471,21 @@
 % 13. VALIDAÇÃO E CONDICIONAIS
 % ============================================================
 % Teste interno de vazio com expansão controlada.
+% Expande apenas o primeiro token, suficiente para \@campos antigos,
+% sem forçar expansão completa de conteúdo frágil.
 \newcommand{\sind@ifempty}[3]{%
-  \begingroup
-  \edef\sind@tmp{#1}%
-  \ifx\sind@tmp\@empty
-    \endgroup #2%
-  \else
-    \endgroup #3%
-  \fi
+  \expandafter\ifblank\expandafter{#1}{#2}{#3}%
+}
+
+% Gerador simples de setter/getter para novos campos da classe.
+\newcommand{\sind@newfield}[3]{%
+  \expandafter\gdef\csname @#1\endcsname{#3}%
+  \expandafter\newcommand\csname #1\endcsname[1]{%
+    \expandafter\gdef\csname @#1\endcsname{##1}%
+  }%
+  \expandafter\newcommand\csname get#2\endcsname{%
+    \csname @#1\endcsname
+  }%
 }
 
 \newcommand{\CampoObrigatorio}[2]{%
@@ -688,6 +694,13 @@
 % ============================================================
 % 18. DADOS ESPECÍFICOS DE JUNTADA
 % ============================================================
+\newcommand{\sind@limparJuntada}{%
+  \gdef\@juntadaNumero{}%
+  \gdef\@juntadaArquivo{}%
+  \gdef\@juntadaItens{}%
+}
+\newcommand{\novaJuntada}{\sind@limparJuntada}
+
 \newcommand{\juntadaNumero}[1]{%
   \gdef\@juntadaNumero{#1}%
   \gdef\@juntadaArquivo{documentos/docjuntada#1.pdf}%
@@ -701,9 +714,7 @@
   \gdef\@juntadaItens{#1}%
 }
 
-\gdef\@juntadaNumero{}
-\gdef\@juntadaArquivo{}
-\gdef\@juntadaItens{}
+\sind@limparJuntada
 
 \newcommand{\getJuntadaNumero}{\@juntadaNumero}
 \newcommand{\getJuntadaArquivo}{\@juntadaArquivo}
@@ -738,13 +749,18 @@
 % Cada despacho é produzido pelo sindicante, sem PDF anexado.
 % Para vários despachos, use dados-despacho1.tex, dados-despacho2.tex etc.,
 % sempre redefinindo os campos antes de chamar \GerarDocumento{despacho}.
+\newcommand{\sind@limparDespacho}{%
+  \gdef\@despachoNumero{}%
+  \gdef\@despachoTexto{}%
+  \gdef\@despachoLocalData{}%
+}
+\newcommand{\novoDespacho}{\sind@limparDespacho}
+
 \newcommand{\despachoNumero}[1]{\gdef\@despachoNumero{#1}}
 \newcommand{\despachoTexto}[1]{\gdef\@despachoTexto{#1}}
 \newcommand{\despachoLocalData}[1]{\gdef\@despachoLocalData{#1}}
 
-\gdef\@despachoNumero{}
-\gdef\@despachoTexto{}
-\gdef\@despachoLocalData{}
+\sind@limparDespacho
 
 \newcommand{\getDespachoNumero}{\@despachoNumero}
 \newcommand{\getDespachoTexto}{\@despachoTexto}
@@ -769,6 +785,16 @@
 % A notificação prévia é documento produzido pelo sindicante para dar ciência
 % ao sindicado sobre a sindicância, sobre sua inquirição e, se for o caso,
 % sobre oitivas de denunciante/ofendido e testemunhas.
+\newcommand{\sind@limparNotificacaoPrevia}{%
+  \gdef\@notificacaoNumero{}%
+  \gdef\@notificacaoLocalData{}%
+  \gdef\@notificacaoLocalVista{}%
+  \gdef\@notificacaoAnexos{}%
+  \gdef\@notificacaoTestemunhas{}%
+  \gdef\@notificacaoTextoComplementar{}%
+}
+\newcommand{\novaNotificacaoPrevia}{\sind@limparNotificacaoPrevia}
+
 \newcommand{\notificacaoNumero}[1]{\gdef\@notificacaoNumero{#1}}
 \newcommand{\notificacaoLocalData}[1]{\gdef\@notificacaoLocalData{#1}}
 \newcommand{\notificacaoLocalVista}[1]{\gdef\@notificacaoLocalVista{#1}}
@@ -776,12 +802,7 @@
 \newcommand{\notificacaoTestemunhas}[1]{\gdef\@notificacaoTestemunhas{#1}}
 \newcommand{\notificacaoTextoComplementar}[1]{\gdef\@notificacaoTextoComplementar{#1}}
 
-\gdef\@notificacaoNumero{}
-\gdef\@notificacaoLocalData{}
-\gdef\@notificacaoLocalVista{}
-\gdef\@notificacaoAnexos{}
-\gdef\@notificacaoTestemunhas{}
-\gdef\@notificacaoTextoComplementar{}
+\sind@limparNotificacaoPrevia
 
 \newcommand{\getNotificacaoNumero}{\@notificacaoNumero}
 \newcommand{\getNotificacaoLocalData}{\@notificacaoLocalData}
@@ -831,8 +852,9 @@
   \gdef\@diexLocalData{}%
   \gdef\@diexFecho{Atenciosamente,}%
 }
+\newcommand{\novoDiex}{\sind@limparDiex}
 
-\newcommand{\diexNumero}[1]{\sind@limparDiex\gdef\@diexNumero{#1}}
+\newcommand{\diexNumero}[1]{\gdef\@diexNumero{#1}}
 \newcommand{\diexOrigem}[1]{\gdef\@diexOrigem{#1}}
 \newcommand{\diexRemetente}[1]{\gdef\@diexRemetente{#1}}
 \newcommand{\diexDestinatario}[1]{\gdef\@diexDestinatario{#1}}
@@ -892,8 +914,9 @@
   \gdef\@oficioLocalData{}%
   \gdef\@oficioFecho{Atenciosamente,}%
 }
+\newcommand{\novoOficio}{\sind@limparOficio}
 
-\newcommand{\oficioNumero}[1]{\sind@limparOficio\gdef\@oficioNumero{#1}}
+\newcommand{\oficioNumero}[1]{\gdef\@oficioNumero{#1}}
 \newcommand{\oficioOrigem}[1]{\gdef\@oficioOrigem{#1}}
 \newcommand{\oficioRemetente}[1]{\gdef\@oficioRemetente{#1}}
 \newcommand{\oficioDestinatario}[1]{\gdef\@oficioDestinatario{#1}}
@@ -959,8 +982,9 @@
   \gdef\@inqSindicadoAlgoMais{não}%%
   \gdef\@inqSindicadoPrazoDefesa{três dias úteis}%%
 }
+\newcommand{\novaInquiricaoSindicado}{\sind@limparInqSindicado}
 
-\newcommand{\inquiricaoSindicadoNumero}[1]{\sind@limparInqSindicado\gdef\@inqSindicadoNumero{#1}}
+\newcommand{\inquiricaoSindicadoNumero}[1]{\gdef\@inqSindicadoNumero{#1}}
 \newcommand{\inquiricaoSindicadoDataAta}[1]{\gdef\@inqSindicadoDataAta{#1}}
 \newcommand{\inquiricaoSindicadoDocumentoBase}[1]{\gdef\@inqSindicadoDocumentoBase{#1}}
 \newcommand{\inquiricaoSindicadoFls}[1]{\gdef\@inqSindicadoFls{#1}}
@@ -1036,8 +1060,9 @@
   \gdef\@inqTestemunhaPerguntas{}%
   \gdef\@inqTestemunhaAlgoMais{não}%%
 }
+\newcommand{\novaInquiricaoTestemunha}{\sind@limparInqTestemunha}
 
-\newcommand{\inquiricaoTestemunhaNumero}[1]{\sind@limparInqTestemunha\gdef\@inqTestemunhaNumero{#1}}
+\newcommand{\inquiricaoTestemunhaNumero}[1]{\gdef\@inqTestemunhaNumero{#1}}
 \newcommand{\inquiricaoTestemunhaDataAta}[1]{\gdef\@inqTestemunhaDataAta{#1}}
 \newcommand{\inquiricaoTestemunhaDocumentoBase}[1]{\gdef\@inqTestemunhaDocumentoBase{#1}}
 \newcommand{\inquiricaoTestemunhaFls}[1]{\gdef\@inqTestemunhaFls{#1}}
@@ -1107,8 +1132,9 @@
   \gdef\@cartaPrecatoriaLocalData{}%
   \gdef\@cartaPrecatoriaFecho{Respeitosamente,}%
 }
+\newcommand{\novaCartaPrecatoria}{\sind@limparCartaPrecatoria}
 
-\newcommand{\cartaPrecatoriaNumero}[1]{\sind@limparCartaPrecatoria\gdef\@cartaPrecatoriaNumero{#1}}
+\newcommand{\cartaPrecatoriaNumero}[1]{\gdef\@cartaPrecatoriaNumero{#1}}
 \newcommand{\cartaPrecatoriaOrigem}[1]{\gdef\@cartaPrecatoriaOrigem{#1}}
 \newcommand{\cartaPrecatoriaRemetente}[1]{\gdef\@cartaPrecatoriaRemetente{#1}}
 \newcommand{\cartaPrecatoriaAutoridadeDeprecada}[1]{\gdef\@cartaPrecatoriaAutoridadeDeprecada{#1}}
@@ -1182,8 +1208,9 @@
   \gdef\@vistaAlegacoesLocalData{}%
   \gdef\@vistaAlegacoesHora{}%
 }
+\newcommand{\novaVistaAlegacoes}{\sind@limparVistaAlegacoes}
 
-\newcommand{\vistaAlegacoesNumero}[1]{\sind@limparVistaAlegacoes\gdef\@vistaAlegacoesNumero{#1}}
+\newcommand{\vistaAlegacoesNumero}[1]{\gdef\@vistaAlegacoesNumero{#1}}
 \newcommand{\vistaAlegacoesLocal}[1]{\gdef\@vistaAlegacoesLocal{#1}}
 \newcommand{\vistaAlegacoesPrazo}[1]{\gdef\@vistaAlegacoesPrazo{#1}}
 \newcommand{\vistaAlegacoesObjeto}[1]{\gdef\@vistaAlegacoesObjeto{#1}}
@@ -1232,8 +1259,9 @@
   \gdef\@compSindHora{}%
   \gdef\@compSindLocal{}%
 }
+\newcommand{\novoComparecimentoSindicado}{\sind@limparComparecimentoSindicado}
 
-\newcommand{\comparecimentoSindicadoNumero}[1]{\sind@limparComparecimentoSindicado\gdef\@compSindNumero{#1}}
+\newcommand{\comparecimentoSindicadoNumero}[1]{\gdef\@compSindNumero{#1}}
 \newcommand{\comparecimentoSindicadoOrigem}[1]{\gdef\@compSindOrigem{#1}}
 \newcommand{\comparecimentoSindicadoLocalData}[1]{\gdef\@compSindLocalData{#1}}
 \newcommand{\comparecimentoSindicadoComandante}[1]{\gdef\@compSindComandante{#1}}
@@ -1277,8 +1305,9 @@
   \gdef\@compTestQuartel{}%
   \gdef\@compTestEndereco{}%
 }
+\newcommand{\novoComparecimentoTestemunha}{\sind@limparComparecimentoTestemunha}
 
-\newcommand{\comparecimentoTestemunhaNumero}[1]{\sind@limparComparecimentoTestemunha\gdef\@compTestNumero{#1}}
+\newcommand{\comparecimentoTestemunhaNumero}[1]{\gdef\@compTestNumero{#1}}
 \newcommand{\comparecimentoTestemunhaOrigem}[1]{\gdef\@compTestOrigem{#1}}
 \newcommand{\comparecimentoTestemunhaLocalData}[1]{\gdef\@compTestLocalData{#1}}
 \newcommand{\comparecimentoTestemunhaDestinatario}[1]{\gdef\@compTestDestinatario{#1}}
@@ -1319,13 +1348,18 @@
   \gdef\@certidaoNumeroDocumento{}%
   \gdef\@certidaoDataDocumento{}%
   \gdef\@certidaoLocalData{}%
+  \gdef\@certidaoTexto{}%
+  \gdef\@certidaoCiencia{}%
 }
+\newcommand{\novaCertidao}{\sind@limparCertidao}
 
-\newcommand{\certidaoDataTerminoPrazo}[1]{\sind@limparCertidao\gdef\@certidaoDataTerminoPrazo{#1}}
+\newcommand{\certidaoDataTerminoPrazo}[1]{\gdef\@certidaoDataTerminoPrazo{#1}}
 \newcommand{\certidaoTipoDocumento}[1]{\gdef\@certidaoTipoDocumento{#1}}
 \newcommand{\certidaoNumeroDocumento}[1]{\gdef\@certidaoNumeroDocumento{#1}}
 \newcommand{\certidaoDataDocumento}[1]{\gdef\@certidaoDataDocumento{#1}}
 \newcommand{\certidaoLocalData}[1]{\gdef\@certidaoLocalData{#1}}
+\newcommand{\certidaoTexto}[1]{\gdef\@certidaoTexto{#1}}
+\newcommand{\certidaoCiencia}[1]{\gdef\@certidaoCiencia{#1}}
 
 \sind@limparCertidao
 
@@ -1334,14 +1368,13 @@
 \newcommand{\getCertidaoNumeroDocumento}{\@certidaoNumeroDocumento}
 \newcommand{\getCertidaoDataDocumento}{\@certidaoDataDocumento}
 \newcommand{\getCertidaoLocalData}{\@certidaoLocalData}
+\newcommand{\getCertidaoTexto}{\@certidaoTexto}
+\newcommand{\getCertidaoCiencia}{\@certidaoCiencia}
 
 \newcommand{\ValidarCertidao}{%
   \CampoObrigatorio{sindicanteNome}{nome do sindicante}%
   \CampoObrigatorio{sindicantePosto}{posto/graduação do sindicante}%
-  \CampoObrigatorioRaw{certidaoDataTerminoPrazo}{dia do término do prazo}%
-  \CampoObrigatorioRaw{certidaoTipoDocumento}{tipo de documento que concedeu o prazo}%
-  \CampoObrigatorioRaw{certidaoNumeroDocumento}{número do documento que concedeu o prazo}%
-  \CampoObrigatorioRaw{certidaoDataDocumento}{data do documento que concedeu o prazo}%
+  \CampoObrigatorioRaw{certidaoTexto}{texto da certidão}%
 }
 
 % ============================================================
@@ -1354,8 +1387,9 @@
   \gdef\@relatorioParteConclusiva{}%
   \gdef\@relatorioLocalData{}%
 }
+\newcommand{\novoRelatorio}{\sind@limparRelatorio}
 
-\newcommand{\relatorioIntroducao}[1]{\sind@limparRelatorio\gdef\@relatorioIntroducao{#1}}
+\newcommand{\relatorioIntroducao}[1]{\gdef\@relatorioIntroducao{#1}}
 \newcommand{\relatorioDiligencias}[1]{\gdef\@relatorioDiligencias{#1}}
 \newcommand{\relatorioParteExpositiva}[1]{\gdef\@relatorioParteExpositiva{#1}}
 \newcommand{\relatorioParteConclusiva}[1]{\gdef\@relatorioParteConclusiva{#1}}
@@ -1384,8 +1418,9 @@
 \newcommand{\sind@limparTermoEncerramento}{%
   \gdef\@termoEncerramentoPortaria{}%
 }
+\newcommand{\novoTermoEncerramento}{\sind@limparTermoEncerramento}
 
-\newcommand{\termoEncerramentoPortaria}[1]{\sind@limparTermoEncerramento\gdef\@termoEncerramentoPortaria{#1}}
+\newcommand{\termoEncerramentoPortaria}[1]{\gdef\@termoEncerramentoPortaria{#1}}
 
 \sind@limparTermoEncerramento
 
@@ -1413,8 +1448,9 @@
   \gdef\@diexRemessaReferencia{}%
   \gdef\@diexRemessaTextoComplementar{}%
 }
+\newcommand{\novoDiexRemessa}{\sind@limparDiexRemessa}
 
-\newcommand{\diexRemessaNumero}[1]{\sind@limparDiexRemessa\gdef\@diexRemessaNumero{#1}}
+\newcommand{\diexRemessaNumero}[1]{\gdef\@diexRemessaNumero{#1}}
 \newcommand{\diexRemessaOrigem}[1]{\gdef\@diexRemessaOrigem{#1}}
 \newcommand{\diexRemessaLocalData}[1]{\gdef\@diexRemessaLocalData{#1}}
 \newcommand{\diexRemessaDestinatario}[1]{\gdef\@diexRemessaDestinatario{#1}}
@@ -1443,6 +1479,57 @@
   \CampoObrigatorioRaw{diexRemessaFolhas}{quantidade de folhas da sindicância}%
 }
 
+% ============================================================
+% 33. MODELO AUXILIAR - SOLICITAÇÃO DE PRORROGAÇÃO DE PRAZO
+% ============================================================
+\newcommand{\sind@limparProrrogacao}{%
+  \gdef\@prorrogacaoNumero{}%
+  \gdef\@prorrogacaoOrigem{Sindicante}%
+  \gdef\@prorrogacaoLocalData{}%
+  \gdef\@prorrogacaoDestinatario{}%
+  \gdef\@prorrogacaoReferencia{}%
+  \gdef\@prorrogacaoPrazo{}%
+  \gdef\@prorrogacaoDataInicio{}%
+  \gdef\@prorrogacaoFaseAndamento{}%
+  \gdef\@prorrogacaoJustificativa{}%
+}
+\newcommand{\novaSolicitacaoProrrogacao}{\sind@limparProrrogacao}
+
+\newcommand{\prorrogacaoNumero}[1]{\gdef\@prorrogacaoNumero{#1}}
+\newcommand{\prorrogacaoOrigem}[1]{\gdef\@prorrogacaoOrigem{#1}}
+\newcommand{\prorrogacaoLocalData}[1]{\gdef\@prorrogacaoLocalData{#1}}
+\newcommand{\prorrogacaoDestinatario}[1]{\gdef\@prorrogacaoDestinatario{#1}}
+\newcommand{\prorrogacaoReferencia}[1]{\gdef\@prorrogacaoReferencia{#1}}
+\newcommand{\prorrogacaoPrazo}[1]{\gdef\@prorrogacaoPrazo{#1}}
+\newcommand{\prorrogacaoDataInicio}[1]{\gdef\@prorrogacaoDataInicio{#1}}
+\newcommand{\prorrogacaoFaseAndamento}[1]{\gdef\@prorrogacaoFaseAndamento{#1}}
+\newcommand{\prorrogacaoJustificativa}[1]{\gdef\@prorrogacaoJustificativa{#1}}
+
+\sind@limparProrrogacao
+
+\newcommand{\getProrrogacaoNumero}{\@prorrogacaoNumero}
+\newcommand{\getProrrogacaoOrigem}{\@prorrogacaoOrigem}
+\newcommand{\getProrrogacaoLocalData}{\@prorrogacaoLocalData}
+\newcommand{\getProrrogacaoDestinatario}{\@prorrogacaoDestinatario}
+\newcommand{\getProrrogacaoReferencia}{\@prorrogacaoReferencia}
+\newcommand{\getProrrogacaoPrazo}{\@prorrogacaoPrazo}
+\newcommand{\getProrrogacaoDataInicio}{\@prorrogacaoDataInicio}
+\newcommand{\getProrrogacaoFaseAndamento}{\@prorrogacaoFaseAndamento}
+\newcommand{\getProrrogacaoJustificativa}{\@prorrogacaoJustificativa}
+
+\newcommand{\ValidarSolicitacaoProrrogacao}{%
+  \CampoObrigatorio{nup}{NUP/EB da solicitação de prorrogação}%
+  \CampoObrigatorio{sindicanteNome}{nome do sindicante}%
+  \CampoObrigatorio{sindicantePosto}{posto/graduação do sindicante}%
+  \CampoObrigatorioRaw{prorrogacaoNumero}{número do DIEx de prorrogação}%
+  \CampoObrigatorioRaw{prorrogacaoDestinatario}{destinatário da solicitação de prorrogação}%
+  \CampoObrigatorioRaw{prorrogacaoReferencia}{referência da solicitação de prorrogação}%
+  \CampoObrigatorioRaw{prorrogacaoPrazo}{prazo solicitado na prorrogação}%
+  \CampoObrigatorioRaw{prorrogacaoDataInicio}{data inicial da prorrogação}%
+  \CampoObrigatorioRaw{prorrogacaoFaseAndamento}{fase atual da sindicância}%
+  \CampoObrigatorioRaw{prorrogacaoJustificativa}{justificativa da prorrogação}%
+}
+
 
 
 
@@ -1454,8 +1541,9 @@
   \gdef\@designacaoEscrivaoLocalData{}%
   \gdef\@designacaoEscrivaoPortaria{}%
 }
+\newcommand{\novaDesignacaoEscrivao}{\sind@limparDesignacaoEscrivao}
 
-\newcommand{\designacaoEscrivaoNumero}[1]{\sind@limparDesignacaoEscrivao\gdef\@designacaoEscrivaoNumero{#1}}
+\newcommand{\designacaoEscrivaoNumero}[1]{\gdef\@designacaoEscrivaoNumero{#1}}
 \newcommand{\designacaoEscrivaoLocalData}[1]{\gdef\@designacaoEscrivaoLocalData{#1}}
 \newcommand{\designacaoEscrivaoPortaria}[1]{\gdef\@designacaoEscrivaoPortaria{#1}}
 
@@ -1481,8 +1569,9 @@
 \newcommand{\sind@limparCompromissoEscrivao}{%
   \gdef\@compromissoEscrivaoLocalData{}%
 }
+\newcommand{\novoCompromissoEscrivao}{\sind@limparCompromissoEscrivao}
 
-\newcommand{\compromissoEscrivaoLocalData}[1]{\sind@limparCompromissoEscrivao\gdef\@compromissoEscrivaoLocalData{#1}}
+\newcommand{\compromissoEscrivaoLocalData}[1]{\gdef\@compromissoEscrivaoLocalData{#1}}
 
 \sind@limparCompromissoEscrivao
 
@@ -1513,8 +1602,9 @@
   \gdef\@notNovoSindHoraReinquiricao{}%
   \gdef\@notNovoSindLocalReinquiricao{}%
 }
+\newcommand{\novaNotificacaoNovoSindicado}{\sind@limparNotificacaoNovoSindicado}
 
-\newcommand{\notificacaoNovoSindicadoNumero}[1]{\sind@limparNotificacaoNovoSindicado\gdef\@notNovoSindNumero{#1}}
+\newcommand{\notificacaoNovoSindicadoNumero}[1]{\gdef\@notNovoSindNumero{#1}}
 \newcommand{\notificacaoNovoSindicadoOrigem}[1]{\gdef\@notNovoSindOrigem{#1}}
 \newcommand{\notificacaoNovoSindicadoLocalData}[1]{\gdef\@notNovoSindLocalData{#1}}
 \newcommand{\notificacaoNovoSindicadoDestinatario}[1]{\gdef\@notNovoSindDestinatario{#1}}
@@ -1564,8 +1654,9 @@
   \gdef\@notDilHoraAudiencia{}%
   \gdef\@notDilLocalAudiencia{}%
 }
+\newcommand{\novaNotificacaoDiligencias}{\sind@limparNotificacaoDiligencias}
 
-\newcommand{\notificacaoDiligenciasNumero}[1]{\sind@limparNotificacaoDiligencias\gdef\@notDilNumero{#1}}
+\newcommand{\notificacaoDiligenciasNumero}[1]{\gdef\@notDilNumero{#1}}
 \newcommand{\notificacaoDiligenciasOrigem}[1]{\gdef\@notDilOrigem{#1}}
 \newcommand{\notificacaoDiligenciasLocalData}[1]{\gdef\@notDilLocalData{#1}}
 \newcommand{\notificacaoDiligenciasDestinatario}[1]{\gdef\@notDilDestinatario{#1}}
@@ -1618,8 +1709,9 @@
   \gdef\@substSindFls{}%
   \gdef\@substSindMotivo{}%
 }
+\newcommand{\novaSubstituicaoSindicante}{\sind@limparSubstituicaoSindicante}
 
-\newcommand{\substituicaoSindicanteNumero}[1]{\sind@limparSubstituicaoSindicante\gdef\@substSindNumero{#1}}
+\newcommand{\substituicaoSindicanteNumero}[1]{\gdef\@substSindNumero{#1}}
 \newcommand{\substituicaoSindicanteOrigem}[1]{\gdef\@substSindOrigem{#1}}
 \newcommand{\substituicaoSindicanteLocalData}[1]{\gdef\@substSindLocalData{#1}}
 \newcommand{\substituicaoSindicanteDestinatario}[1]{\gdef\@substSindDestinatario{#1}}
@@ -1660,8 +1752,9 @@
   \gdef\@acareacaoDeclaracaoB{}%
   \gdef\@acareacaoDeclaracaoSindicado{}%
 }
+\newcommand{\novaAcareacao}{\sind@limparAcareacao}
 
-\newcommand{\acareacaoDataAta}[1]{\sind@limparAcareacao\gdef\@acareacaoDataAta{#1}}
+\newcommand{\acareacaoDataAta}[1]{\gdef\@acareacaoDataAta{#1}}
 \newcommand{\acareacaoLocal}[1]{\gdef\@acareacaoLocal{#1}}
 \newcommand{\acareacaoPontosDivergencia}[1]{\gdef\@acareacaoPontosDivergencia{#1}}
 \newcommand{\acareacaoDeclaracaoA}[1]{\gdef\@acareacaoDeclaracaoA{#1}}

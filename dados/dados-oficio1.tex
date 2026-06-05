@@ -1,0 +1,32 @@
+% ============================================================
+% DADOS - OFÍCIO GENÉRICO 1
+% Arquivo: dados/dados-oficio1.tex
+%
+% Use este modelo para destinatário externo ou quando não houver anexo específico.
+% ============================================================
+
+\novoOficio
+
+\oficioNumero{001}
+\oficioOrigem{Sindicante}
+
+% Se não informar, usa \localData.
+% \oficioLocalData{Petrolina/PE, 31 de maio de 2026}
+
+\oficioRemetente{\getSindicantePosto\ \getSindicanteNome}
+\oficioDestinatario{NOME DO DESTINATÁRIO}
+\oficioCargoDestinatario{CARGO/FUNÇÃO DO DESTINATÁRIO}
+\oficioEnderecoDestinatario{ENDEREÇO DO DESTINATÁRIO}
+\oficioAssunto{solicitação de informações}
+
+% Opcionais:
+% \oficioReferencia{\getPortaria}
+% \oficioAnexos{01 (um) documento}
+
+\oficioTexto{%
+\noindent Solicito a Vossa Senhoria a remessa das informações/documentos necessários à instrução da sindicância em epígrafe.
+
+\vspace{1em}
+
+\noindent Solicito, ainda, que a resposta seja encaminhada a esta Organização Militar no prazo possível, em razão dos prazos processuais aplicáveis.
+}

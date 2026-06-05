@@ -1,0 +1,61 @@
+% ============================================================
+% MODELO AUXILIAR: SOLICITAÇÃO DE PRORROGAÇÃO DE PRAZO
+% Arquivo: modelos/solicitacao-prorrogacao.tex
+%
+% Peça auxiliar em formato de DIEx para solicitar à autoridade
+% instauradora a prorrogação do prazo da sindicância.
+% ============================================================
+
+\pdfbookmark[1]{Solicitação de Prorrogação de Prazo}{solicitacao-prorrogacao-\getProrrogacaoNumero}
+
+\ValidarSolicitacaoProrrogacao
+
+\clearpage
+\thispagestyle{empty}
+
+\cabecalhoInstitucional
+
+\vspace{3em}
+
+\noindent\textbf{DIEx nº \getProrrogacaoNumero\ -- \getProrrogacaoOrigem}\\
+\textbf{EB:} \getNup
+
+\vspace{1em}
+
+\begin{flushright}
+\SeCampoPreenchido{prorrogacaoLocalData}{\getProrrogacaoLocalData}
+\SeCampoVazio{prorrogacaoLocalData}{\localData}
+\end{flushright}
+
+\vspace{1em}
+
+\noindent\textbf{Do} \getSindicantePosto\ \getSindicanteNome
+
+\noindent\textbf{Ao Sr.} \getProrrogacaoDestinatario
+
+\vspace{0.5em}
+
+\noindent\textbf{Assunto:} prorrogação de prazo
+
+\noindent\textbf{Referência:} \getProrrogacaoReferencia
+
+\vspace{1em}
+
+\begin{enumerate}
+  \item Trata o presente expediente sobre a solicitação de prorrogação de prazo para o prosseguimento das atividades da sindicância instaurada nesta OM, conforme referência.
+
+  \item Solicito-vos a prorrogação do prazo da sindicância da qual sou encarregado por \getProrrogacaoPrazo, a contar de \getProrrogacaoDataInicio, com a finalidade de dar continuidade aos trabalhos realizados na sindicância.
+
+  \item A presente solicitação tem fundamento no atual andamento da sindicância, que se encontra na seguinte fase: \getProrrogacaoFaseAndamento.
+
+  \item A prorrogação mostra-se necessária em razão de \getProrrogacaoJustificativa.
+\end{enumerate}
+
+\vspace{2.5cm}
+
+\begin{center}
+\textbf{\getSindicanteNome} -- \getSindicantePosto\\
+Sindicante
+\end{center}
+
+\clearpage

@@ -2,9 +2,10 @@
 % DADOS - ANEXO V - CERTIDÃO
 % Arquivo: dados/dados-anexo-v-certidao.tex
 %
-% Este arquivo define diretamente o texto da certidão.
-% Assim, o modelo fica flexível e não exige alteração no sindicancia.cls.
+% Este arquivo define o texto da certidão usando a API pública da classe.
 % ============================================================
+
+\novaCertidao
 
 % ------------------------------------------------------------
 % CAMPOS EDITÁVEIS
@@ -27,13 +28,13 @@
 
 \newcommand{\certidaoResultado}{apresentado o \certidaoTestemunhaApresentada\ como testemunha, sem, entretanto, juntar documento extra}
 
-\newcommand{\getCertidaoLocalData}{Petrolina/PE, 03 de junho de 2026}
+\certidaoLocalData{Petrolina/PE, 03 de junho de 2026}
 
 % ------------------------------------------------------------
 % TEXTO DA CERTIDÃO
 % ------------------------------------------------------------
 
-\newcommand{\getCertidaoTexto}{%
+\certidaoTexto{%
 Certifico que, em \certidaoDataDecursoPrazo, decorreu o prazo concedido por meio do
 \certidaoDocumentoReferencia\ de \certidaoDataDocumentoReferencia, concedendo
 \textbf{\certidaoPrazo}, a contar da data de inquirição, tendo o sindicado,
@@ -44,10 +45,10 @@ Certifico que, em \certidaoDataDecursoPrazo, decorreu o prazo concedido por meio
 % CAIXA DE CIÊNCIA
 %
 % Para ocultar a caixa, deixe vazio:
-% \renewcommand{\getCertidaoCiencia}{}
+% \certidaoCiencia{}
 % ------------------------------------------------------------
 
-\newcommand{\getCertidaoCiencia}{%
+\certidaoCiencia{%
 Declaro que tenho ciência:
 
 \vspace{0.5em}

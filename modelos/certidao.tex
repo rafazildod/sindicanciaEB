@@ -3,12 +3,12 @@
 % Arquivo: modelos/certidao.tex
 %
 % Modelo genérico de certidão.
-% Não depende de novos campos no sindicancia.cls.
-% O texto da certidão é definido diretamente no arquivo:
-%   dados/dados-anexo-v-certidao.tex
+% O texto principal é preenchido por \certidaoTexto{...} no arquivo de dados.
 % ============================================================
 
 \pdfbookmark[1]{Certidão}{certidao}
+
+\ValidarCertidao
 
 \clearpage
 \thispagestyle{empty}
@@ -34,7 +34,8 @@ Do que para constar, lavrei o presente termo.
 \vspace{2em}
 
 \begin{flushright}
-\getCertidaoLocalData
+\SeCampoPreenchido{certidaoLocalData}{\getCertidaoLocalData}
+\SeCampoVazio{certidaoLocalData}{\localData}
 \end{flushright}
 
 \vspace{2cm}
@@ -47,21 +48,18 @@ Sindicante
 
 % ------------------------------------------------------------
 % Caixa opcional de ciência.
-% Para não imprimir, deixe \getCertidaoCiencia vazio ou comente este bloco.
+% Para não imprimir, deixe \certidaoCiencia{} vazio.
 % ------------------------------------------------------------
-\ifcsname getCertidaoCiencia\endcsname
-  \ifx\getCertidaoCiencia\empty
-  \else
-    \vfill
-    \begin{flushright}
-    \setlength{\fboxsep}{6pt}
-    \fbox{%
-      \begin{minipage}{6.8cm}
-      \getCertidaoCiencia
-      \end{minipage}
-    }
-    \end{flushright}
-  \fi
-\fi
+\SeCampoPreenchido{certidaoCiencia}{%
+  \vfill
+  \begin{flushright}
+  \setlength{\fboxsep}{6pt}
+  \fbox{%
+    \begin{minipage}{6.8cm}
+    \getCertidaoCiencia
+    \end{minipage}
+  }
+  \end{flushright}
+}
 
 \clearpage

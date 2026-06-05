@@ -1,0 +1,30 @@
+% ============================================================
+% DADOS - DIEx GENÉRICO 1
+% Arquivo: dados/dados-diex1.tex
+%
+% Use este modelo apenas quando não houver anexo específico aplicável.
+% ============================================================
+
+\novoDiex
+
+\diexNumero{001}
+\diexOrigem{Sindicante}
+
+% Se não informar, usa \localData.
+% \diexLocalData{Petrolina/PE, 31 de maio de 2026}
+
+\diexRemetente{\getSindicantePosto\ \getSindicanteNome}
+\diexDestinatario{\getAutoridadePosto\ \getAutoridadeNome, \getAutoridadeFuncao}
+\diexAssunto{informação sobre andamento de sindicância}
+
+% Opcionais:
+% \diexReferencia{\getPortaria}
+% \diexAnexos{01 (um) documento}
+
+\diexTexto{%
+\noindent Informo a Vossa Senhoria que a sindicância instaurada por meio da referência encontra-se em andamento, com diligências pendentes de conclusão.
+
+\vspace{1em}
+
+\noindent Permaneço à disposição para prestar informações complementares, caso necessário.
+}
