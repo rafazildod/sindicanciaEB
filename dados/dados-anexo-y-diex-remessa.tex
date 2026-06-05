@@ -3,16 +3,24 @@
 % Arquivo: dados/dados-anexo-y-diex-remessa.tex
 % ============================================================
 
+% ------------------------------------------------------------
+% Data própria do documento
+% Deixe em branco para usar a data/local do termo de abertura.
+% Formato: \dataDocumento{dia}{mês}{ano}{cidade/UF}
+% ------------------------------------------------------------
+\dataDocumento{}{}{}{}
+
 \novoDiexRemessa
 
 \diexRemessaNumero{003}
 \diexRemessaOrigem{Sindicante}
 
 % Se não informar, usa \localData.
-% \diexRemessaLocalData{Petrolina/PE, 31 de maio de 2026}
+% \diexRemessaLocalData{CIDADE/UF, 31 de maio de 2026}
 
 \diexRemessaDestinatario{\getAutoridadePosto\ \getAutoridadeNome, \getAutoridadeFuncao}
-\diexRemessaFolhas{00}
+% A quantidade de folhas no assunto do DIEx de remessa é deixada em branco
+% no PDF para preenchimento manual no fechamento dos autos.
 
 % Se não informar, usa \getPortaria.
 % \diexRemessaReferencia{Portaria nº 000, de 00 de mês de 2026}

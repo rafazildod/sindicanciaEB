@@ -1,0 +1,36 @@
+% ============================================================
+% CONTROLE MANUAL DE EXPEDIENTES
+% Arquivo: dados/controle-expedientes.tex
+%
+% Este arquivo NÃO tenta gravar nada automaticamente no disco.
+% Ele funciona como um registro simples e editável pelo usuário.
+%
+% Como usar:
+% - Atualize \proximoDiex e \proximoOficio antes de compilar.
+% - Em qualquer dados-*.tex de DIEx/Ofício, deixe o número vazio
+%   para usar o próximo número informado aqui.
+% - Depois de assinar/emitir o expediente, registre-o no histórico
+%   e avance manualmente o próximo número.
+%
+% Exemplo:
+%   \diexNumero{}   % usa \proximoDiex
+%   \oficioNumero{} % usa \proximoOficio
+% ============================================================
+
+\proximoDiex{005}
+\proximoOficio{002}
+
+% ------------------------------------------------------------
+% Histórico manual de DIEx expedidos
+% Formato: \registroDiex{número}{data}{assunto/título}
+% ------------------------------------------------------------
+\registroDiex{001}{00 de mês de 2026}{notificação prévia}
+\registroDiex{002}{00 de mês de 2026}{solicitação de comparecimento de testemunha}
+\registroDiex{003}{00 de mês de 2026}{remessa dos autos}
+\registroDiex{004}{00 de mês de 2026}{solicitação de prorrogação de prazo}
+
+% ------------------------------------------------------------
+% Histórico manual de Ofícios expedidos
+% Formato: \registroOficio{número}{data}{assunto/título}
+% ------------------------------------------------------------
+\registroOficio{001}{00 de mês de 2026}{solicitação de informações}

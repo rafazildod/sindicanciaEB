@@ -14,68 +14,71 @@
 % ============================================================
 
 % ------------------------------------------------------------
-% Data e local padrão dos documentos
+% Data/local de abertura dos trabalhos
+% Usada também como fallback quando um documento não informar data própria.
 % ------------------------------------------------------------
-\dia{31}
-\mes{maio}
+\dia{00}
+\mes{mês}
 \ano{2026}
-\cidade{Petrolina/PE}
+\cidade{CIDADE/UF}
 
 % ------------------------------------------------------------
 % Organização militar
 % ------------------------------------------------------------
-\om{72º Batalhão de Infantaria de Caatinga}
-\omSuperior{CMNE -- 7ª RM / 7ª DE -- 10ª BDA INF MTZ}
+\om{ORGANIZAÇÃO MILITAR}
+\omSuperior{ESCALÃO SUPERIOR}
+\omComplemento{LINHA COMPLEMENTAR DA OM}
+\omNomeHistorico{NOME HISTÓRICO DA OM}
 
 % ------------------------------------------------------------
 % Processo / portaria / objeto
 % ------------------------------------------------------------
-\nup{64108.000000/2026-00}
+\nup{00000.000000/2026-00}
 
-\portaria{Portaria nº 000 -- Seç Ap Ass Jurd/72º BI Caat, de 00 de mês de 2026, do Comandante do 72º Batalhão de Infantaria de Caatinga}
+\portaria{Portaria nº 000, de 00 de mês de 2026, do Comandante da ORGANIZAÇÃO MILITAR}
 
 \objeto{apurar os fatos constantes da portaria instauradora e seus anexos}
 
 % ------------------------------------------------------------
 % Autoridade instauradora / nomeante
 % ------------------------------------------------------------
-\autoridadeNome{NOME DA AUTORIDADE INSTAURADORA}
-\autoridadePosto{Cel}
-\autoridadeFuncao{Comandante do 72º Batalhão de Infantaria de Caatinga}
+\autoridadeNome{AUTORIDADE INSTAURADORA}
+\autoridadePosto{POSTO}
+\autoridadeFuncao{Comandante da ORGANIZAÇÃO MILITAR}
 
 % ------------------------------------------------------------
 % Sindicante
 % ------------------------------------------------------------
-\sindicanteNome{RAFAEL DOS SANTOS DANTAS}
-\sindicantePosto{1º Ten}
-\sindicanteOM{72º BI Caat}
+\sindicanteNome{SINDICANTE}
+\sindicantePosto{POSTO/GRADUAÇÃO}
+\sindicanteOM{\getOm}
 
 % ------------------------------------------------------------
 % Sindicado
 % Se ainda não houver sindicado, deixe em branco ou comente,
 % desde que o modelo usado permita ausência.
 % ------------------------------------------------------------
-\sindicadoNome{NOME DO SINDICADO}
-\sindicadoPosto{Posto/Graduação}
-\sindicadoSU{Subunidade/Seção}
-\sindicadoOM{72º BI Caat}
+\sindicadoNome{SINDICADO}
+\sindicadoPosto{POSTO/GRADUAÇÃO}
+\sindicadoSU{SUBUNIDADE/SEÇÃO}
+\sindicadoOM{\getOm}
 
 % Dados complementares do sindicado, usados principalmente no Anexo Q
 % e também por outros modelos que precisem qualificar o sindicado.
 \sindicadoIdentidade{000000000 ÓRGÃO/UF}
 \sindicadoCPF{000.000.000-00}
 \sindicadoNascimento{00 de mês de 0000}
-\sindicadoNaturalidade{Cidade-UF}
-\sindicadoEstadoCivil{estado civil}
+\sindicadoNaturalidade{CIDADE/UF}
+\sindicadoEstadoCivil{ESTADO CIVIL}
 \sindicadoFiliacao{NOME DO PAI e NOME DA MÃE}
-\sindicadoResidencia{endereço completo}
+\sindicadoResidencia{ENDEREÇO COMPLETO}
 \sindicadoCelular{(00) 00000-0000}
 
 % ------------------------------------------------------------
 % Escrivão
 % Usado pelos Anexos F e G, quando houver designação de escrivão.
 % ------------------------------------------------------------
-\escrivaoNome{NOME COMPLETO DO ESCRIVÃO}
+\escrivaoNome{ESCRIVÃO}
 \escrivaoPosto{POSTO/GRADUAÇÃO}
 
 % ------------------------------------------------------------

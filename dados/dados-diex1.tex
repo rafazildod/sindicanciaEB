@@ -5,13 +5,21 @@
 % Use este modelo apenas quando não houver anexo específico aplicável.
 % ============================================================
 
+% ------------------------------------------------------------
+% Data própria do documento
+% Deixe em branco para usar a data/local do termo de abertura.
+% Formato: \dataDocumento{dia}{mês}{ano}{cidade/UF}
+% ------------------------------------------------------------
+\dataDocumento{}{}{}{}
+
 \novoDiex
 
-\diexNumero{001}
+% Deixe vazio para usar \proximoDiex de dados/controle-expedientes.tex.
+\diexNumero{}
 \diexOrigem{Sindicante}
 
 % Se não informar, usa \localData.
-% \diexLocalData{Petrolina/PE, 31 de maio de 2026}
+% \diexLocalData{CIDADE/UF, 31 de maio de 2026}
 
 \diexRemetente{\getSindicantePosto\ \getSindicanteNome}
 \diexDestinatario{\getAutoridadePosto\ \getAutoridadeNome, \getAutoridadeFuncao}

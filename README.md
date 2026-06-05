@@ -28,12 +28,14 @@ sindicanciaEB/
 ├── main.tex
 ├── sindicancia.cls
 ├── .gitattributes
+├── .gitignore
 ├── bases/
 │   ├── anexo_c_capa.docx
 │   ├── ...
 │   └── anexo_y_diex_remessa.docx
 ├── dados/
 │   ├── dados-sindicancia.tex
+│   ├── controle-expedientes.tex
 │   ├── dados-anexo-c-capa.tex
 │   ├── ...
 │   ├── dados-anexo-y-diex-remessa.tex
@@ -41,7 +43,7 @@ sindicanciaEB/
 │   ├── dados-oficio1.tex
 │   └── dados-solicitacao-prorrogacao.tex
 ├── documentos/
-│   └── docjuntada1.pdf
+│   └── docjuntada1.pdf   # PDF fictício de exemplo
 ├── figs/
 │   └── Coat.pdf
 ├── modelos/
@@ -131,6 +133,154 @@ Esse teste carrega todos os modelos implementados com os dados de exemplo do rep
 
 ---
 
+## Versionamento do projeto
+
+O repositório já inclui:
+
+```text
+.gitattributes
+.gitignore
+```
+
+`.gitattributes` normaliza arquivos de texto com LF, reduzindo diffs falsos por diferença de final de linha. `.gitignore` evita versionar arquivos temporários de LaTeX, PDFs finais gerados e PDFs reais em `documentos/`.
+
+Fluxo recomendado:
+
+```bash
+git status
+latexmk -lualatex -halt-on-error -interaction=nonstopmode -outdir=build tests/all-models.tex
+git add README.md main.tex sindicancia.cls dados modelos documentos tests .gitattributes .gitignore
+git commit -m "Atualiza modelos de sindicancia"
+git push
+```
+
+Para registrar somente novos expedientes emitidos:
+
+```bash
+git add dados/controle-expedientes.tex
+git commit -m "Registra expedientes emitidos"
+```
+
+Não versionar em repositório público:
+
+```text
+main.pdf
+build/
+*.aux
+*.log
+documentos/*.pdf reais
+PDFs finais assinados
+dados reais de sindicância
+```
+
+---
+
+
+## Datas dos documentos
+
+A data/local informada em `dados/dados-sindicancia.tex` é a **data de abertura dos trabalhos**, isto é, a data usada como marco prático do início da sindicância. Ela não precisa ser igual à data da portaria.
+
+No arquivo geral, preencha:
+
+```latex
+\dia{00}
+\mes{mês}
+\ano{2026}
+\cidade{CIDADE/UF}
+```
+
+Também existem aliases equivalentes, caso você prefira deixar explícito que se trata da abertura:
+
+```latex
+\aberturaDia{00}
+\aberturaMes{mês}
+\aberturaAno{2026}
+\aberturaCidade{CIDADE/UF}
+```
+
+Cada arquivo específico em `dados/dados-*.tex` possui seu próprio comando de data:
+
+```latex
+\dataDocumento{}{}{}{}
+```
+
+Deixe os quatro campos em branco para herdar a data/local da abertura. Para informar uma data própria para aquela peça, preencha:
+
+```latex
+\dataDocumento{05}{junho}{2026}{CIDADE/UF}
+```
+
+Os modelos que imprimem `\localData`, `\getDia`, `\getMes`, `\getAno` ou `\getCidade` usam a data própria do documento quando ela existir. Quando ela estiver vazia, usam a data de abertura.
+
+Nos termos em formato de ata, como inquirição e acareação, o campo textual específico continua aceitando texto livre:
+
+```latex
+\inquiricaoSindicadoDataAta{quatro dias do mês de junho do ano de dois mil e vinte e seis}
+```
+
+Se esse campo ficar vazio, o modelo monta a data por extenso a partir de `\dataDocumento`; se `\dataDocumento` também estiver vazio, usa a data de abertura.
+
+---
+
+## Controle manual e versionável de DIEx e Ofícios
+
+O arquivo abaixo concentra o controle manual dos expedientes:
+
+```text
+dados/controle-expedientes.tex
+```
+
+Nele você informa os próximos números:
+
+```latex
+\proximoDiex{005}
+\proximoOficio{002}
+```
+
+Em um arquivo de dados de DIEx ou Ofício, deixe o número vazio para usar o próximo número do controle:
+
+```latex
+\diexNumero{}   % usa \proximoDiex
+\oficioNumero{} % usa \proximoOficio
+```
+
+Depois de emitir ou assinar o expediente, atualize manualmente o histórico e avance o próximo número:
+
+```latex
+\registroDiex{005}{05 de junho de 2026}{assunto do DIEx expedido}
+\proximoDiex{006}
+
+\registroOficio{002}{06 de junho de 2026}{assunto do Ofício expedido}
+\proximoOficio{003}
+```
+
+O LaTeX **não grava nem incrementa esse controle automaticamente**. Isso é intencional: recompilar um PDF nunca deve consumir número de DIEx ou Ofício. O arquivo funciona como uma base manual, rastreável e versionável no Git.
+
+Sugestão de uso no Git:
+
+```bash
+git add dados/controle-expedientes.tex
+git commit -m "Registra expedientes emitidos"
+```
+
+Para sindicâncias reais, use repositório privado. Em repositório público, substitua dados reais por placeholders antes de publicar.
+
+---
+
+## DIEx final de remessa
+
+O DIEx final de remessa não recebe a caixa `Fl. ____`, seguindo a mesma regra da capa.
+
+O assunto desse documento fica propositalmente assim:
+
+```text
+sindicância com ______ folhas
+```
+
+A quantidade de folhas deve ser preenchida manualmente no fechamento dos autos, pois o projeto não tenta controlar a paginação final efetiva da sindicância. Isso evita divergência entre o PDF de teste e os autos efetivamente montados, assinados, juntados ou impressos.
+
+---
+
 ## Regra importante para arquivos de dados
 
 Use os comandos públicos da classe. Não redefina getters.
@@ -138,14 +288,17 @@ Use os comandos públicos da classe. Não redefina getters.
 Correto:
 
 ```latex
-\certidaoLocalData{Petrolina/PE, 03 de junho de 2026}
-\certidaoTexto{Texto da certidão...}
+\certidaoDataTerminoPrazo{DIA DO TÉRMINO DO PRAZO}
+\certidaoTipoDocumento{DIEx}
+\certidaoNumeroDocumento{000}
+\certidaoDataDocumento{00 de mês de 2026}
+\certidaoLocalData{CIDADE/UF, 00 de mês de 2026}
 ```
 
 Evite:
 
 ```latex
-\newcommand{\getCertidaoLocalData}{Petrolina/PE, 03 de junho de 2026}
+\newcommand{\getCertidaoLocalData}{CIDADE/UF, 00 de mês de 2026}
 ```
 
 O padrão da classe é:
@@ -164,29 +317,62 @@ Para documentos que podem se repetir, os arquivos de dados usam um reset explíc
 
 Isso evita que campos opcionais de uma peça contaminem a próxima.
 
----
-
 ## Juntadas
 
-O modelo de juntada usa este padrão:
+Os documentos juntados aos autos devem ser digitalizados/escaneados e salvos em PDF dentro da pasta:
+
+```text
+documentos/
+```
+
+A nomenclatura padrão é controlada pela classe. Ao usar:
 
 ```latex
 \juntadaNumero{1}
 ```
 
-e procura automaticamente:
+o projeto procura automaticamente:
 
 ```text
 documentos/docjuntada1.pdf
 ```
 
-Para uma segunda juntada, use `\juntadaNumero{2}` e coloque o arquivo correspondente em:
+Para uma segunda juntada, use:
+
+```latex
+\juntadaNumero{2}
+```
+
+e salve o PDF correspondente como:
 
 ```text
 documentos/docjuntada2.pdf
 ```
 
-No `main.tex`, o segundo exemplo permanece comentado porque o PDF `docjuntada2.pdf` não existe no repositório.
+O padrão esperado é, portanto:
+
+```text
+documentos/docjuntada<N>.pdf
+```
+
+em que `<N>` é o número informado em `\juntadaNumero{<N>}`.
+
+Se precisar usar outro nome de arquivo, informe explicitamente:
+
+```latex
+\juntadaArquivo{documentos/nome-do-arquivo.pdf}
+```
+
+Recomendações práticas:
+
+- escaneie cada conjunto de documentos já na ordem em que será juntado;
+- gere um PDF único por juntada;
+- confira se o PDF está legível antes de compilar;
+- não coloque documentos reais em repositório público;
+- mantenha apenas PDFs fictícios de exemplo quando for publicar o projeto.
+
+`documentos/docjuntada1.pdf` é um PDF fictício de exemplo, sem dados reais. O `.gitignore` ignora PDFs reais em `documentos/`, exceto esse exemplo fictício.
+
 
 ---
 
@@ -277,7 +463,7 @@ Para uso real:
 
 - mantenha o repositório privado;
 - use dados fictícios em exemplos públicos;
-- remova PDFs reais de `documentos/` antes de publicar;
+- remova PDFs reais de `documentos/` antes de publicar; mantenha apenas PDFs fictícios de exemplo, como `documentos/docjuntada1.pdf`;
 - não versione PDFs finais reais, `.aux`, `.log`, `.out` ou outros arquivos gerados;
 - revise todos os PDFs antes da impressão ou assinatura.
 
@@ -286,6 +472,7 @@ Para uso real:
 ## Notas de manutenção
 
 - `.gitattributes` normaliza arquivos de texto com LF para evitar diffs falsos por CRLF/LF.
-- `sindicancia.cls` removeu dependências desnecessárias e não usa mais TikZ para desenhar a caixa `Fl. ____`.
+- `.gitignore` evita versionar saídas de compilação, PDFs finais e PDFs reais em `documentos/`.
+- `sindicancia.cls` usa TikZ para desenhar a caixa `Fl. ____`, mantendo a capa e o DIEx final de remessa sem a caixa.
 - `hyperref` é carregado depois dos pacotes de layout.
-- A validação de certidão agora usa `\certidaoTexto{...}` e `\certidaoCiencia{...}` em vez de redefinir getters.
+- O Anexo V segue o texto do modelo `bases/anexo_v_certidao.docx` e usa campos estruturados como `\certidaoDataTerminoPrazo{...}`, `\certidaoNumeroDocumento{...}` e `\certidaoDataDocumento{...}`.

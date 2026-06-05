@@ -18,14 +18,15 @@
     \textbf{DESIGNAÇÃO DE ESCRIVÃO}
 \end{center}
 
-\vspace{2.5cm}
+\vspace{3em}
 
 Designo, nos termos do parágrafo único do art. 6 das Instruções Gerais para a Elaboração de Sindicância no Âmbito do Exército Brasileiro (EB10-IG-09.001), o \getEscrivaoPosto\ \getEscrivaoNome, para servir como escrivão na sindicância instaurada com a \getDesignacaoEscrivaoPortaria, lavrando-se o respectivo termo de compromisso.
 
-\vspace{2cm}
+\vspace{3em}
 
 \begin{flushright}
-\ifstrempty{\getDesignacaoEscrivaoLocalData}{\localData}{\getDesignacaoEscrivaoLocalData}
+\SeCampoPreenchido{designacaoEscrivaoLocalData}{\getDesignacaoEscrivaoLocalData}
+\SeCampoVazio{designacaoEscrivaoLocalData}{\localData}
 \end{flushright}
 
 \assinaturaAutoridade

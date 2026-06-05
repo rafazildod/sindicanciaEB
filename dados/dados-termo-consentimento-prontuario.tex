@@ -10,6 +10,13 @@
 % Identificação do militar que autoriza.
 % Por padrão, usa os dados gerais do sindicado.
 % ------------------------------------------------------------
+% ------------------------------------------------------------
+% Data própria do documento
+% Deixe em branco para usar a data/local do termo de abertura.
+% Formato: \dataDocumento{dia}{mês}{ano}{cidade/UF}
+% ------------------------------------------------------------
+\dataDocumento{}{}{}{}
+
 \newcommand{\tcpNome}{\getSindicadoNome}
 \newcommand{\tcpPostoGraduacao}{\getSindicadoPosto}
 \newcommand{\tcpIdentidade}{\getSindicadoIdentidade}
@@ -22,24 +29,16 @@
 \newcommand{\tcpCondicaoProcessual}{sindicado}
 
 % ------------------------------------------------------------
-% Objeto médico delimitado.
-% Evite autorização ampla demais. Descreva somente o necessário.
-% ------------------------------------------------------------
-\newcommand{\tcpObjetoMedico}{queixas, atendimentos, exames e registros médicos relativos a dores ou lesões nos joelhos, no contexto dos fatos apurados}
-
-% ------------------------------------------------------------
 % DATA DO TERMO
 %
-% Opção 1, padrão: usa a data geral de dados-sindicancia.tex
-% \newcommand{\tcpLocalData}{\localData}
-%
-% Opção 2, recomendada quando o termo tiver data própria:
-% edite diretamente a linha abaixo.
+% Por padrão, usa a data geral de dados-sindicancia.tex.
+% Edite somente quando o termo precisar de data própria.
 % ------------------------------------------------------------
-\newcommand{\tcpLocalData}{Petrolina/PE, 01 de junho de 2026}
+\newcommand{\tcpLocalData}{\localData}
+% \renewcommand{\tcpLocalData}{CIDADE/UF, 00 de mês de 2026}
 
 % ------------------------------------------------------------
 % Linha complementar abaixo da assinatura.
-% Exemplo: "IDT nº 000000000 ÓRGÃO/UF" ou "CPF nº ..."
+% Exemplo: "IDT nº 000000000 ÓRGÃO/UF" ou "CPF nº 000.000.000-00".
 % ------------------------------------------------------------
 \newcommand{\tcpIdentificacaoAssinatura}{IDT nº \tcpIdentidade}

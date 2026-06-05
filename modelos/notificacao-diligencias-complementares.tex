@@ -10,17 +10,21 @@
 \clearpage
 \thispagestyle{empty}
 
-\noindent\textbf{DIEx nº \getNotificacaoDiligenciasNumero\ -- \getNotificacaoDiligenciasOrigem}\\
-\textbf{EB:} \getNup
-
-\vspace{1.2cm}
-
 \cabecalhoInstitucional
 
 \vspace{3em}
 
+\noindent\textbf{DIEx nº \getNotificacaoDiligenciasNumero\ -- \getNotificacaoDiligenciasOrigem}
+
+\vspace{0.5em}
+
+\noindent\textbf{EB:} \getNup
+
+\vspace{1em}
+
 \begin{flushright}
-\ifstrempty{\getNotificacaoDiligenciasLocalData}{\localData}{\getNotificacaoDiligenciasLocalData}
+\SeCampoPreenchido{notDilLocalData}{\getNotificacaoDiligenciasLocalData}
+\SeCampoVazio{notDilLocalData}{\localData}
 \end{flushright}
 
 \vspace{1cm}

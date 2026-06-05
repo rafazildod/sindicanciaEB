@@ -2,64 +2,30 @@
 % DADOS - ANEXO V - CERTIDÃO
 % Arquivo: dados/dados-anexo-v-certidao.tex
 %
-% Este arquivo define o texto da certidão usando a API pública da classe.
+% Modelo conforme bases/anexo_v_certidao.docx.
+% Preencha somente os campos abaixo.
 % ============================================================
+
+% ------------------------------------------------------------
+% Data própria do documento
+% Deixe em branco para usar a data/local do termo de abertura.
+% Formato: \dataDocumento{dia}{mês}{ano}{cidade/UF}
+% ------------------------------------------------------------
+\dataDocumento{}{}{}{}
 
 \novaCertidao
 
-% ------------------------------------------------------------
-% CAMPOS EDITÁVEIS
-% ------------------------------------------------------------
+% Data em que terminou o prazo concedido ao sindicado.
+\certidaoDataTerminoPrazo{DIA DO TÉRMINO DO PRAZO}
 
-\newcommand{\certidaoDataDecursoPrazo}{03 de junho de 2026}
-\newcommand{\certidaoDataDecursoPrazoNumerica}{03/06/2026}
+% Documento que concedeu o prazo. Exemplos:
+% \certidaoTipoDocumento{DIEx}
+% \certidaoTipoDocumento{Ofício}
+\certidaoTipoDocumento{DIEx}
 
-% Atenção:
-% No modelo enviado havia referência a "29 de junho de 2026", mas isso
-% fica cronologicamente incompatível com o decurso de prazo em 03 de junho.
-% Ajuste a data abaixo conforme o termo real.
-\newcommand{\certidaoDocumentoReferencia}{Termo de Inquirição de Sindicado}
-\newcommand{\certidaoDataDocumentoReferencia}{29 de maio de 2026}
+% Número e data do DIEx/Ofício que concedeu o prazo.
+\certidaoNumeroDocumento{000}
+\certidaoDataDocumento{00 de mês de 2026}
 
-\newcommand{\certidaoPrazo}{03 (três) dias úteis}
-
-\newcommand{\certidaoSindicadoNome}{LUCAS VINICIUS DA SILVA RODRIGUES}
-\newcommand{\certidaoTestemunhaApresentada}{1º Ten CARVALHO}
-
-\newcommand{\certidaoResultado}{apresentado o \certidaoTestemunhaApresentada\ como testemunha, sem, entretanto, juntar documento extra}
-
-\certidaoLocalData{Petrolina/PE, 03 de junho de 2026}
-
-% ------------------------------------------------------------
-% TEXTO DA CERTIDÃO
-% ------------------------------------------------------------
-
-\certidaoTexto{%
-Certifico que, em \certidaoDataDecursoPrazo, decorreu o prazo concedido por meio do
-\certidaoDocumentoReferencia\ de \certidaoDataDocumentoReferencia, concedendo
-\textbf{\certidaoPrazo}, a contar da data de inquirição, tendo o sindicado,
-\textbf{\certidaoSindicadoNome}, \certidaoResultado.%
-}
-
-% ------------------------------------------------------------
-% CAIXA DE CIÊNCIA
-%
-% Para ocultar a caixa, deixe vazio:
-% \certidaoCiencia{}
-% ------------------------------------------------------------
-
-\certidaoCiencia{%
-Declaro que tenho ciência:
-
-\vspace{0.5em}
-
-Data: \certidaoDataDecursoPrazoNumerica.
-
-\vspace{1em}
-
-Nome:
-
-\vspace{1.2em}
-
-\hrulefill
-}
+% Opcional. Se ficar em branco, usa \localData de dados-sindicancia.tex.
+% \certidaoLocalData{CIDADE/UF, 00 de mês de 2026}

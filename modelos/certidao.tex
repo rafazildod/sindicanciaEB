@@ -2,8 +2,7 @@
 % ANEXO V - CERTIDÃO
 % Arquivo: modelos/certidao.tex
 %
-% Modelo genérico de certidão.
-% O texto principal é preenchido por \certidaoTexto{...} no arquivo de dados.
+% Modelo conforme o anexo V de referência.
 % ============================================================
 
 \pdfbookmark[1]{Certidão}{certidao}
@@ -21,45 +20,32 @@
     \textbf{CERTIDÃO}
 \end{center}
 
-\vspace{2.5cm}
+\vspace{3em}
 
 \noindent
-\getCertidaoTexto
+Certifico que, em \getCertidaoDataTerminoPrazo, decorreu o prazo concedido por meio do
+\getCertidaoTipoDocumento{} nº \getCertidaoNumeroDocumento, de
+\getCertidaoDataDocumento, sem que o sindicado apresentasse suas razões de defesa
+escritas.
 
 \vspace{1em}
 
 \noindent
 Do que para constar, lavrei o presente termo.
 
-\vspace{2em}
+\vspace{3em}
 
 \begin{flushright}
 \SeCampoPreenchido{certidaoLocalData}{\getCertidaoLocalData}
 \SeCampoVazio{certidaoLocalData}{\localData}
 \end{flushright}
 
-\vspace{2cm}
+\vspace{3em}
 
 \begin{center}
 \rule{9cm}{0.4pt}\\
 \textbf{\getSindicanteNome} -- \getSindicantePosto\\
 Sindicante
 \end{center}
-
-% ------------------------------------------------------------
-% Caixa opcional de ciência.
-% Para não imprimir, deixe \certidaoCiencia{} vazio.
-% ------------------------------------------------------------
-\SeCampoPreenchido{certidaoCiencia}{%
-  \vfill
-  \begin{flushright}
-  \setlength{\fboxsep}{6pt}
-  \fbox{%
-    \begin{minipage}{6.8cm}
-    \getCertidaoCiencia
-    \end{minipage}
-  }
-  \end{flushright}
-}
 
 \clearpage

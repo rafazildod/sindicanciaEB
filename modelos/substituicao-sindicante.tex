@@ -20,7 +20,8 @@
 \vspace{1cm}
 
 \begin{flushright}
-\ifstrempty{\getSubstituicaoSindicanteLocalData}{\localData}{\getSubstituicaoSindicanteLocalData}
+\SeCampoPreenchido{substSindLocalData}{\getSubstituicaoSindicanteLocalData}
+\SeCampoVazio{substSindLocalData}{\localData}
 \end{flushright}
 
 \vspace{1cm}

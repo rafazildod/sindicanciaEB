@@ -5,13 +5,21 @@
 % Use este modelo para destinatário externo ou quando não houver anexo específico.
 % ============================================================
 
+% ------------------------------------------------------------
+% Data própria do documento
+% Deixe em branco para usar a data/local do termo de abertura.
+% Formato: \dataDocumento{dia}{mês}{ano}{cidade/UF}
+% ------------------------------------------------------------
+\dataDocumento{}{}{}{}
+
 \novoOficio
 
-\oficioNumero{001}
+% Deixe vazio para usar \proximoOficio de dados/controle-expedientes.tex.
+\oficioNumero{}
 \oficioOrigem{Sindicante}
 
 % Se não informar, usa \localData.
-% \oficioLocalData{Petrolina/PE, 31 de maio de 2026}
+% \oficioLocalData{CIDADE/UF, 31 de maio de 2026}
 
 \oficioRemetente{\getSindicantePosto\ \getSindicanteNome}
 \oficioDestinatario{NOME DO DESTINATÁRIO}

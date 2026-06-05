@@ -3,13 +3,20 @@
 % Arquivo: dados/dados-anexo-j-notificacao-novo-sindicado.tex
 % ============================================================
 
+% ------------------------------------------------------------
+% Data própria do documento
+% Deixe em branco para usar a data/local do termo de abertura.
+% Formato: \dataDocumento{dia}{mês}{ano}{cidade/UF}
+% ------------------------------------------------------------
+\dataDocumento{}{}{}{}
+
 \novaNotificacaoNovoSindicado
 
 \notificacaoNovoSindicadoNumero{001}
 \notificacaoNovoSindicadoOrigem{Sindicante}
 
 % Se ficar vazio, o modelo usa \localData.
-% \notificacaoNovoSindicadoLocalData{Petrolina/PE, 31 de maio de 2026}
+% \notificacaoNovoSindicadoLocalData{CIDADE/UF, 31 de maio de 2026}
 
 \notificacaoNovoSindicadoDestinatario{\getSindicadoPosto\ \getSindicadoNome\ -- \getSindicadoSU/\getSindicadoOM}
 \notificacaoNovoSindicadoAnexos{cópia da \getPortaria; cópia dos documentos que deram origem à instauração}

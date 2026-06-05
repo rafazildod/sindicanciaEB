@@ -3,18 +3,25 @@
 % Arquivo: dados/dados-anexo-k-notificacao-diligencias-complementares.tex
 % ============================================================
 
+% ------------------------------------------------------------
+% Data própria do documento
+% Deixe em branco para usar a data/local do termo de abertura.
+% Formato: \dataDocumento{dia}{mês}{ano}{cidade/UF}
+% ------------------------------------------------------------
+\dataDocumento{}{}{}{}
+
 \novaNotificacaoDiligencias
 
 \notificacaoDiligenciasNumero{001}
 \notificacaoDiligenciasOrigem{Sindicante}
 
 % Se ficar vazio, o modelo usa \localData.
-% \notificacaoDiligenciasLocalData{Petrolina/PE, 31 de maio de 2026}
+% \notificacaoDiligenciasLocalData{CIDADE/UF, 31 de maio de 2026}
 
 \notificacaoDiligenciasDestinatario{\getSindicadoPosto\ \getSindicadoNome\ -- \getSindicadoSU/\getSindicadoOM}
 
 % Se ficar vazio, o modelo usa \autoridadeFuncao.
-% \notificacaoDiligenciasAutoridadeFuncao{Comandante do 72º Batalhão de Infantaria de Caatinga}
+% \notificacaoDiligenciasAutoridadeFuncao{Comandante do ORGANIZAÇÃO MILITAR}
 
 \notificacaoDiligenciasLocalVista{Sala do Sindicante, no quartel do \getOm}
 \notificacaoDiligenciasDescricao{conforme despacho de fls. XX, relativo à realização de diligências complementares}

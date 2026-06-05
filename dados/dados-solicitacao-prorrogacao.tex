@@ -5,13 +5,20 @@
 % Peça auxiliar em formato de DIEx.
 % ============================================================
 
+% ------------------------------------------------------------
+% Data própria do documento
+% Deixe em branco para usar a data/local do termo de abertura.
+% Formato: \dataDocumento{dia}{mês}{ano}{cidade/UF}
+% ------------------------------------------------------------
+\dataDocumento{}{}{}{}
+
 \novaSolicitacaoProrrogacao
 
 \prorrogacaoNumero{004}
 \prorrogacaoOrigem{Sindicante}
 
 % Se não informar, usa \localData.
-% \prorrogacaoLocalData{Petrolina/PE, 03 de junho de 2026}
+% \prorrogacaoLocalData{CIDADE/UF, 03 de junho de 2026}
 
 \prorrogacaoDestinatario{\getAutoridadePosto\ \getAutoridadeNome, \getAutoridadeFuncao}
 \prorrogacaoReferencia{\getPortaria}

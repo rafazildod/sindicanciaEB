@@ -18,14 +18,15 @@
     \textbf{COMPROMISSO DE ESCRIVÃO}
 \end{center}
 
-\vspace{2.5cm}
+\vspace{3em}
 
 Aos \getDia\ dias do mês de \getMes\ de \getAno, foi designado pelo Sr. \getAutoridadePosto\ \getAutoridadeNome, Autoridade Nomeante desta sindicância, o(a) Sr(a). \getEscrivaoPosto\ \getEscrivaoNome\ para exercer a função de escrivão, tendo este perante o referido sindicante, prestado o compromisso de manter o sigilo da sindicância e de cumprir fielmente as determinações contidas nas Instruções Gerais para a Elaboração de Sindicância no Âmbito do Exército Brasileiro (EB10-IG-09.001), durante o exercício da função.
 
-\vspace{2cm}
+\vspace{3em}
 
 \begin{flushright}
-\ifstrempty{\getCompromissoEscrivaoLocalData}{\localData}{\getCompromissoEscrivaoLocalData}
+\SeCampoPreenchido{compromissoEscrivaoLocalData}{\getCompromissoEscrivaoLocalData}
+\SeCampoVazio{compromissoEscrivaoLocalData}{\localData}
 \end{flushright}
 
 \assinaturaSindicante

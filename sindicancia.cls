@@ -2,12 +2,12 @@
 % sindicancia.cls
 % Classe para elaboração de documentos de Sindicância no EB
 % Baseado em: EB10-IG-09.001 (2ª Ed, 2024)
-% Autor original: Rafael dos Santos Dantas
+% Autor original: projeto modelo
 % Refatoração assistida: versão 1.12
 % ============================================================
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{sindicancia}[2026/06/05 v2.4 Sindicancias EB - build validado]
+\ProvidesClass{sindicancia}[2026/06/05 v2.5 Sindicancias EB - datas e expedientes versionaveis]
 
 % ============================================================
 % 1. OPÇÕES DA CLASSE
@@ -60,6 +60,7 @@
 \RequirePackage{pdfpages}
 \@ifundefined{NewDocumentCommand}{\RequirePackage{xparse}}{}
 \RequirePackage{etoolbox}
+\RequirePackage{tikz}
 
 % Carregar hyperref por último reduz conflitos com layout e âncoras.
 \RequirePackage[hidelinks]{hyperref}
@@ -130,25 +131,37 @@
 \newcommand{\MostrarCaixaFolha}{\sind@mostrarflboxtrue}
 \newcommand{\OcultarCaixaFolha}{\sind@mostrarflboxfalse}
 
-% Caixa com dimensão externa controlada: 2 cm x 1.5 cm, sem TikZ.
+% Caixa com dimensão externa controlada: 2 cm x 1.5 cm.
 \newcommand{\flbox}{%
-  \begingroup
-  \setlength{\unitlength}{1cm}%
-  \begin{picture}(2,1.5)
-    \linethickness{0.4pt}%
-    \put(0,0){%
-      \framebox(2,1.5)[l]{%
-        \hspace{2pt}\footnotesize Fl.\,\rule{1cm}{0.4pt}%
-      }%
-    }%
-  \end{picture}%
-  \endgroup
+  \tikz[baseline=(F.base)]{%
+    \node[
+      draw=black,
+      line width=0.4pt,
+      minimum width=2cm,
+      minimum height=1.5cm,
+      inner sep=0pt,
+      align=left,
+      font=\footnotesize
+    ] (F) {Fl.\,\rule{1cm}{0.4pt}};%
+  }%
 }
 
 % Desenho da caixa em páginas normais geradas pelo LaTeX.
 \newcommand{\sind@desenharflbox}{%
   \ifsind@mostrarflbox
-    \put(\strip@pt\dimexpr\paperwidth-4.5cm\relax,\strip@pt\dimexpr\paperheight-2.5cm\relax){\flbox}%
+    \begin{tikzpicture}[remember picture,overlay]
+      \node[
+        anchor=north east,
+        draw=black,
+        line width=0.4pt,
+        minimum width=2cm,
+        minimum height=1.5cm,
+        inner sep=0pt,
+        align=left,
+        font=\footnotesize
+      ] at ([xshift=-2.5cm,yshift=-1.0cm]current page.north east)
+      {Fl.\,\rule{1cm}{0.4pt}};
+    \end{tikzpicture}%
   \fi
 }
 
@@ -182,10 +195,10 @@
     \includegraphics[height=2cm]{\@arquivoBrasao}\\[0.2cm]
     \textbf{MINISTÉRIO DA DEFESA}\\
     \textbf{EXÉRCITO BRASILEIRO}\\
-    \textbf{CMNE -- 7ª RM / 7ª DE -- 10ª BDA INF MTZ}\\
-    \textbf{72º BATALHÃO DE INFANTARIA DE CAATINGA}\\
-    \textbf{(35º Batalhão de Infantaria / 1968)}\\
-    \textbf{``BATALHÃO GENERAL VICTORINO CARNEIRO MONTEIRO''}
+    \SeCampoPreenchido{omSuperior}{\textbf{\getOmSuperior}\\}%
+    \SeCampoPreenchido{om}{\textbf{\getOm}\\}%
+    \SeCampoPreenchido{omComplemento}{\textbf{\getOmComplemento}\\}%
+    \SeCampoPreenchido{omNomeHistorico}{\textbf{``\getOmNomeHistorico''}}%
   \end{center}%
 }
 
@@ -239,8 +252,48 @@
 \newcommand{\mes}[1]{\gdef\@mes{#1}}
 \newcommand{\ano}[1]{\gdef\@ano{#1}}
 \newcommand{\cidade}[1]{\gdef\@cidade{#1}}
+
+% A data principal da classe é a data de abertura dos trabalhos.
+% Use estes aliases se quiser deixar o arquivo de dados mais explícito.
+\newcommand{\aberturaDia}[1]{\dia{#1}}
+\newcommand{\aberturaMes}[1]{\mes{#1}}
+\newcommand{\aberturaAno}[1]{\ano{#1}}
+\newcommand{\aberturaCidade}[1]{\cidade{#1}}
+
+% Data própria do documento em geração.
+% Deixe todos os argumentos vazios para herdar a data/local de abertura.
+\gdef\@documentoDia{}
+\gdef\@documentoMes{}
+\gdef\@documentoAno{}
+\gdef\@documentoCidade{}
+
+\newcommand{\dataDocumento}[4]{%
+  \gdef\@documentoDia{#1}%
+  \gdef\@documentoMes{#2}%
+  \gdef\@documentoAno{#3}%
+  \gdef\@documentoCidade{#4}%
+}
+\newcommand{\limparDataDocumento}{%
+  \gdef\@documentoDia{}%
+  \gdef\@documentoMes{}%
+  \gdef\@documentoAno{}%
+  \gdef\@documentoCidade{}%
+}
+
+\newcommand{\getDiaAbertura}{\@dia}
+\newcommand{\getMesAbertura}{\@mes}
+\newcommand{\getAnoAbertura}{\@ano}
+\newcommand{\getCidadeAbertura}{\@cidade}
+
+\newcommand{\getDiaDocumento}{\ifcsempty{@documentoDia}{\@dia}{\@documentoDia}}
+\newcommand{\getMesDocumento}{\ifcsempty{@documentoMes}{\@mes}{\@documentoMes}}
+\newcommand{\getAnoDocumento}{\ifcsempty{@documentoAno}{\@ano}{\@documentoAno}}
+\newcommand{\getCidadeDocumento}{\ifcsempty{@documentoCidade}{\@cidade}{\@documentoCidade}}
+
 \newcommand{\om}[1]{\gdef\@om{#1}}
 \newcommand{\omSuperior}[1]{\gdef\@omSuperior{#1}}
+\newcommand{\omComplemento}[1]{\gdef\@omComplemento{#1}}
+\newcommand{\omNomeHistorico}[1]{\gdef\@omNomeHistorico{#1}}
 \newcommand{\portaria}[1]{\gdef\@portaria{#1}}
 \newcommand{\nup}[1]{\gdef\@nup{#1}}
 \newcommand{\objeto}[1]{\gdef\@objeto{#1}}
@@ -252,6 +305,8 @@
 \gdef\@cidade{}
 \gdef\@om{}
 \gdef\@omSuperior{}
+\gdef\@omComplemento{}
+\gdef\@omNomeHistorico{}
 \gdef\@portaria{}
 \gdef\@nup{}
 \gdef\@objeto{}
@@ -372,12 +427,14 @@
 % ============================================================
 % 11. GETTERS PÚBLICOS
 % ============================================================
-\newcommand{\getDia}{\@dia}
-\newcommand{\getMes}{\@mes}
-\newcommand{\getAno}{\@ano}
-\newcommand{\getCidade}{\@cidade}
+\newcommand{\getDia}{\getDiaDocumento}
+\newcommand{\getMes}{\getMesDocumento}
+\newcommand{\getAno}{\getAnoDocumento}
+\newcommand{\getCidade}{\getCidadeDocumento}
 \newcommand{\getOm}{\@om}
 \newcommand{\getOmSuperior}{\@omSuperior}
+\newcommand{\getOmComplemento}{\@omComplemento}
+\newcommand{\getOmNomeHistorico}{\@omNomeHistorico}
 \newcommand{\getPortaria}{\@portaria}
 \newcommand{\getNup}{\@nup}
 \newcommand{\getObjeto}{\@objeto}
@@ -459,12 +516,24 @@
 % ============================================================
 % 12. DATAS PRINCIPAIS
 % ============================================================
-\newcommand{\dataExtenso}{%
+\newcommand{\dataExtensoAbertura}{%
   \@dia\ de \@mes\ de \@ano%
 }
 
+\newcommand{\localDataAbertura}{%
+  \@cidade, \dataExtensoAbertura%
+}
+
+\newcommand{\dataExtenso}{%
+  \getDia\ de \getMes\ de \getAno%
+}
+
 \newcommand{\localData}{%
-  \@cidade, \dataExtenso%
+  \getCidade, \dataExtenso%
+}
+
+\newcommand{\dataAtaDocumento}{%
+  \getDia\ dias do mês de \getMes\ do ano de \getAno%
 }
 
 % ============================================================
@@ -528,7 +597,7 @@
 % 14. ASSINATURAS
 % ============================================================
 \newcommand{\assinaturaPessoa}[3]{%
-  \vspace{2.5cm}
+  \vspace{3em}
   \begin{center}
     \textbf{#1} -- #2\\
     #3
@@ -560,14 +629,14 @@
   \assinaturaPessoa{\@testemunhaInquiricaoBNome}{\@testemunhaInquiricaoBPosto}{Testemunha da Inquirição}%
 }
 \newcommand{\assinaturaAdvogado}{%
-  \vspace{2.5cm}
+  \vspace{3em}
   \begin{center}
     \textbf{\@advogadoNome}\\
     \@advogadoOAB
   \end{center}%
 }
 \newcommand{\assinaturaAdvogadoDenunciante}{%
-  \vspace{2.5cm}
+  \vspace{3em}
   \begin{center}
     \textbf{\@advogadoDenuncianteNome}\\
     \@advogadoDenuncianteOAB
@@ -621,6 +690,7 @@
       \ClassError{sindicancia}{Modelo '#1' nao encontrado}{Crie modelos/#1.tex ou anexos/#1.tex.}%
     }%
   }%
+  \limparDataDocumento
 }
 
 % ============================================================
@@ -629,7 +699,7 @@
 \newcommand{\rulefill}{\leavevmode\leaders\hrule height 0.4pt\hfill\kern\z@}
 
 \newcommand{\ateste}{%
-  \vspace*{\fill}%
+  \vspace{3em}%
   \noindent\fbox{%
     \begin{minipage}[t][3cm][t]{0.6\textwidth}
       \footnotesize
@@ -650,7 +720,7 @@
       Ass: \rulefill
     \end{minipage}%
   }%
-  \vspace*{\fill}%
+  \vspace{3em}%
 }
 
 
@@ -730,6 +800,50 @@
   }%
 }
 
+% Controle manual de expedientes.
+% O usuário atualiza dados/controle-expedientes.tex; os modelos podem usar
+% os próximos números quando o número específico do documento ficar vazio.
+\gdef\@proximoDiex{}
+\gdef\@proximoOficio{}
+
+\newcommand{\proximoDiex}[1]{\gdef\@proximoDiex{#1}}
+\newcommand{\proximoOficio}[1]{\gdef\@proximoOficio{#1}}
+\newcommand{\getProximoDiex}{\@proximoDiex}
+\newcommand{\getProximoOficio}{\@proximoOficio}
+
+% Registros sem efeito tipográfico: servem como histórico editável em dados/.
+\newcommand{\registroDiex}[3]{}
+\newcommand{\registroOficio}[3]{}
+
+\newcommand{\sind@getNumeroOuProximoDiex}[1]{%
+  \ifcsempty{#1}{\@proximoDiex}{\csname #1\endcsname}%
+}
+\newcommand{\sind@getNumeroOuProximoOficio}[1]{%
+  \ifcsempty{#1}{\@proximoOficio}{\csname #1\endcsname}%
+}
+\newcommand{\CampoObrigatorioRawOuProximoDiex}[2]{%
+  \ifcsundef{@#1}{%
+    \ClassError{sindicancia}{Campo obrigatorio inexistente: #1}{O campo #1 nao foi definido na classe.}%
+  }{%
+    \ifcsempty{@#1}{%
+      \ifcsempty{@proximoDiex}{%
+        \ClassError{sindicancia}{Campo obrigatorio ausente: #2}{Preencha o campo do documento ou defina \string\proximoDiex\space em dados/controle-expedientes.tex.}%
+      }{}%
+    }{}%
+  }%
+}
+\newcommand{\CampoObrigatorioRawOuProximoOficio}[2]{%
+  \ifcsundef{@#1}{%
+    \ClassError{sindicancia}{Campo obrigatorio inexistente: #1}{O campo #1 nao foi definido na classe.}%
+  }{%
+    \ifcsempty{@#1}{%
+      \ifcsempty{@proximoOficio}{%
+        \ClassError{sindicancia}{Campo obrigatorio ausente: #2}{Preencha o campo do documento ou defina \string\proximoOficio\space em dados/controle-expedientes.tex.}%
+      }{}%
+    }{}%
+  }%
+}
+
 \newcommand{\ValidarJuntada}{%
   \CampoObrigatorio{dia}{dia da juntada}%
   \CampoObrigatorio{mes}{mes da juntada}%
@@ -804,7 +918,7 @@
 
 \sind@limparNotificacaoPrevia
 
-\newcommand{\getNotificacaoNumero}{\@notificacaoNumero}
+\newcommand{\getNotificacaoNumero}{\sind@getNumeroOuProximoDiex{@notificacaoNumero}}
 \newcommand{\getNotificacaoLocalData}{\@notificacaoLocalData}
 \newcommand{\getNotificacaoLocalVista}{\@notificacaoLocalVista}
 \newcommand{\getNotificacaoAnexos}{\@notificacaoAnexos}
@@ -827,7 +941,7 @@
   \CampoObrigatorioRaw{notificacaoLocalVista}{local de vista dos autos}%
   \CampoObrigatorio{dataInquiricao}{data da inquirição do sindicado}%
   \CampoObrigatorio{horaInquiricao}{hora da inquirição do sindicado}%
-  \CampoObrigatorioRaw{notificacaoNumero}{número da notificação/DIEx}%
+  \CampoObrigatorioRawOuProximoDiex{notificacaoNumero}{número da notificação/DIEx}%
   \CampoObrigatorioRaw{notificacaoAnexos}{anexos da notificação}%
 }
 
@@ -867,7 +981,7 @@
 
 \sind@limparDiex
 
-\newcommand{\getDiexNumero}{\@diexNumero}
+\newcommand{\getDiexNumero}{\sind@getNumeroOuProximoDiex{@diexNumero}}
 \newcommand{\getDiexOrigem}{\@diexOrigem}
 \newcommand{\getDiexRemetente}{\@diexRemetente}
 \newcommand{\getDiexDestinatario}{\@diexDestinatario}
@@ -886,7 +1000,7 @@
   \CampoObrigatorio{nup}{NUP/EB do DIEx}%
   \CampoObrigatorio{sindicanteNome}{nome do sindicante}%
   \CampoObrigatorio{sindicantePosto}{posto/graduação do sindicante}%
-  \CampoObrigatorioRaw{diexNumero}{número do DIEx}%
+  \CampoObrigatorioRawOuProximoDiex{diexNumero}{número do DIEx}%
   \CampoObrigatorioRaw{diexRemetente}{remetente do DIEx}%
   \CampoObrigatorioRaw{diexDestinatario}{destinatário do DIEx}%
   \CampoObrigatorioRaw{diexAssunto}{assunto do DIEx}%
@@ -932,7 +1046,7 @@
 
 \sind@limparOficio
 
-\newcommand{\getOficioNumero}{\@oficioNumero}
+\newcommand{\getOficioNumero}{\sind@getNumeroOuProximoOficio{@oficioNumero}}
 \newcommand{\getOficioOrigem}{\@oficioOrigem}
 \newcommand{\getOficioRemetente}{\@oficioRemetente}
 \newcommand{\getOficioDestinatario}{\@oficioDestinatario}
@@ -954,7 +1068,7 @@
   \CampoObrigatorio{nup}{NUP/EB do Ofício}%
   \CampoObrigatorio{sindicanteNome}{nome do sindicante}%
   \CampoObrigatorio{sindicantePosto}{posto/graduação do sindicante}%
-  \CampoObrigatorioRaw{oficioNumero}{número do Ofício}%
+  \CampoObrigatorioRawOuProximoOficio{oficioNumero}{número do Ofício}%
   \CampoObrigatorioRaw{oficioRemetente}{remetente do Ofício}%
   \CampoObrigatorioRaw{oficioDestinatario}{destinatário do Ofício}%
   \CampoObrigatorioRaw{oficioAssunto}{assunto do Ofício}%
@@ -1004,7 +1118,7 @@
 \sind@limparInqSindicado
 
 \newcommand{\getInqSindicadoNumero}{\@inqSindicadoNumero}
-\newcommand{\getInqSindicadoDataAta}{\@inqSindicadoDataAta}
+\newcommand{\getInqSindicadoDataAta}{\ifcsempty{@inqSindicadoDataAta}{\dataAtaDocumento}{\@inqSindicadoDataAta}}
 \newcommand{\getInqSindicadoDocumentoBase}{\@inqSindicadoDocumentoBase}
 \newcommand{\getInqSindicadoFls}{\@inqSindicadoFls}
 \newcommand{\getInqSindicadoPerguntaConhecimento}{\@inqSindicadoPerguntaConhecimento}
@@ -1034,7 +1148,6 @@
   \CampoObrigatorio{localInquiricao}{local da inquirição}%
   \CampoObrigatorio{testemunhaInquiricaoNome}{nome da testemunha da inquirição}%
   \CampoObrigatorioRaw{inqSindicadoNumero}{número da inquirição do sindicado}%
-  \CampoObrigatorioRaw{inqSindicadoDataAta}{data por extenso da ata de inquirição}%
   \CampoObrigatorioRaw{horaInicioInquiricao}{hora de início da inquirição}%
   \CampoObrigatorioRaw{horaFimInquiricao}{hora de término da inquirição}%
   \CampoObrigatorioRaw{inqSindicadoPerguntas}{perguntas e respostas da inquirição}%
@@ -1076,7 +1189,7 @@
 \sind@limparInqTestemunha
 
 \newcommand{\getInqTestemunhaNumero}{\@inqTestemunhaNumero}
-\newcommand{\getInqTestemunhaDataAta}{\@inqTestemunhaDataAta}
+\newcommand{\getInqTestemunhaDataAta}{\ifcsempty{@inqTestemunhaDataAta}{\dataAtaDocumento}{\@inqTestemunhaDataAta}}
 \newcommand{\getInqTestemunhaDocumentoBase}{\@inqTestemunhaDocumentoBase}
 \newcommand{\getInqTestemunhaFls}{\@inqTestemunhaFls}
 \newcommand{\getInqTestemunhaCompromisso}{\@inqTestemunhaCompromisso}
@@ -1097,7 +1210,6 @@
   \CampoObrigatorio{localInquiricao}{local da inquirição}%
   \CampoObrigatorio{testemunhaInquiricaoNome}{nome da testemunha da inquirição}%
   \CampoObrigatorioRaw{inqTestemunhaNumero}{número da inquirição da testemunha}%
-  \CampoObrigatorioRaw{inqTestemunhaDataAta}{data por extenso da ata de inquirição}%
   \CampoObrigatorioRaw{horaInicioInquiricao}{hora de início da inquirição}%
   \CampoObrigatorioRaw{horaFimInquiricao}{hora de término da inquirição}%
   \CampoObrigatorioRaw{inqTestemunhaPerguntas}{perguntas e respostas da inquirição}%
@@ -1155,7 +1267,7 @@
 
 \sind@limparCartaPrecatoria
 
-\newcommand{\getCartaPrecatoriaNumero}{\@cartaPrecatoriaNumero}
+\newcommand{\getCartaPrecatoriaNumero}{\sind@getNumeroOuProximoDiex{@cartaPrecatoriaNumero}}
 \newcommand{\getCartaPrecatoriaOrigem}{\@cartaPrecatoriaOrigem}
 \newcommand{\getCartaPrecatoriaRemetente}{\@cartaPrecatoriaRemetente}
 \newcommand{\getCartaPrecatoriaAutoridadeDeprecada}{\@cartaPrecatoriaAutoridadeDeprecada}
@@ -1182,7 +1294,7 @@
   \CampoObrigatorio{nup}{NUP/EB da carta precatória}%
   \CampoObrigatorio{sindicanteNome}{nome do sindicante}%
   \CampoObrigatorio{sindicantePosto}{posto/graduação do sindicante}%
-  \CampoObrigatorioRaw{cartaPrecatoriaNumero}{número da carta precatória}%
+  \CampoObrigatorioRawOuProximoDiex{cartaPrecatoriaNumero}{número da carta precatória}%
   \CampoObrigatorioRaw{cartaPrecatoriaAutoridadeDeprecada}{autoridade deprecada}%
   \CampoObrigatorioRaw{cartaPrecatoriaOMDeprecada}{OM/órgão deprecado}%
   \CampoObrigatorioRaw{cartaPrecatoriaAssunto}{assunto da carta precatória}%
@@ -1271,7 +1383,7 @@
 
 \sind@limparComparecimentoSindicado
 
-\newcommand{\getComparecimentoSindicadoNumero}{\@compSindNumero}
+\newcommand{\getComparecimentoSindicadoNumero}{\sind@getNumeroOuProximoDiex{@compSindNumero}}
 \newcommand{\getComparecimentoSindicadoOrigem}{\@compSindOrigem}
 \newcommand{\getComparecimentoSindicadoLocalData}{\@compSindLocalData}
 \newcommand{\getComparecimentoSindicadoComandante}{\@compSindComandante}
@@ -1285,7 +1397,7 @@
   \CampoObrigatorio{sindicantePosto}{posto/graduação do sindicante}%
   \CampoObrigatorio{sindicadoNome}{nome do sindicado}%
   \CampoObrigatorio{sindicadoPosto}{posto/graduação do sindicado}%
-  \CampoObrigatorioRaw{compSindNumero}{número do DIEx de comparecimento de sindicado}%
+  \CampoObrigatorioRawOuProximoDiex{compSindNumero}{número do DIEx de comparecimento de sindicado}%
   \CampoObrigatorioRaw{compSindComandante}{comandante do sindicado}%
   \CampoObrigatorioRaw{compSindData}{data de comparecimento do sindicado}%
   \CampoObrigatorioRaw{compSindHora}{hora de comparecimento do sindicado}%
@@ -1318,7 +1430,7 @@
 
 \sind@limparComparecimentoTestemunha
 
-\newcommand{\getComparecimentoTestemunhaNumero}{\@compTestNumero}
+\newcommand{\getComparecimentoTestemunhaNumero}{\sind@getNumeroOuProximoDiex{@compTestNumero}}
 \newcommand{\getComparecimentoTestemunhaOrigem}{\@compTestOrigem}
 \newcommand{\getComparecimentoTestemunhaLocalData}{\@compTestLocalData}
 \newcommand{\getComparecimentoTestemunhaDestinatario}{\@compTestDestinatario}
@@ -1331,7 +1443,7 @@
   \CampoObrigatorio{nup}{NUP/EB do DIEx de comparecimento de testemunha}%
   \CampoObrigatorio{sindicanteNome}{nome do sindicante}%
   \CampoObrigatorio{sindicantePosto}{posto/graduação do sindicante}%
-  \CampoObrigatorioRaw{compTestNumero}{número do DIEx de comparecimento de testemunha}%
+  \CampoObrigatorioRawOuProximoDiex{compTestNumero}{número do DIEx de comparecimento de testemunha}%
   \CampoObrigatorioRaw{compTestDestinatario}{destinatário do comparecimento de testemunha}%
   \CampoObrigatorioRaw{compTestData}{data de comparecimento da testemunha}%
   \CampoObrigatorioRaw{compTestHora}{hora de comparecimento da testemunha}%
@@ -1374,7 +1486,9 @@
 \newcommand{\ValidarCertidao}{%
   \CampoObrigatorio{sindicanteNome}{nome do sindicante}%
   \CampoObrigatorio{sindicantePosto}{posto/graduação do sindicante}%
-  \CampoObrigatorioRaw{certidaoTexto}{texto da certidão}%
+  \CampoObrigatorioRaw{certidaoDataTerminoPrazo}{data do término do prazo da certidão}%
+  \CampoObrigatorioRaw{certidaoNumeroDocumento}{número do DIEx/Ofício da certidão}%
+  \CampoObrigatorioRaw{certidaoDataDocumento}{data do DIEx/Ofício da certidão}%
 }
 
 % ============================================================
@@ -1460,7 +1574,7 @@
 
 \sind@limparDiexRemessa
 
-\newcommand{\getDiexRemessaNumero}{\@diexRemessaNumero}
+\newcommand{\getDiexRemessaNumero}{\sind@getNumeroOuProximoDiex{@diexRemessaNumero}}
 \newcommand{\getDiexRemessaOrigem}{\@diexRemessaOrigem}
 \newcommand{\getDiexRemessaLocalData}{\@diexRemessaLocalData}
 \newcommand{\getDiexRemessaDestinatario}{\@diexRemessaDestinatario}
@@ -1474,9 +1588,9 @@
   \CampoObrigatorio{sindicantePosto}{posto/graduação do sindicante}%
   \CampoObrigatorio{sindicadoNome}{nome do sindicado}%
   \CampoObrigatorio{sindicadoPosto}{posto/graduação do sindicado}%
-  \CampoObrigatorioRaw{diexRemessaNumero}{número do DIEx de remessa}%
+  \CampoObrigatorioRawOuProximoDiex{diexRemessaNumero}{número do DIEx de remessa}%
   \CampoObrigatorioRaw{diexRemessaDestinatario}{destinatário do DIEx de remessa}%
-  \CampoObrigatorioRaw{diexRemessaFolhas}{quantidade de folhas da sindicância}%
+  % A quantidade de folhas do DIEx de remessa é preenchida manualmente no documento final.%
 }
 
 % ============================================================
@@ -1507,7 +1621,7 @@
 
 \sind@limparProrrogacao
 
-\newcommand{\getProrrogacaoNumero}{\@prorrogacaoNumero}
+\newcommand{\getProrrogacaoNumero}{\sind@getNumeroOuProximoDiex{@prorrogacaoNumero}}
 \newcommand{\getProrrogacaoOrigem}{\@prorrogacaoOrigem}
 \newcommand{\getProrrogacaoLocalData}{\@prorrogacaoLocalData}
 \newcommand{\getProrrogacaoDestinatario}{\@prorrogacaoDestinatario}
@@ -1521,7 +1635,7 @@
   \CampoObrigatorio{nup}{NUP/EB da solicitação de prorrogação}%
   \CampoObrigatorio{sindicanteNome}{nome do sindicante}%
   \CampoObrigatorio{sindicantePosto}{posto/graduação do sindicante}%
-  \CampoObrigatorioRaw{prorrogacaoNumero}{número do DIEx de prorrogação}%
+  \CampoObrigatorioRawOuProximoDiex{prorrogacaoNumero}{número do DIEx de prorrogação}%
   \CampoObrigatorioRaw{prorrogacaoDestinatario}{destinatário da solicitação de prorrogação}%
   \CampoObrigatorioRaw{prorrogacaoReferencia}{referência da solicitação de prorrogação}%
   \CampoObrigatorioRaw{prorrogacaoPrazo}{prazo solicitado na prorrogação}%
@@ -1552,7 +1666,7 @@
 \newcommand{\getDesignacaoEscrivaoNumero}{\@designacaoEscrivaoNumero}
 \newcommand{\getDesignacaoEscrivaoLocalData}{\@designacaoEscrivaoLocalData}
 \newcommand{\getDesignacaoEscrivaoPortaria}{%
-  \ifstrempty{\@designacaoEscrivaoPortaria}{\@portaria}{\@designacaoEscrivaoPortaria}%
+  \ifcsempty{@designacaoEscrivaoPortaria}{\@portaria}{\@designacaoEscrivaoPortaria}%
 }
 
 \newcommand{\ValidarDesignacaoEscrivao}{%
@@ -1616,7 +1730,7 @@
 
 \sind@limparNotificacaoNovoSindicado
 
-\newcommand{\getNotificacaoNovoSindicadoNumero}{\@notNovoSindNumero}
+\newcommand{\getNotificacaoNovoSindicadoNumero}{\sind@getNumeroOuProximoDiex{@notNovoSindNumero}}
 \newcommand{\getNotificacaoNovoSindicadoOrigem}{\@notNovoSindOrigem}
 \newcommand{\getNotificacaoNovoSindicadoLocalData}{\@notNovoSindLocalData}
 \newcommand{\getNotificacaoNovoSindicadoDestinatario}{\@notNovoSindDestinatario}
@@ -1633,7 +1747,7 @@
   \CampoObrigatorio{sindicantePosto}{posto/graduação do sindicante}%
   \CampoObrigatorio{sindicadoNome}{nome do novo sindicado}%
   \CampoObrigatorio{sindicadoPosto}{posto/graduação do novo sindicado}%
-  \CampoObrigatorioRaw{notNovoSindNumero}{número do DIEx de notificação de novo sindicado}%
+  \CampoObrigatorioRawOuProximoDiex{notNovoSindNumero}{número do DIEx de notificação de novo sindicado}%
   \CampoObrigatorioRaw{notNovoSindDestinatario}{destinatário da notificação de novo sindicado}%
   \CampoObrigatorioRaw{notNovoSindLocalVista}{local de vista dos autos}%
 }
@@ -1670,12 +1784,12 @@
 
 \sind@limparNotificacaoDiligencias
 
-\newcommand{\getNotificacaoDiligenciasNumero}{\@notDilNumero}
+\newcommand{\getNotificacaoDiligenciasNumero}{\sind@getNumeroOuProximoDiex{@notDilNumero}}
 \newcommand{\getNotificacaoDiligenciasOrigem}{\@notDilOrigem}
 \newcommand{\getNotificacaoDiligenciasLocalData}{\@notDilLocalData}
 \newcommand{\getNotificacaoDiligenciasDestinatario}{\@notDilDestinatario}
 \newcommand{\getNotificacaoDiligenciasAutoridadeFuncao}{%
-  \ifstrempty{\@notDilAutoridadeFuncao}{\@autoridadeFuncao}{\@notDilAutoridadeFuncao}%
+  \ifcsempty{@notDilAutoridadeFuncao}{\@autoridadeFuncao}{\@notDilAutoridadeFuncao}%
 }
 \newcommand{\getNotificacaoDiligenciasLocalVista}{\@notDilLocalVista}
 \newcommand{\getNotificacaoDiligenciasDescricao}{\@notDilDescricao}
@@ -1691,7 +1805,7 @@
   \CampoObrigatorio{sindicantePosto}{posto/graduação do sindicante}%
   \CampoObrigatorio{sindicadoNome}{nome do sindicado}%
   \CampoObrigatorio{sindicadoPosto}{posto/graduação do sindicado}%
-  \CampoObrigatorioRaw{notDilNumero}{número do DIEx de notificação de diligências complementares}%
+  \CampoObrigatorioRawOuProximoDiex{notDilNumero}{número do DIEx de notificação de diligências complementares}%
   \CampoObrigatorioRaw{notDilDestinatario}{destinatário da notificação de diligências complementares}%
   \CampoObrigatorioRaw{notDilLocalVista}{local de vista dos autos}%
   \CampoObrigatorioRaw{notDilDescricao}{descrição ou referência das diligências complementares}%
@@ -1721,7 +1835,7 @@
 
 \sind@limparSubstituicaoSindicante
 
-\newcommand{\getSubstituicaoSindicanteNumero}{\@substSindNumero}
+\newcommand{\getSubstituicaoSindicanteNumero}{\sind@getNumeroOuProximoDiex{@substSindNumero}}
 \newcommand{\getSubstituicaoSindicanteOrigem}{\@substSindOrigem}
 \newcommand{\getSubstituicaoSindicanteLocalData}{\@substSindLocalData}
 \newcommand{\getSubstituicaoSindicanteDestinatario}{\@substSindDestinatario}
@@ -1734,7 +1848,7 @@
   \CampoObrigatorio{portaria}{portaria instauradora}%
   \CampoObrigatorio{sindicanteNome}{nome do sindicante}%
   \CampoObrigatorio{sindicantePosto}{posto/graduação do sindicante}%
-  \CampoObrigatorioRaw{substSindNumero}{número do DIEx de substituição de sindicante}%
+  \CampoObrigatorioRawOuProximoDiex{substSindNumero}{número do DIEx de substituição de sindicante}%
   \CampoObrigatorioRaw{substSindDestinatario}{destinatário do DIEx de substituição de sindicante}%
   \CampoObrigatorioRaw{substSindRelatoSucinto}{relato sucinto da sindicância}%
   \CampoObrigatorioRaw{substSindFls}{folhas do documento que fundamenta a substituição}%
@@ -1763,7 +1877,7 @@
 
 \sind@limparAcareacao
 
-\newcommand{\getAcareacaoDataAta}{\@acareacaoDataAta}
+\newcommand{\getAcareacaoDataAta}{\ifcsempty{@acareacaoDataAta}{\dataAtaDocumento}{\@acareacaoDataAta}}
 \newcommand{\getAcareacaoLocal}{\@acareacaoLocal}
 \newcommand{\getAcareacaoPontosDivergencia}{\@acareacaoPontosDivergencia}
 \newcommand{\getAcareacaoDeclaracaoA}{\@acareacaoDeclaracaoA}
@@ -1779,7 +1893,6 @@
   \CampoObrigatorio{sindicadoNome}{nome do sindicado}%
   \CampoObrigatorio{testemunhaANome}{nome da testemunha A}%
   \CampoObrigatorio{testemunhaBNome}{nome da testemunha B}%
-  \CampoObrigatorioRaw{acareacaoDataAta}{data da acareação por extenso}%
   \CampoObrigatorioRaw{acareacaoPontosDivergencia}{pontos de divergência}%
   \CampoObrigatorioRaw{acareacaoDeclaracaoA}{declaração da testemunha A}%
   \CampoObrigatorioRaw{acareacaoDeclaracaoB}{declaração da testemunha B}%
@@ -1791,7 +1904,7 @@
 % 33. AUXILIARES DE ASSINATURA E RECIBO
 % ============================================================
 \newcommand{\assinaturaCentral}[2]{%
-  \vspace{2cm}%
+  \vspace{3em}%
   \begin{center}
     \rule{8cm}{0.4pt}\\
     #1\\
@@ -1803,7 +1916,7 @@
   \vspace{0.8cm}%
   \noindent Declaro que tenho ciência.\\[0.8em]
   \noindent Data: \rule{1.2cm}{0.4pt}/\rule{1.2cm}{0.4pt}/\rule{1.8cm}{0.4pt}
-  \vspace{1.4cm}
+  \vspace{3em}
   \begin{center}
     \rule{8cm}{0.4pt}\\
     \getSindicadoPosto\ \getSindicadoNome
