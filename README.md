@@ -32,7 +32,8 @@ sindicanciaEB/
 ├── bases/
 │   ├── anexo_c_capa.docx
 │   ├── ...
-│   └── anexo_y_diex_remessa.docx
+│   ├── anexo_y_diex_remessa.docx
+│   └── port_2394-c_ex_ig_elb_sind_eb10-ig-09.001.pdf
 ├── dados/
 │   ├── dados-sindicancia.tex
 │   ├── controle-expedientes.tex
@@ -133,6 +134,30 @@ Esse teste carrega todos os modelos implementados com os dados de exemplo do rep
 
 ---
 
+## Base normativa e prazos
+
+A pasta `bases/` contém os modelos oficiais em DOCX e também a portaria das Instruções Gerais:
+
+```text
+bases/port_2394-c_ex_ig_elb_sind_eb10-ig-09.001.pdf
+```
+
+Pelo texto da EB10-IG-09.001, a autoridade instauradora fixa o prazo inicial de **trinta dias corridos** para conclusão da sindicância, com possibilidade de prorrogação por **vinte dias**, mediante solicitação fundamentada do sindicante e a critério da autoridade nomeante. A própria norma também prevê que, na contagem dos prazos, exclui-se o dia do início e inclui-se o do vencimento, e que os prazos se iniciam e vencem em dia de expediente na OM.
+
+Por isso, no projeto, a data geral de `dados/dados-sindicancia.tex` deve representar a **data efetiva de abertura/início dos trabalhos**, normalmente ligada ao recebimento da portaria pelo sindicante e à lavratura do termo de abertura. A data da portaria continua existindo como dado documental, mas não deve ser usada como fallback automático para a data das peças.
+
+Para o controle de prazo em caso real, confira sempre:
+
+- a data de recebimento/ciência da portaria pelo sindicante;
+- o primeiro dia de expediente aplicável na OM;
+- a data do termo de abertura;
+- eventuais publicações em BI relativas a prorrogação;
+- o calendário de expediente da OM.
+
+O projeto auxilia na padronização documental, mas não substitui a conferência jurídica/administrativa da contagem de prazo.
+
+---
+
 ## Versionamento do projeto
 
 O repositório já inclui:
@@ -178,7 +203,7 @@ dados reais de sindicância
 
 ## Datas dos documentos
 
-A data/local informada em `dados/dados-sindicancia.tex` é a **data de abertura dos trabalhos**, isto é, a data usada como marco prático do início da sindicância. Ela não precisa ser igual à data da portaria.
+A data/local informada em `dados/dados-sindicancia.tex` é a **data de abertura dos trabalhos**, isto é, a data usada como marco prático do início da sindicância. Ela não precisa ser igual à data da portaria. Essa escolha segue a lógica da seção “Base normativa e prazos”: a data da portaria é apenas documental; o marco prático do trabalho é o recebimento/abertura.
 
 No arquivo geral, preencha:
 
