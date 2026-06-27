@@ -27,37 +27,31 @@ jobs:
           texlive_version: 2026
           os: debian
           pre_compile: mkdir -p build
+          post_compile: |
+            check_rejected() {
+              file="$1"
+              name="$2"
+              expected="$3"
+              log="build/${name}.log"
+
+              if lualatex --file-line-error --halt-on-error --interaction=nonstopmode --output-directory=build "$file" >"$log" 2>&1; then
+                cat "$log"
+                echo "::error ::O teste negativo $file foi aceito indevidamente."
+                return 1
+              fi
+
+              if ! grep -Fq "$expected" "$log"; then
+                cat "$log"
+                echo "::error ::O teste $file falhou por uma razão inesperada."
+                return 1
+              fi
+
+              echo "Validação negativa confirmada: $file"
+            }
+
+            check_rejected tests/placeholder-validation.tex placeholder-validation "Placeholder nao substituido: cidade"
+            check_rejected tests/medical-consent-validation.tex medical-consent-validation "Placeholder nao substituido: finalidade"
           args: -file-line-error -halt-on-error -interaction=nonstopmode -outdir=build
-
-      - name: Confirmar rejeição de placeholders
-        id: placeholders
-        continue-on-error: true
-        uses: xu-cheng/latex-action@v4
-        with:
-          root_file: tests/placeholder-validation.tex
-          latexmk_use_lualatex: true
-          texlive_version: 2026
-          os: debian
-          args: -file-line-error -halt-on-error -interaction=nonstopmode
-
-      - name: Falhar se o placeholder tiver sido aceito
-        if: steps.placeholders.outcome != 'failure'
-        run: exit 1
-
-      - name: Confirmar validação do termo médico
-        id: medical_consent
-        continue-on-error: true
-        uses: xu-cheng/latex-action@v4
-        with:
-          root_file: tests/medical-consent-validation.tex
-          latexmk_use_lualatex: true
-          texlive_version: 2026
-          os: debian
-          args: -file-line-error -halt-on-error -interaction=nonstopmode
-
-      - name: Falhar se o marcador médico tiver sido aceito
-        if: steps.medical_consent.outcome != 'failure'
-        run: exit 1
 
       - name: Publicar PDFs da compilação
         uses: actions/upload-artifact@v7
