@@ -7,17 +7,20 @@
 % ============================================================
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{sindicancia}[2026/06/05 v2.5 Sindicancias EB - datas e expedientes versionaveis]
+\ProvidesClass{sindicancia}[2026/06/26 v2.6 Sindicancias EB - validacao de placeholders]
 
 % ============================================================
 % 1. OPÇÕES DA CLASSE
 % ============================================================
 \newif\ifsind@sumario
 \newif\ifsind@ordinario
+\newif\ifsind@permitirplaceholders
 \sind@ordinariotrue
+\sind@permitirplaceholdersfalse
 
 \DeclareOption{sumario}{\sind@sumariotrue\sind@ordinariofalse}
 \DeclareOption{ordinario}{\sind@ordinariotrue\sind@sumariofalse}
+\DeclareOption{permitir-placeholders}{\sind@permitirplaceholderstrue}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
 \ProcessOptions\relax
 
@@ -74,7 +77,11 @@
 \IfFontExistsTF{Times New Roman}{%
   \setmainfont{Times New Roman}%
 }{%
-  \setmainfont{Liberation Serif}%
+  \IfFontExistsTF{Liberation Serif}{%
+    \setmainfont{Liberation Serif}%
+  }{%
+    \setmainfont{TeX Gyre Termes}%
+  }%
 }
 
 
@@ -557,13 +564,84 @@
   }%
 }
 
+% Validação central de valores obrigatórios.
+% Além de campos vazios, rejeita marcadores de preenchimento comuns. A opção
+% permitir-placeholders existe somente para a suíte de testes e para o PDF demo.
+\ExplSyntaxOn
+\tl_new:N \l__sind_validation_value_tl
+\cs_new_protected:Npn \sind_validate_required:nn #1#2
+  {
+    \tl_set:No \l__sind_validation_value_tl {#1}
+    \tl_trim_spaces:N \l__sind_validation_value_tl
+    \tl_if_blank:VTF \l__sind_validation_value_tl
+      {
+        \ClassError{sindicancia}
+          {Campo~obrigatorio~ausente:~#2}
+          {Preencha~o~campo~antes~de~gerar~este~documento.}
+      }
+      {
+        \ifsind@permitirplaceholders
+        \else
+          \exp_args:NnV \regex_match:nnTF
+            {
+              CIDADE/UF
+              | ORGANIZA[CÇ][AÃ]O\s+MILITAR
+              | ESCAL[AÃ]O\s+SUPERIOR
+              | LINHA\s+COMPLEMENTAR\s+DA\s+OM
+              | NOME\s+HIST[OÓ]RICO\s+DA\s+OM
+              | AUTORIDADE\s+INSTAURADORA
+              | SINDICANTE
+              | SINDICADO
+              | ESCRIV[AÃ]O
+              | POSTO(/GRADUA[CÇ][AÃ]O)?
+              | SUBUNIDADE/SE[CÇ][AÃ]O
+              | NOME\s+(COMPLETO\s+)?D(A|O)\s+
+              | NOME\s+DO\s+PAI
+              | NOME\s+DA\s+M[AÃ]E
+              | ESTADO\s+CIVIL
+              | ENDERE[CÇ]O(\s+COMPLETO|\s+DA)?
+              | DATA\s+DE\s+NASCIMENTO
+              | NATURALIDADE-UF
+              | [OÓ]RG[AÃ]O/UF
+              | DIA\s+DO\s+T[EÉ]RMINO
+              | DOCUMENTO/INFORMA[CÇ][AÃ]O
+              | FINALIDADE\s+ESPEC[IÍ]FICA
+              | DOCUMENTOS\s+E\s+INFORMA[CÇ][OÕ]ES
+              | PER[IÍ]ODO\s+DOS\s+REGISTROS
+              | UNIDADES\s+OU\s+AGENTES\s+AUTORIZADOS
+              | PRAZO\s+OU\s+CRIT[EÉ]RIO\s+DE\s+RETEN[CÇ][AÃ]O
+              | CANAL\s+DO\s+CONTROLADOR
+              | \[?INSERIR\s+
+              | 00\s+de\s+m[eê]s
+              | Portaria\s+n[ºo]?\s*000
+              | \A\s*00\s*\Z
+              | \A\s*XX\s*\Z
+              | \A\s*0{5}\.0{6}/[0-9]{4}-0{2}\s*\Z
+              | \A\s*0{3}\.0{3}\.0{3}-0{2}\s*\Z
+              | \A\s*\(00\)\s*0{5}-0{4}\s*\Z
+            }
+            \l__sind_validation_value_tl
+            {
+              \ClassError{sindicancia}
+                {Placeholder~nao~substituido:~#2}
+                {Substitua~o~texto~de~exemplo~por~um~valor~real~antes~de~gerar~o~documento.}
+            }
+            { }
+        \fi
+      }
+  }
+\cs_new_eq:NN \sindValidarValorObrigatorio \sind_validate_required:nn
+\ExplSyntaxOff
+
+\newcommand{\ValidarValorObrigatorio}[2]{%
+  \sindValidarValorObrigatorio{#1}{#2}%
+}
+
 \newcommand{\CampoObrigatorio}[2]{%
   \ifcsundef{@#1}{%
     \ClassError{sindicancia}{Campo obrigatorio inexistente: #1}{O campo #1 nao foi definido na classe.}%
   }{%
-    \ifcsempty{@#1}{%
-      \ClassError{sindicancia}{Campo obrigatorio ausente: #2}{Preencha o campo usando o comando adequado antes de gerar este documento.}%
-    }{}%
+    \expandafter\ValidarValorObrigatorio\expandafter{\csname @#1\endcsname}{#2}%
   }%
 }
 
@@ -794,9 +872,7 @@
   \ifcsundef{@#1}{%
     \ClassError{sindicancia}{Campo obrigatorio inexistente: #1}{O campo #1 nao foi definido na classe.}%
   }{%
-    \expandafter\ifx\csname @#1\endcsname\@empty
-      \ClassError{sindicancia}{Campo obrigatorio ausente: #2}{Preencha o campo antes de gerar este documento.}%
-    \fi
+    \expandafter\ValidarValorObrigatorio\expandafter{\csname @#1\endcsname}{#2}%
   }%
 }
 
@@ -826,10 +902,10 @@
     \ClassError{sindicancia}{Campo obrigatorio inexistente: #1}{O campo #1 nao foi definido na classe.}%
   }{%
     \ifcsempty{@#1}{%
-      \ifcsempty{@proximoDiex}{%
-        \ClassError{sindicancia}{Campo obrigatorio ausente: #2}{Preencha o campo do documento ou defina \string\proximoDiex\space em dados/controle-expedientes.tex.}%
-      }{}%
-    }{}%
+      \ValidarValorObrigatorio{\@proximoDiex}{#2}%
+    }{%
+      \expandafter\ValidarValorObrigatorio\expandafter{\csname @#1\endcsname}{#2}%
+    }%
   }%
 }
 \newcommand{\CampoObrigatorioRawOuProximoOficio}[2]{%
@@ -837,10 +913,10 @@
     \ClassError{sindicancia}{Campo obrigatorio inexistente: #1}{O campo #1 nao foi definido na classe.}%
   }{%
     \ifcsempty{@#1}{%
-      \ifcsempty{@proximoOficio}{%
-        \ClassError{sindicancia}{Campo obrigatorio ausente: #2}{Preencha o campo do documento ou defina \string\proximoOficio\space em dados/controle-expedientes.tex.}%
-      }{}%
-    }{}%
+      \ValidarValorObrigatorio{\@proximoOficio}{#2}%
+    }{%
+      \expandafter\ValidarValorObrigatorio\expandafter{\csname @#1\endcsname}{#2}%
+    }%
   }%
 }
 

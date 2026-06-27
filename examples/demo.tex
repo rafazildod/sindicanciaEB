@@ -1,0 +1,80 @@
+% PDF demonstrativo público. Todos os nomes e números são fictícios.
+\documentclass{sindicancia}
+
+\dia{15}
+\mes{junho}
+\ano{2026}
+\cidade{Salvador/BA}
+
+\om{1º Batalhão de Demonstração}
+\omSuperior{Comando de Projetos Demonstrativos}
+\omComplemento{Unidade fictícia para documentação}
+\omNomeHistorico{Unidade-Modelo}
+
+\nup{00001.000001/2026-11}
+\portaria{Portaria nº 12, de 10 de junho de 2026, do Comandante do 1º Batalhão de Demonstração}
+\objeto{apurar, em cenário inteiramente fictício, divergência no registro de entrega de material de expediente}
+
+\autoridadeNome{Carlos Exemplo}
+\autoridadePosto{Coronel}
+\autoridadeFuncao{Comandante do 1º Batalhão de Demonstração}
+
+\sindicanteNome{Ana Modelo}
+\sindicantePosto{Capitão}
+\sindicanteOM{\getOm}
+
+\sindicadoNome{João Fictício}
+\sindicadoPosto{2º Sargento}
+\sindicadoSU{Seção Administrativa}
+\sindicadoOM{\getOm}
+
+% Marca todas as páginas para impedir uso acidental como documento real.
+\AddToHook{shipout/background}{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[rotate=45,scale=4.2,text opacity=0.08] at (current page.center)
+      {DOCUMENTO FICTÍCIO -- SEM VALIDADE};
+  \end{tikzpicture}%
+}
+
+\begin{document}
+
+\GerarDocumento{capa}
+
+\dataDocumento{15}{junho}{2026}{Salvador/BA}
+\GerarDocumento{termo-abertura}
+
+\dataDocumento{16}{junho}{2026}{Salvador/BA}
+\novoDespacho
+\despachoNumero{1}
+\despachoTexto{%
+Juntar aos autos o relatório fictício de conferência do material e solicitar à
+Seção Administrativa a relação de cautelas emitidas no período de 1º a 10 de
+junho de 2026.
+}
+\GerarDocumento{despacho}
+
+\dataDocumento{25}{junho}{2026}{Salvador/BA}
+\novoRelatorio
+\relatorioIntroducao{%
+Esta demonstração reproduz a estrutura de um relatório sem utilizar fatos ou
+pessoas reais. A apuração fictícia trata de \getObjeto.
+}
+\relatorioDiligencias{%
+Foram simuladas a conferência dos registros, a juntada das cautelas e a oitiva
+dos envolvidos, sem vínculo com autos administrativos reais.
+}
+\relatorioParteExpositiva{%
+A comparação fictícia identificou uma divergência de lançamento posteriormente
+corrigida, sem indícios de extravio, dano ao erário ou conduta disciplinar.
+}
+\relatorioParteConclusiva{%
+Conclui-se, no cenário demonstrativo, pela inexistência de irregularidade e pela
+padronização do registro de entrega de material.
+}
+\GerarDocumento{relatorio}
+
+\dataDocumento{26}{junho}{2026}{Salvador/BA}
+\novoTermoEncerramento
+\GerarDocumento{termo-encerramento}
+
+\end{document}

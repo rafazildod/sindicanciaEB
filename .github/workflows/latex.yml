@@ -1,0 +1,62 @@
+name: Compilação LaTeX
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Compilar modelos e demonstração
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v6
+
+      - name: Compilar suíte e PDF demonstrativo
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: |
+            tests/all-models.tex
+            examples/demo.tex
+          latexmk_use_lualatex: true
+          texlive_version: 2026
+          os: debian
+          pre_compile: mkdir -p build
+          post_compile: |
+            check_rejected() {
+              file="$1"
+              name="$2"
+              expected="$3"
+              console_log="build/${name}-console.txt"
+
+              if lualatex --file-line-error --halt-on-error --interaction=nonstopmode --output-directory=build "$file" >"$console_log" 2>&1; then
+                cat "$console_log"
+                echo "::error ::O teste negativo $file foi aceito indevidamente."
+                return 1
+              fi
+
+              if ! grep -Fq "Class sindicancia Error: Placeholder" "$console_log" || ! grep -Fq "$expected" "$console_log"; then
+                cat "$console_log"
+                echo "::error ::O teste $file falhou por uma razão inesperada."
+                return 1
+              fi
+
+              echo "Validação negativa confirmada: $file"
+            }
+
+            check_rejected tests/placeholder-validation.tex placeholder-validation "cidade"
+            check_rejected tests/medical-consent-validation.tex medical-consent-validation "finalidade"
+          args: -file-line-error -halt-on-error -interaction=nonstopmode -outdir=build
+
+      - name: Publicar PDFs da compilação
+        uses: actions/upload-artifact@v7
+        with:
+          name: PDFs-sindicanciaEB
+          path: build/*.pdf
+          if-no-files-found: error
+          retention-days: 14

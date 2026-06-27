@@ -5,7 +5,9 @@
 % latexmk -lualatex -halt-on-error -interaction=nonstopmode -outdir=build tests/all-models.tex
 % ============================================================
 
-\documentclass{sindicancia}
+% Os dados desta suíte são deliberadamente fictícios e contêm marcadores.
+% A opção abaixo não deve ser usada na geração de documentos reais.
+\documentclass[permitir-placeholders]{sindicancia}
 
 \input{dados/dados-sindicancia.tex}
 \InputIfFileExists{dados/controle-expedientes.tex}{}{}
