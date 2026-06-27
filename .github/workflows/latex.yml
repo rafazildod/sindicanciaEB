@@ -32,16 +32,16 @@ jobs:
               file="$1"
               name="$2"
               expected="$3"
-              log="build/${name}.log"
+              console_log="build/${name}-console.txt"
 
-              if lualatex --file-line-error --halt-on-error --interaction=nonstopmode --output-directory=build "$file" >"$log" 2>&1; then
-                cat "$log"
+              if lualatex --file-line-error --halt-on-error --interaction=nonstopmode --output-directory=build "$file" >"$console_log" 2>&1; then
+                cat "$console_log"
                 echo "::error ::O teste negativo $file foi aceito indevidamente."
                 return 1
               fi
 
-              if ! grep -Fq "Placeholder nao" "$log" || ! grep -Fq "$expected" "$log"; then
-                cat "$log"
+              if ! grep -Fq "Class sindicancia Error: Placeholder" "$console_log" || ! grep -Fq "$expected" "$console_log"; then
+                cat "$console_log"
                 echo "::error ::O teste $file falhou por uma razão inesperada."
                 return 1
               fi
