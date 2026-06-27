@@ -1,0 +1,68 @@
+name: Compilação LaTeX
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Compilar modelos e demonstração
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v6
+
+      - name: Compilar suíte e PDF demonstrativo
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: |
+            tests/all-models.tex
+            examples/demo.tex
+          latexmk_use_lualatex: true
+          texlive_version: 2026
+          os: debian
+          pre_compile: mkdir -p build
+          args: -file-line-error -halt-on-error -interaction=nonstopmode -outdir=build
+
+      - name: Confirmar rejeição de placeholders
+        id: placeholders
+        continue-on-error: true
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: tests/placeholder-validation.tex
+          latexmk_use_lualatex: true
+          texlive_version: 2026
+          os: debian
+          args: -file-line-error -halt-on-error -interaction=nonstopmode
+
+      - name: Falhar se o placeholder tiver sido aceito
+        if: steps.placeholders.outcome != 'failure'
+        run: exit 1
+
+      - name: Confirmar validação do termo médico
+        id: medical_consent
+        continue-on-error: true
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: tests/medical-consent-validation.tex
+          latexmk_use_lualatex: true
+          texlive_version: 2026
+          os: debian
+          args: -file-line-error -halt-on-error -interaction=nonstopmode
+
+      - name: Falhar se o marcador médico tiver sido aceito
+        if: steps.medical_consent.outcome != 'failure'
+        run: exit 1
+
+      - name: Publicar PDFs da compilação
+        uses: actions/upload-artifact@v7
+        with:
+          name: PDFs-sindicanciaEB
+          path: build/*.pdf
+          if-no-files-found: error
+          retention-days: 14

@@ -2,52 +2,126 @@
 % MODELO AUXILIAR: TERMO DE CONSENTIMENTO PARA ACESSO A PRONTUÁRIO
 % Arquivo: modelos/termo-consentimento-prontuario.tex
 %
-% Este modelo não corresponde a anexo C-Y da EB10-IG-09.001.
-% É peça auxiliar para colher autorização expressa do sindicado
-% para acesso, requisição, cópia e/ou juntada de documentação médica
-% relacionada aos fatos apurados na sindicância.
+% Revisão técnica orientada pela LGPD. Este texto não substitui parecer do
+% setor jurídico nem validação pelo encarregado de dados da organização.
 % ============================================================
 
 \pdfbookmark[1]{Termo de Consentimento para Acesso a Prontuário}{termo-consentimento-prontuario}
+
+\newcommand{\ValidarTermoConsentimentoProntuario}{%
+  \CampoObrigatorio{om}{organização militar controladora}%
+  \CampoObrigatorio{nup}{NUP da sindicância}%
+  \CampoObrigatorio{portaria}{portaria instauradora}%
+  \CampoObrigatorio{sindicanteNome}{nome do sindicante}%
+  \CampoObrigatorio{sindicantePosto}{posto/graduação do sindicante}%
+  \CampoObrigatorio{sindicadoNome}{nome do titular}%
+  \CampoObrigatorio{sindicadoPosto}{posto/graduação do titular}%
+  \CampoObrigatorio{sindicadoIdentidade}{identidade do titular}%
+  \CampoObrigatorio{sindicadoCPF}{CPF do titular}%
+  \ValidarValorObrigatorio{\tcpNome}{nome do titular}%
+  \ValidarValorObrigatorio{\tcpPostoGraduacao}{posto/graduação do titular}%
+  \ValidarValorObrigatorio{\tcpIdentidade}{identidade do titular}%
+  \ValidarValorObrigatorio{\tcpCpf}{CPF do titular}%
+  \ValidarValorObrigatorio{\tcpQualificacao}{qualificação do titular}%
+  \ValidarValorObrigatorio{\tcpCondicaoProcessual}{condição processual do titular}%
+  \ValidarValorObrigatorio{\tcpControlador}{identificação do controlador}%
+  \ValidarValorObrigatorio{\tcpFinalidadeEspecifica}{finalidade específica}%
+  \ValidarValorObrigatorio{\tcpEscopoDocumentos}{escopo dos documentos médicos}%
+  \ValidarValorObrigatorio{\tcpPeriodoDados}{período dos registros médicos}%
+  \ValidarValorObrigatorio{\tcpDestinatarios}{destinatários autorizados}%
+  \ValidarValorObrigatorio{\tcpPrazoRetencao}{prazo ou critério de retenção}%
+  \ValidarValorObrigatorio{\tcpCanalDireitos}{canal para exercício de direitos}%
+  \ValidarValorObrigatorio{\tcpLocalData}{local e data do termo}%
+}
+
+\ValidarTermoConsentimentoProntuario
 
 \clearpage
 \thispagestyle{empty}
 
 \cabecalhoInstitucional
 
-\vspace{3em}
-
-\begin{center}
-    \textbf{TERMO DE CONSENTIMENTO PARA ACESSO A PRONTUÁRIO E DOCUMENTAÇÃO MÉDICA}
-\end{center}
-
 \vspace{2em}
 
-\noindent
-Eu, \textbf{\tcpNome}, \tcpQualificacao, identidade nº \tcpIdentidade,
-CPF nº \tcpCpf, abaixo-assinado, na condição de \tcpCondicaoProcessual\ nos autos
-da Sindicância NUP \getNup, instaurada pela \getPortaria, \textbf{AUTORIZO},
-de forma livre, informada e específica, o acesso, a requisição, a extração de cópias
-e/ou a juntada aos autos de prontuário, documentação nosológica, exames complementares,
-laudos, relatórios, atestados, pareceres e demais registros médicos diretamente
-relacionados aos fatos objeto da presente sindicância. Declaro, ainda, estar ciente
-de que a presente autorização se limita às informações de saúde necessárias à apuração
-dos fatos constantes da sindicância, resguardado o sigilo das informações médicas e
-o uso restrito aos fins deste processo administrativo.
+\begin{center}
+  \textbf{TERMO DE CONSENTIMENTO ESPECÍFICO PARA ACESSO A PRONTUÁRIO E DOCUMENTAÇÃO MÉDICA}
+\end{center}
 
-\vspace{1em}
+\vspace{1.5em}
 
 \noindent
-Declaro, por fim, que fui informado de que a recusa em assinar o presente termo não impede
-o regular prosseguimento da sindicância, devendo eventual negativa ser registrada nos autos.
+Eu, \textbf{\tcpNome}, \tcpQualificacao, \tcpPostoGraduacao, identidade nº
+\tcpIdentidade, CPF nº \tcpCpf, na condição de \tcpCondicaoProcessual\ nos autos
+da Sindicância NUP \getNup, instaurada pela \getPortaria, declaro que recebi
+informações claras sobre o tratamento de meus dados pessoais referentes à saúde.
 
-\vspace{3em}
+\vspace{0.8em}
+
+\noindent\textbf{Controlador:} \tcpControlador.
+
+\noindent\textbf{Finalidade específica:} \tcpFinalidadeEspecifica.
+
+\noindent\textbf{Documentos e dados abrangidos:} \tcpEscopoDocumentos.
+
+\noindent\textbf{Período dos registros:} \tcpPeriodoDados.
+
+\noindent\textbf{Pessoas ou unidades com acesso autorizado:} \tcpDestinatarios.
+
+\noindent\textbf{Prazo ou critério de retenção:} \tcpPrazoRetencao.
+
+\vspace{0.8em}
+
+\noindent
+De forma livre, informada, específica e destacada, \textbf{CONSINTO} com a
+requisição, o acesso, a extração de cópias e a juntada aos autos somente dos
+documentos e dados delimitados acima, estritamente necessários à finalidade
+informada. O acesso deverá observar o sigilo, a limitação aos agentes autorizados
+e as medidas de segurança aplicáveis a dados pessoais sensíveis.
+
+\vspace{0.8em}
+
+\noindent
+Fui informado de que posso solicitar informações sobre o tratamento e exercer os
+direitos aplicáveis por meio do seguinte canal: \tcpCanalDireitos. Posso revogar
+este consentimento mediante manifestação expressa, por procedimento gratuito e
+facilitado, sem prejuízo dos tratamentos realizados validamente antes da
+revogação.
+
+\vspace{0.8em}
+
+\noindent
+A recusa ou a revogação não serão interpretadas como consentimento. Caso o
+controlador entenda existir outra hipótese legal para tratar os dados sem
+consentimento, inclusive para o exercício regular de direitos em processo
+administrativo, o respectivo fundamento, a finalidade e os procedimentos deverão
+ser informados e registrados de forma própria.
+
+\clearpage
+\thispagestyle{empty}
+
+\cabecalhoInstitucional
+
+\vspace{1.5em}
+
+\begin{center}
+  \textbf{MANIFESTAÇÃO E ASSINATURAS}\\
+  Sindicância NUP \getNup
+\end{center}
+
+\vspace{1.5em}
+
+\noindent
+Declaro que li e compreendi as informações constantes da página anterior e
+manifesto expressamente meu consentimento nos limites, na finalidade e pelo
+período nela indicados.
+
+\vspace{1.5em}
 
 \begin{flushright}
 \tcpLocalData
 \end{flushright}
 
-\vspace{3em}
+\vspace{2.5em}
 
 \begin{center}
 \rule{9cm}{0.4pt}\\
@@ -55,7 +129,7 @@ o regular prosseguimento da sindicância, devendo eventual negativa ser registra
 \tcpIdentificacaoAssinatura
 \end{center}
 
-\vspace{3em}
+\vspace{2.5em}
 
 \begin{center}
 \rule{9cm}{0.4pt}\\

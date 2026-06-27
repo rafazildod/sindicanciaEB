@@ -1,0 +1,9 @@
+% Este teste deve FALHAR. Ele comprova que placeholders não passam pela
+% validação padrão da classe.
+\documentclass{sindicancia}
+
+\cidade{CIDADE/UF}
+
+\begin{document}
+\CampoObrigatorio{cidade}{cidade}
+\end{document}
