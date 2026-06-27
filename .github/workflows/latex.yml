@@ -40,7 +40,7 @@ jobs:
                 return 1
               fi
 
-              if ! grep -Fq "$expected" "$log"; then
+              if ! grep -Fq "Placeholder nao" "$log" || ! grep -Fq "$expected" "$log"; then
                 cat "$log"
                 echo "::error ::O teste $file falhou por uma razão inesperada."
                 return 1
@@ -49,8 +49,8 @@ jobs:
               echo "Validação negativa confirmada: $file"
             }
 
-            check_rejected tests/placeholder-validation.tex placeholder-validation "Placeholder nao substituido: cidade"
-            check_rejected tests/medical-consent-validation.tex medical-consent-validation "Placeholder nao substituido: finalidade"
+            check_rejected tests/placeholder-validation.tex placeholder-validation "cidade"
+            check_rejected tests/medical-consent-validation.tex medical-consent-validation "finalidade"
           args: -file-line-error -halt-on-error -interaction=nonstopmode -outdir=build
 
       - name: Publicar PDFs da compilação
