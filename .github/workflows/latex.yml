@@ -98,14 +98,25 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+      - name: Posicionar tag da versão no commit validado
+        if: >-
+          github.ref == 'refs/heads/codex/conformidade-portaria-2024' &&
+          (github.event.head_commit.message == 'Publica release v2.0.0' ||
+           github.event.head_commit.message == 'Corrige alvo do release v2.0.0')
+        run: |
+          git tag -f v2.0.0 "${GITHUB_SHA}"
+          git push origin refs/tags/v2.0.0 --force
+
       - name: Criar release da versão
         if: >-
           startsWith(github.ref, 'refs/tags/v') ||
           (github.ref == 'refs/heads/codex/conformidade-portaria-2024' &&
-           github.event.head_commit.message == 'Publica release v2.0.0')
+           (github.event.head_commit.message == 'Publica release v2.0.0' ||
+            github.event.head_commit.message == 'Corrige alvo do release v2.0.0'))
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || 'v2.0.0' }}
+          target_commitish: ${{ github.sha }}
           name: Versão ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || 'v2.0.0' }}
           body_path: CHANGELOG.md
           files: build/sindicanciaEB-demo.pdf
