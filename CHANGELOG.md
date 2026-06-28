@@ -13,7 +13,7 @@ Versão principal de adequação à Portaria C Ex nº 2.394/2024 e às EB10-IG-0
 - modos de documento padrão, adaptado e personalizado;
 - participantes, prazos, recursos e dependências normativas estruturados;
 - inquirições, acareações, notificações e cartas precatórias revisadas;
-- controle de cronologia, foliação, rubrica, sigilo e prorrogação;
+- controle de cronologia e do intervalo da foliação manual, além de sigilo e prorrogação;
 - relatório complementar, solução, publicação e notificação;
 - matriz automatizada de cenários positivos e testes de rejeição normativa.
 
@@ -24,5 +24,7 @@ Versão principal de adequação à Portaria C Ex nº 2.394/2024 e às EB10-IG-0
 - documentos processuais exigem natureza processual e sindicado identificado;
 - expedientes, notificações, inquirições e prorrogações possuem novos campos obrigatórios;
 - portarias anteriores a 1º de janeiro de 2025 não são aceitas por esta versão.
+
+Os anexos A, B, Z e AA são mantidos apenas como referência da Seção de Apoio Jurídico e não integram o fluxo de elaboração do sindicante.
 
 Consulte `README.md` e `docs/CONFORMIDADE-EB10-IG-09.001.md` antes de migrar uma sindicância criada na versão 1.0.0.

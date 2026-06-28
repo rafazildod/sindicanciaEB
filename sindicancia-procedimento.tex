@@ -488,50 +488,12 @@
 \newcommand{\getAcareacaoAssinaturasDinamicas}{\@acareacaoAssinaturasDinamicas}
 
 % ------------------------------------------------------------
-% 8. FOLIACAO E RUBRICA
+% 8. CAMPOS DOS ANEXOS A, B, Z E AA
 % ------------------------------------------------------------
-\newif\ifsind@foliacaoautomatica
-\sind@foliacaoautomaticafalse
-\newcounter{sindfolha}
-\setcounter{sindfolha}{1}
-\newcommand{\foliacaoAutomatica}[1]{\sind@foliacaoautomaticatrue\setcounter{sindfolha}{#1}}
-\newcommand{\foliacaoManual}{\sind@foliacaoautomaticafalse}
-\newcommand{\sind@folhaValor}{\ifsind@foliacaoautomatica\arabic{sindfolha}\else\rule{0.9cm}{0.4pt}\fi}
-\newcommand{\sind@avancarFolha}{\ifsind@foliacaoautomatica\global\advance\c@sindfolha by 1\relax\fi}
-
-\renewcommand{\flbox}{%
-  \tikz[baseline=(F.base)]{%
-    \node[
-      draw=black,line width=0.4pt,minimum width=2.8cm,minimum height=1.5cm,
-      inner sep=2pt,align=left,font=\scriptsize
-    ] (F) {Fl.\ \sind@folhaValor\\Rubrica:\ \rule{1.1cm}{0.4pt}};%
-  }%
+\newcommand{\AvisoModeloApoioJuridico}[1]{%
+  \ClassWarningNoLine{sindicancia}{Anexo #1 mantido apenas como referencia; sua elaboracao compete a Secao de Apoio Juridico, nao ao sindicante}%
 }
 
-\renewcommand{\sind@desenharflbox}{%
-  \ifsind@mostrarflbox
-    \begin{tikzpicture}[remember picture,overlay]
-      \node[
-        anchor=north east,draw=black,line width=0.4pt,
-        minimum width=2.8cm,minimum height=1.5cm,inner sep=2pt,
-        align=left,font=\scriptsize
-      ] at ([xshift=-2.5cm,yshift=-1.0cm]current page.north east)
-      {Fl.\ \sind@folhaValor\\Rubrica:\ \rule{1.1cm}{0.4pt}};
-    \end{tikzpicture}%
-    \sind@avancarFolha
-  \fi
-}
-
-\renewcommand{\sind@desenharflboxpdfpages}{%
-  \ifsind@mostrarflbox
-    \put(\strip@pt\dimexpr\paperwidth-5.3cm\relax,\strip@pt\dimexpr\paperheight-2.5cm\relax){\flbox}%
-    \sind@avancarFolha
-  \fi
-}
-
-% ------------------------------------------------------------
-% 9. CAMPOS DOS ANEXOS A, B, Z E AA
-% ------------------------------------------------------------
 \gdef\@portariaNumero{}
 \gdef\@portariaAnexoOrigem{}
 \gdef\@portariaSinteseFatos{}
@@ -640,7 +602,7 @@
 }
 
 % ------------------------------------------------------------
-% 10. DOCUMENTOS PROCEDIMENTAIS ADICIONAIS
+% 9. DOCUMENTOS PROCEDIMENTAIS ADICIONAIS
 % ------------------------------------------------------------
 \gdef\@relatorioComplementarDiligencias{}
 \gdef\@relatorioComplementarConclusoes{}
@@ -681,7 +643,7 @@
 }
 
 % ------------------------------------------------------------
-% 11. RECURSOS E DEPENDENCIAS DE OUTRAS NORMAS
+% 10. RECURSOS E DEPENDENCIAS DE OUTRAS NORMAS
 % ------------------------------------------------------------
 \gdef\@sindRecursosRegistrados{}
 \gdef\@sindDependenciasNormativas{}
@@ -721,7 +683,7 @@
 }
 
 % ------------------------------------------------------------
-% 12. APLICABILIDADE DOS MODELOS AO ESTADO PROCESSUAL
+% 11. APLICABILIDADE DOS MODELOS AO ESTADO PROCESSUAL
 % ------------------------------------------------------------
 \newcommand{\sind@ExigirSindicado}[1]{%
   \ifdefstring{\@sindNatureza}{processual}{}{%

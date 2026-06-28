@@ -29,6 +29,7 @@ jobs:
             tests/cenario-sigiloso.tex
             tests/cenario-inquiricao-especial.tex
             tests/cenario-flexibilidade.tex
+            tests/cenario-foliacao-manual.tex
             examples/demo.tex
           latexmk_use_lualatex: true
           texlive_version: 2026

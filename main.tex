@@ -43,19 +43,6 @@
 % ============================================================
 
 % ------------------------------------------------------------
-% ANEXO A - PORTARIA DE INSTAURAÇÃO
-% ------------------------------------------------------------
-% \input{dados/dados-anexo-a-portaria-instauracao.tex}
-% \GerarDocumento{portaria-instauracao}
-
-% ------------------------------------------------------------
-% ANEXO B - PORTARIA DECORRENTE DE DENÚNCIA ANÔNIMA
-% Use somente quando a origem e as circunstâncias do caso corresponderem.
-% ------------------------------------------------------------
-% \input{dados/dados-anexo-b-portaria-denuncia-anonima.tex}
-% \GerarDocumento{portaria-denuncia-anonima}
-
-% ------------------------------------------------------------
 % ANEXO C - CAPA DOS AUTOS
 % ------------------------------------------------------------
 % \input{dados/dados-anexo-c-capa.tex}
@@ -170,15 +157,6 @@
 % \input{dados/dados-anexo-s-acareacao.tex}
 % \GerarDocumento{acareacao}
 
-% ------------------------------------------------------------
-% ANEXO AA - CERTIDÃO DE MODIFICAÇÃO DO RITO
-% Use apenas no rito sumário. Registre a transição antes da peça e
-% posicione este bloco na data real do ato para preservar a cronologia.
-% ------------------------------------------------------------
-% \converterRitoParaOrdinario{DATA}{FUNDAMENTO}
-% \input{dados/dados-anexo-aa-certidao-modificacao-rito.tex}
-% \GerarDocumento{certidao-modificacao-rito}
-
 % ============================================================
 % 6. SUBSTITUIÇÃO EVENTUAL DE SINDICANTE
 % ============================================================
@@ -249,12 +227,6 @@
 % \GerarDocumento{diex-remessa}
 
 % ------------------------------------------------------------
-% ANEXO Z - SOLUÇÃO DA SINDICÂNCIA
-% ------------------------------------------------------------
-% \input{dados/dados-anexo-z-solucao.tex}
-% \GerarDocumento{solucao-sindicancia}
-
-% ------------------------------------------------------------
 % NOTIFICAÇÃO DA SOLUÇÃO
 % ------------------------------------------------------------
 % \input{dados/dados-notificacao-solucao.tex}
@@ -290,6 +262,30 @@
 % ------------------------------------------------------------
 % \input{dados/dados-solicitacao-prorrogacao.tex}
 % \GerarDocumento{solicitacao-prorrogacao}
+
+% ============================================================
+% 10. REFERÊNCIAS DA SEÇÃO DE APOIO JURÍDICO
+% Os anexos abaixo não são elaborados pelo sindicante. Permanecem no
+% projeto apenas para consulta, testes e eventual uso pela seção competente.
+% Não integram o intervalo de folhas numerado pelo sindicante.
+% ============================================================
+
+% ANEXO A - PORTARIA DE INSTAURAÇÃO
+% \input{dados/dados-anexo-a-portaria-instauracao.tex}
+% \GerarDocumento{portaria-instauracao}
+
+% ANEXO B - PORTARIA DECORRENTE DE DENÚNCIA ANÔNIMA
+% \input{dados/dados-anexo-b-portaria-denuncia-anonima.tex}
+% \GerarDocumento{portaria-denuncia-anonima}
+
+% ANEXO Z - SOLUÇÃO DA SINDICÂNCIA
+% \input{dados/dados-anexo-z-solucao.tex}
+% \GerarDocumento{solucao-sindicancia}
+
+% ANEXO AA - CERTIDÃO DE MODIFICAÇÃO DO RITO
+% \converterRitoParaOrdinario{DATA}{FUNDAMENTO}
+% \input{dados/dados-anexo-aa-certidao-modificacao-rito.tex}
+% \GerarDocumento{certidao-modificacao-rito}
 
 
 \end{document}

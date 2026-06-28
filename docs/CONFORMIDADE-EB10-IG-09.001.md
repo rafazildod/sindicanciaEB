@@ -23,13 +23,14 @@ Uma apuração pode começar sem sindicado. Nessa fase, use natureza investigat�
 
 Se surgirem elementos de responsabilidade individual, preencha o sindicado e execute `\converterParaProcessual{data}{fundamento}`. A transição fica registrada e libera as peças processuais.
 
-No rito sumário, execute `\converterRitoParaOrdinario{data}{fundamento}` antes do Anexo AA. A certidão exige que essa transição exista.
+No rito sumário, a mudança para o ordinário pode ser registrada tecnicamente com `\converterRitoParaOrdinario{data}{fundamento}`. O Anexo AA correspondente é de competência da Seção de Apoio Jurídico e permanece no projeto apenas como referência.
 
 ## Aplicabilidade das peças
 
 | Grupo | Condição principal |
 |---|---|
-| Portarias A e B, capa, abertura, juntada, despacho, testemunhas, acareação, relatório, encerramento, remessa e solução | Podem ser usados sem sindicado, conforme os fatos e o rito |
+| Anexos A, B, Z e AA | Referência da Seção de Apoio Jurídico; não são elaborados pelo sindicante |
+| Capa, abertura, juntada, despacho, testemunhas, acareação, relatório, encerramento e remessa | Podem ser usados sem sindicado, conforme os fatos e o rito |
 | Notificações I, J e K | Natureza processual e sindicado identificado |
 | Comparecimento e inquirição de sindicado | Natureza processual e sindicado identificado |
 | Vista para alegações finais | Natureza processual e sindicado identificado |
@@ -37,6 +38,10 @@ No rito sumário, execute `\converterRitoParaOrdinario{data}{fundamento}` antes 
 | Anexo B | Somente quando a instauração decorrer de denúncia anônima nas condições normativas |
 | Anexo AA | Somente após mudança registrada do rito sumário para o ordinário |
 | Relatório complementar | Somente quando houver determinação de diligências complementares |
+
+## Foliação
+
+A caixa `Fl. ____` é sempre manual. Ela não aparece na capa, inicia no termo de abertura e deixa de aparecer a partir do DIEx de remessa. Os anexos de competência da Seção de Apoio Jurídico também ficam fora dessa numeração do sindicante.
 
 ## Regras automatizadas
 
@@ -55,7 +60,7 @@ O projeto verifica:
 - finalidade e prioridade dos expedientes;
 - quesitos da defesa e notificação na carta precatória processual;
 - antecedência mínima declarada de 48 horas para prorrogação;
-- total real de folhas informado na remessa;
+- total real de folhas informado na remessa, sem numeração automática pelo LaTeX;
 - publicação, notificados e prazo recursal na solução.
 
 ## Controles que dependem de conferência humana

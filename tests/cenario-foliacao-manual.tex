@@ -1,0 +1,44 @@
+% Confirma o intervalo da caixa de foliação manual.
+\documentclass[permitir-placeholders]{sindicancia}
+\input{dados/dados-sindicancia.tex}
+
+\makeatletter
+\newcommand{\ExigirCaixaOculta}[1]{%
+  \ifsind@mostrarflbox
+    \ClassError{sindicancia}{Caixa de folha visivel em #1}{A caixa deveria estar oculta neste ponto.}%
+  \fi
+}
+\newcommand{\ExigirCaixaVisivel}[1]{%
+  \ifsind@mostrarflbox\else
+    \ClassError{sindicancia}{Caixa de folha oculta em #1}{A caixa deveria estar visivel neste ponto.}%
+  \fi
+}
+\makeatother
+
+\begin{document}
+\ExigirCaixaOculta{estado inicial}
+
+\input{dados/dados-anexo-a-portaria-instauracao.tex}
+\GerarDocumento{portaria-instauracao}
+\ExigirCaixaOculta{anexo A}
+
+\input{dados/dados-anexo-c-capa.tex}
+\GerarDocumento{capa}
+\ExigirCaixaOculta{capa}
+
+\input{dados/dados-anexo-d-termo-abertura.tex}
+\GerarDocumento{termo-abertura}
+\ExigirCaixaVisivel{termo de abertura}
+
+\input{dados/dados-anexo-h-despacho1.tex}
+\GerarDocumento{despacho}
+\ExigirCaixaVisivel{instrucao}
+
+\input{dados/dados-anexo-y-diex-remessa.tex}
+\GerarDocumento{diex-remessa}
+\ExigirCaixaOculta{DIEx de remessa}
+
+\input{dados/dados-anexo-z-solucao.tex}
+\GerarDocumento{solucao-sindicancia}
+\ExigirCaixaOculta{anexo Z}
+\end{document}
