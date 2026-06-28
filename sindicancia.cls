@@ -3,11 +3,11 @@
 % Classe para elaboração de documentos de Sindicância no EB
 % Baseado em: EB10-IG-09.001 (2ª Ed, 2024)
 % Autor original: projeto modelo
-% Refatoração assistida: versão 1.12
+% Refatoração assistida: versão 2.0.0
 % ============================================================
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{sindicancia}[2026/06/26 v2.6 Sindicancias EB - validacao de placeholders]
+\ProvidesClass{sindicancia}[2026/06/28 v2.0.0 Sindicancias EB - conformidade processual]
 
 % ============================================================
 % 1. OPÇÕES DA CLASSE
@@ -205,7 +205,8 @@
     \SeCampoPreenchido{omSuperior}{\textbf{\getOmSuperior}\\}%
     \SeCampoPreenchido{om}{\textbf{\getOm}\\}%
     \SeCampoPreenchido{omComplemento}{\textbf{\getOmComplemento}\\}%
-    \SeCampoPreenchido{omNomeHistorico}{\textbf{``\getOmNomeHistorico''}}%
+    \SeCampoPreenchido{omNomeHistorico}{\textbf{``\getOmNomeHistorico''}\\}%
+    \@ifundefined{sind@cabecalhoClassificacao}{}{\sind@cabecalhoClassificacao}%
   \end{center}%
 }
 
@@ -763,6 +764,8 @@
 
 % Seleciona modelos por nome, procurando primeiro em modelos/ e depois em anexos/.
 \newcommand{\GerarDocumento}[1]{%
+  \ValidarEstadoDocumento{#1}%
+  \ValidarDataDocumentoParaModelo{#1}%
   \InputIfFileExists{modelos/#1.tex}{}{%
     \InputIfFileExists{anexos/#1.tex}{}{%
       \ClassError{sindicancia}{Modelo '#1' nao encontrado}{Crie modelos/#1.tex ou anexos/#1.tex.}%
@@ -1222,11 +1225,12 @@
   \CampoObrigatorio{sindicadoIdentidade}{identidade do sindicado}%
   \CampoObrigatorio{sindicadoCPF}{CPF do sindicado}%
   \CampoObrigatorio{localInquiricao}{local da inquirição}%
-  \CampoObrigatorio{testemunhaInquiricaoNome}{nome da testemunha da inquirição}%
   \CampoObrigatorioRaw{inqSindicadoNumero}{número da inquirição do sindicado}%
   \CampoObrigatorioRaw{horaInicioInquiricao}{hora de início da inquirição}%
   \CampoObrigatorioRaw{horaFimInquiricao}{hora de término da inquirição}%
   \CampoObrigatorioRaw{inqSindicadoPerguntas}{perguntas e respostas da inquirição}%
+  \ValidarRegrasInquiricao
+  \ValidarLimiteTestemunhas
 }
 
 
@@ -1284,11 +1288,12 @@
   \CampoObrigatorio{testemunhaNome}{nome da testemunha}%
   \CampoObrigatorio{testemunhaPosto}{posto/graduação ou qualificação da testemunha}%
   \CampoObrigatorio{localInquiricao}{local da inquirição}%
-  \CampoObrigatorio{testemunhaInquiricaoNome}{nome da testemunha da inquirição}%
   \CampoObrigatorioRaw{inqTestemunhaNumero}{número da inquirição da testemunha}%
   \CampoObrigatorioRaw{horaInicioInquiricao}{hora de início da inquirição}%
   \CampoObrigatorioRaw{horaFimInquiricao}{hora de término da inquirição}%
   \CampoObrigatorioRaw{inqTestemunhaPerguntas}{perguntas e respostas da inquirição}%
+  \ValidarRegrasInquiricao
+  \ValidarLimiteTestemunhas
 }
 
 
@@ -1538,6 +1543,7 @@
   \gdef\@certidaoLocalData{}%
   \gdef\@certidaoTexto{}%
   \gdef\@certidaoCiencia{}%
+  \gdef\@certidaoVariante{decurso-prazo}%
 }
 \newcommand{\novaCertidao}{\sind@limparCertidao}
 
@@ -1546,8 +1552,9 @@
 \newcommand{\certidaoNumeroDocumento}[1]{\gdef\@certidaoNumeroDocumento{#1}}
 \newcommand{\certidaoDataDocumento}[1]{\gdef\@certidaoDataDocumento{#1}}
 \newcommand{\certidaoLocalData}[1]{\gdef\@certidaoLocalData{#1}}
-\newcommand{\certidaoTexto}[1]{\gdef\@certidaoTexto{#1}}
+\newcommand{\certidaoTexto}[1]{\gdef\@certidaoTexto{#1}\gdef\@certidaoVariante{ocorrencia}}
 \newcommand{\certidaoCiencia}[1]{\gdef\@certidaoCiencia{#1}}
+\newcommand{\certidaoVariante}[1]{\gdef\@certidaoVariante{#1}}
 
 \sind@limparCertidao
 
@@ -1558,13 +1565,25 @@
 \newcommand{\getCertidaoLocalData}{\@certidaoLocalData}
 \newcommand{\getCertidaoTexto}{\@certidaoTexto}
 \newcommand{\getCertidaoCiencia}{\@certidaoCiencia}
+\newcommand{\getCertidaoVariante}{\@certidaoVariante}
+\newcommand{\SeCertidaoVariante}[3]{\ifdefstring{\@certidaoVariante}{#1}{#2}{#3}}
 
 \newcommand{\ValidarCertidao}{%
   \CampoObrigatorio{sindicanteNome}{nome do sindicante}%
   \CampoObrigatorio{sindicantePosto}{posto/graduação do sindicante}%
-  \CampoObrigatorioRaw{certidaoDataTerminoPrazo}{data do término do prazo da certidão}%
-  \CampoObrigatorioRaw{certidaoNumeroDocumento}{número do DIEx/Ofício da certidão}%
-  \CampoObrigatorioRaw{certidaoDataDocumento}{data do DIEx/Ofício da certidão}%
+  \ifdefstring{\@certidaoVariante}{decurso-prazo}{%
+    \CampoObrigatorioRaw{certidaoDataTerminoPrazo}{data do término do prazo da certidão}%
+    \CampoObrigatorioRaw{certidaoNumeroDocumento}{número do DIEx/Ofício da certidão}%
+    \CampoObrigatorioRaw{certidaoDataDocumento}{data do DIEx/Ofício da certidão}%
+  }{%
+    \ifdefstring{\@certidaoVariante}{ocorrencia}{\CampoObrigatorioRaw{certidaoTexto}{texto da ocorrência certificada}}{%
+      \ifdefstring{\@certidaoVariante}{ciencia}{\CampoObrigatorioRaw{certidaoCiencia}{ato de ciência certificado}}{%
+        \ifdefstring{\@certidaoVariante}{ausencia-sindicado}{}{%
+          \ClassError{sindicancia}{Variante de certidao invalida}{Use decurso-prazo, ocorrencia, ciencia ou ausencia-sindicado.}%
+        }%
+      }%
+    }%
+  }%
 }
 
 % ============================================================
@@ -1662,11 +1681,9 @@
   \CampoObrigatorio{nup}{NUP/EB do DIEx de remessa}%
   \CampoObrigatorio{sindicanteNome}{nome do sindicante}%
   \CampoObrigatorio{sindicantePosto}{posto/graduação do sindicante}%
-  \CampoObrigatorio{sindicadoNome}{nome do sindicado}%
-  \CampoObrigatorio{sindicadoPosto}{posto/graduação do sindicado}%
   \CampoObrigatorioRawOuProximoDiex{diexRemessaNumero}{número do DIEx de remessa}%
   \CampoObrigatorioRaw{diexRemessaDestinatario}{destinatário do DIEx de remessa}%
-  % A quantidade de folhas do DIEx de remessa é preenchida manualmente no documento final.%
+  \CampoObrigatorioRaw{diexRemessaFolhas}{quantidade real de folhas dos autos}%
 }
 
 % ============================================================
@@ -1682,6 +1699,10 @@
   \gdef\@prorrogacaoDataInicio{}%
   \gdef\@prorrogacaoFaseAndamento{}%
   \gdef\@prorrogacaoJustificativa{}%
+  \gdef\@prorrogacaoAtosRealizados{}%
+  \gdef\@prorrogacaoDataSolicitacao{}%
+  \gdef\@prorrogacaoTerminoPrazoAtual{}%
+  \gdef\@prorrogacaoAntecedenciaHoras{}%
 }
 \newcommand{\novaSolicitacaoProrrogacao}{\sind@limparProrrogacao}
 
@@ -1694,6 +1715,10 @@
 \newcommand{\prorrogacaoDataInicio}[1]{\gdef\@prorrogacaoDataInicio{#1}}
 \newcommand{\prorrogacaoFaseAndamento}[1]{\gdef\@prorrogacaoFaseAndamento{#1}}
 \newcommand{\prorrogacaoJustificativa}[1]{\gdef\@prorrogacaoJustificativa{#1}}
+\newcommand{\prorrogacaoAtosRealizados}[1]{\gdef\@prorrogacaoAtosRealizados{#1}}
+\newcommand{\prorrogacaoDataSolicitacao}[1]{\gdef\@prorrogacaoDataSolicitacao{#1}}
+\newcommand{\prorrogacaoTerminoPrazoAtual}[1]{\gdef\@prorrogacaoTerminoPrazoAtual{#1}}
+\newcommand{\prorrogacaoAntecedenciaHoras}[1]{\gdef\@prorrogacaoAntecedenciaHoras{#1}}
 
 \sind@limparProrrogacao
 
@@ -1706,6 +1731,10 @@
 \newcommand{\getProrrogacaoDataInicio}{\@prorrogacaoDataInicio}
 \newcommand{\getProrrogacaoFaseAndamento}{\@prorrogacaoFaseAndamento}
 \newcommand{\getProrrogacaoJustificativa}{\@prorrogacaoJustificativa}
+\newcommand{\getProrrogacaoAtosRealizados}{\@prorrogacaoAtosRealizados}
+\newcommand{\getProrrogacaoDataSolicitacao}{\@prorrogacaoDataSolicitacao}
+\newcommand{\getProrrogacaoTerminoPrazoAtual}{\@prorrogacaoTerminoPrazoAtual}
+\newcommand{\getProrrogacaoAntecedenciaHoras}{\@prorrogacaoAntecedenciaHoras}
 
 \newcommand{\ValidarSolicitacaoProrrogacao}{%
   \CampoObrigatorio{nup}{NUP/EB da solicitação de prorrogação}%
@@ -1718,6 +1747,13 @@
   \CampoObrigatorioRaw{prorrogacaoDataInicio}{data inicial da prorrogação}%
   \CampoObrigatorioRaw{prorrogacaoFaseAndamento}{fase atual da sindicância}%
   \CampoObrigatorioRaw{prorrogacaoJustificativa}{justificativa da prorrogação}%
+  \CampoObrigatorioRaw{prorrogacaoAtosRealizados}{atos já realizados}%
+  \CampoObrigatorioRaw{prorrogacaoDataSolicitacao}{data da solicitação}%
+  \CampoObrigatorioRaw{prorrogacaoTerminoPrazoAtual}{término do prazo vigente}%
+  \CampoObrigatorioRaw{prorrogacaoAntecedenciaHoras}{antecedência da solicitação em horas}%
+  \ifnum\@prorrogacaoAntecedenciaHoras<48\relax
+    \ClassError{sindicancia}{Solicitacao de prorrogacao com antecedencia inferior a 48 horas}{Registre e observe a antecedencia minima de 48 horas.}%
+  \fi
 }
 
 
@@ -1966,13 +2002,8 @@
   \CampoObrigatorio{om}{organização militar}%
   \CampoObrigatorio{sindicanteNome}{nome do sindicante}%
   \CampoObrigatorio{sindicantePosto}{posto/graduação do sindicante}%
-  \CampoObrigatorio{sindicadoNome}{nome do sindicado}%
-  \CampoObrigatorio{testemunhaANome}{nome da testemunha A}%
-  \CampoObrigatorio{testemunhaBNome}{nome da testemunha B}%
   \CampoObrigatorioRaw{acareacaoPontosDivergencia}{pontos de divergência}%
-  \CampoObrigatorioRaw{acareacaoDeclaracaoA}{declaração da testemunha A}%
-  \CampoObrigatorioRaw{acareacaoDeclaracaoB}{declaração da testemunha B}%
-  \CampoObrigatorioRaw{acareacaoDeclaracaoSindicado}{declaração do sindicado}%
+  \ValidarAcareacaoDinamica
 }
 
 
@@ -1998,6 +2029,9 @@
     \getSindicadoPosto\ \getSindicadoNome
   \end{center}%
 }
+
+% Estado processual, regras de aplicabilidade e extensoes da 2a edicao/2024.
+\input{sindicancia-procedimento.tex}
 
 \makeatother
 \endinput

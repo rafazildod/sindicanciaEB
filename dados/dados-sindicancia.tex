@@ -14,6 +14,26 @@
 % ============================================================
 
 % ------------------------------------------------------------
+% Regime normativo e estado inicial do procedimento
+% A versão atual atende somente portarias publicadas a partir de 01/01/2025.
+% ------------------------------------------------------------
+\dataPublicacaoPortariaISO{20260501}
+\dataRecebimentoPortariaISO{20260502}
+\ritoSindicancia{ordinario}
+\naturezaSindicancia{processual}
+\partePrincipalSindicancia{sindicado}
+\classificacaoSindicancia{ostensiva}
+
+% Dependências cuja incidência deve ser confirmada no caso concreto.
+\registrarDependenciaNormativa{Código de Processo Penal Militar}{inquirições, compromisso e atos instrutórios}{conferir a redação vigente e a compatibilidade com a EB10-IG-09.001}
+\registrarDependenciaNormativa{legislação de acesso à informação e proteção de dados}{sigilo, acesso aos autos e dados pessoais}{aplicar conforme o conteúdo efetivamente tratado}
+\registrarDependenciaNormativa{regulamentação interna de atos remotos}{videoconferência e telepresença}{informar o ato normativo específico sempre que a modalidade for utilizada}
+
+% Numeração automática das folhas a partir do termo de abertura.
+% A capa não recebe número de folha.
+\foliacaoAutomatica{1}
+
+% ------------------------------------------------------------
 % Data/local de abertura dos trabalhos
 % Usada também como fallback quando um documento não informar data própria.
 % ------------------------------------------------------------
@@ -73,6 +93,11 @@
 \sindicadoFiliacao{NOME DO PAI e NOME DA MÃE}
 \sindicadoResidencia{ENDEREÇO COMPLETO}
 \sindicadoCelular{(00) 00000-0000}
+
+% Cadastro estruturado. Os comandos antigos acima continuam disponíveis para
+% compatibilidade, mas o cadastro será a fonte do futuro motor de formulários.
+\registrarParticipante{sindicante-principal}{sindicante}{\getSindicanteNome}{\getSindicantePosto}{\getSindicanteOM}{}
+\registrarParticipante{sindicado-principal}{sindicado}{\getSindicadoNome}{\getSindicadoPosto}{\getSindicadoOM}{}
 
 % ------------------------------------------------------------
 % Escrivão

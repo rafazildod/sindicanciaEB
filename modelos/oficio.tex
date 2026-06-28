@@ -7,6 +7,7 @@
 \pdfbookmark[1]{Ofício \getOficioNumero}{oficio-\getOficioNumero}
 
 \ValidarOficio
+\ValidarRegrasExpediente
 
 \clearpage
 \thispagestyle{empty}
@@ -37,12 +38,14 @@
 \vspace{0.5em}
 
 \noindent\textbf{Assunto:} \getOficioAssunto
+\par\noindent\textbf{Finalidade:} \getExpedienteFinalidade
+\par\noindent\textbf{Prioridade:} \getExpedientePrioridade
 \SeCampoPreenchido{oficioReferencia}{\par\noindent\textbf{Referência:} \getOficioReferencia}
 \SeCampoPreenchido{oficioAnexos}{\par\noindent\textbf{Anexo:} \getOficioAnexos}
 
 \vspace{1em}
 
-\getOficioTexto
+\ConteudoDocumentoFlexivel{\getOficioTexto}
 
 \assinaturaSindicante
 

@@ -13,17 +13,21 @@ O projeto separa o conteúdo da formatação: o usuário preenche arquivos simpl
 > [!IMPORTANT]
 > Este é um projeto independente e não oficial. Ele auxilia na preparação material dos documentos, mas não substitui a norma vigente, a orientação da autoridade competente nem a revisão jurídica e administrativa de cada caso.
 
+Consulte também o [mapa de conformidade e aplicabilidade](docs/CONFORMIDADE-EB10-IG-09.001.md).
+As incompatibilidades e orientações de migração da versão 2.0.0 estão no [histórico de versões](CHANGELOG.md).
+
 ## O que o projeto oferece
 
-- modelos dos anexos C a Y da EB10-IG-09.001, com a juntada compartilhada pelos anexos E e L;
-- modelos auxiliares de DIEx, Ofício, solicitação de prorrogação e consentimento para acesso a prontuário;
+- modelos aplicáveis dos anexos A a AA da EB10-IG-09.001, com a juntada compartilhada pelos anexos E e L;
+- modelos auxiliares de DIEx, Ofício, relatório complementar, notificação da solução, prorrogação e consentimento para acesso a prontuário;
 - dados separados da apresentação visual;
-- validação de campos obrigatórios e de placeholders nos modelos;
+- estado formal de rito, natureza, parte principal, sigilo e transições;
+- suporte a apuração sem sindicado e à posterior conversão para natureza processual;
+- modos de texto padrão, adaptado e personalizado sem editar `modelos/*.tex`;
+- validação de datas, cronologia, prazos, aplicabilidade e placeholders;
 - inclusão de PDFs digitalizados nas juntadas;
-- controle manual e versionável da numeração de DIEx e Ofícios;
-- arquivo de teste que reúne todos os modelos implementados.
-
-Os anexos A, B, Z e AA não estão implementados.
+- foliação automática ou manual, com campo de rubrica;
+- matriz de testes com cenários normativos positivos e negativos.
 
 ## Antes de começar: proteja os dados
 
@@ -67,11 +71,14 @@ Abra `dados/dados-sindicancia.tex` em um editor de texto, como Visual Studio Cod
 
 Nesse arquivo ficam os dados reutilizados por várias peças:
 
+- regime normativo, rito, natureza, parte principal e sigilo;
 - data e local de abertura dos trabalhos;
 - organização militar;
 - NUP, portaria e objeto;
 - autoridade instauradora;
 - sindicante, sindicado e escrivão.
+
+Se a apuração ainda não tiver sindicado, use `\naturezaSindicancia{investigatoria}`, `\partePrincipalSindicancia{nenhuma}` e deixe os campos do sindicado vazios. Não use documentos reservados ao contraditório até que a condição seja alterada formalmente.
 
 ### 4. Escolha e preencha uma peça
 
@@ -140,6 +147,7 @@ No uso cotidiano, altere principalmente `dados/` e `main.tex`.
 sindicanciaEB/
 ├── main.tex                 # painel de uso
 ├── sindicancia.cls          # classe e API do projeto
+├── sindicancia-procedimento.tex # estado e regras procedimentais
 ├── dados/                   # campos gerais e dados de cada peça
 ├── modelos/                 # modelos LaTeX dos documentos
 ├── documentos/              # PDFs inseridos em juntadas
@@ -152,6 +160,8 @@ sindicanciaEB/
 
 | Anexo | Documento | Dados | Modelo |
 |---|---|---|---|
+| A | Portaria de instauração | `dados/dados-anexo-a-portaria-instauracao.tex` | `modelos/portaria-instauracao.tex` |
+| B | Portaria decorrente de denúncia anônima | `dados/dados-anexo-b-portaria-denuncia-anonima.tex` | `modelos/portaria-denuncia-anonima.tex` |
 | C | Capa dos autos | `dados/dados-anexo-c-capa.tex` | `modelos/capa.tex` |
 | D | Termo de abertura | `dados/dados-anexo-d-termo-abertura.tex` | `modelos/termo-abertura.tex` |
 | E/L | Juntada | `dados/dados-anexo-e-l-juntada1.tex` | `modelos/juntada.tex` |
@@ -174,6 +184,8 @@ sindicanciaEB/
 | W | Relatório | `dados/dados-anexo-w-relatorio.tex` | `modelos/relatorio.tex` |
 | X | Termo de encerramento | `dados/dados-anexo-x-termo-encerramento.tex` | `modelos/termo-encerramento.tex` |
 | Y | DIEx de remessa | `dados/dados-anexo-y-diex-remessa.tex` | `modelos/diex-remessa.tex` |
+| Z | Solução | `dados/dados-anexo-z-solucao.tex` | `modelos/solucao-sindicancia.tex` |
+| AA | Certidão de modificação do rito | `dados/dados-anexo-aa-certidao-modificacao-rito.tex` | `modelos/certidao-modificacao-rito.tex` |
 
 ### Modelos auxiliares
 
@@ -181,10 +193,57 @@ sindicanciaEB/
 |---|---|---|
 | DIEx genérico | `dados/dados-diex1.tex` | `modelos/diex.tex` |
 | Ofício genérico | `dados/dados-oficio1.tex` | `modelos/oficio.tex` |
+| Relatório complementar | `dados/dados-relatorio-complementar.tex` | `modelos/relatorio-complementar.tex` |
+| Notificação da solução | `dados/dados-notificacao-solucao.tex` | `modelos/notificacao-solucao.tex` |
 | Consentimento para acesso a prontuário | `dados/dados-termo-consentimento-prontuario.tex` | `modelos/termo-consentimento-prontuario.tex` |
 | Solicitação de prorrogação | `dados/dados-solicitacao-prorrogacao.tex` | `modelos/solicitacao-prorrogacao.tex` |
 
 Use um modelo auxiliar somente quando não houver anexo específico aplicável.
+
+## Estado processual e transições
+
+O estado inicial é definido em `dados/dados-sindicancia.tex`:
+
+```latex
+\dataPublicacaoPortariaISO{20260501}
+\dataRecebimentoPortariaISO{20260502}
+\ritoSindicancia{ordinario}             % ordinario ou sumario
+\naturezaSindicancia{investigatoria}    % investigatoria ou processual
+\partePrincipalSindicancia{nenhuma}     % nenhuma, interessado ou sindicado
+\classificacaoSindicancia{ostensiva}    % ostensiva ou sigilosa
+```
+
+Quando surgir um sindicado, preencha sua qualificação e registre a conversão antes da primeira peça processual:
+
+```latex
+\converterParaProcessual{10 de maio de 2026}{fundamento objetivo da conversão}
+```
+
+No rito sumário, a mudança para o ordinário deve preceder o Anexo AA:
+
+```latex
+\converterRitoParaOrdinario{10 de maio de 2026}{novas provas necessárias}
+```
+
+## Texto padrão, adaptado ou personalizado
+
+Os arquivos em `dados/` podem controlar o texto sem alterar o modelo:
+
+```latex
+\modoDocumento{padrao}
+```
+
+```latex
+\modoDocumento{adaptado}
+\textoComplementarDocumento{Parágrafo adicional exigido pelo caso concreto.}
+```
+
+```latex
+\modoDocumento{personalizado}
+\textoDocumentoPersonalizado{Texto integral adequado à peça concreta.}
+```
+
+A identificação, os cabeçalhos, as datas, as assinaturas e as validações permanecem sob controle do projeto. A certidão também aceita `\certidaoTexto{...}` para ocorrências diferentes do decurso de prazo.
 
 ## Datas dos documentos
 
@@ -197,17 +256,14 @@ A data em `dados/dados-sindicancia.tex` representa a abertura ou o início dos t
 \cidade{CIDADE/UF}
 ```
 
-Cada arquivo específico pode herdar essa data:
-
-```latex
-\dataDocumento{}{}{}{}
-```
-
-Ou definir sua própria data e local:
+Cada documento deve informar sua data própria e uma chave cronológica:
 
 ```latex
 \dataDocumento{05}{junho}{2026}{CIDADE/UF}
+\chaveCronologica{20260605}
 ```
+
+O projeto rejeita peças sem data específica ou colocadas antes de outra com chave anterior. A capa é a exceção, pois não representa um ato cronológico.
 
 Nos termos em formato de ata, alguns campos aceitam a data por extenso. Se o campo textual ficar vazio, o modelo tenta montá-la a partir de `\dataDocumento` ou da data geral.
 
@@ -295,7 +351,7 @@ latexmk -lualatex -halt-on-error -interaction=nonstopmode -outdir=build tests/al
 
 O PDF de teste será criado em `build/all-models.pdf`. O teste confirma que os modelos compilam em conjunto com os dados fictícios; ele não valida juridicamente o conteúdo.
 
-O GitHub Actions executa essa compilação automaticamente em cada push e pull request. A automação também confirma que `tests/placeholder-validation.tex` rejeita `CIDADE/UF` e que `tests/medical-consent-validation.tex` rejeita marcadores obrigatórios do termo médico.
+O GitHub Actions executa também cenários sem sindicado, de conversão, dos dois ritos, de sigilo, de inquirição especial e dos três modos de texto. Testes negativos confirmam que o projeto rejeita uso processual sem sindicado, regime anterior a 2025, cronologia invertida, prorrogação intempestiva e inquirição excessiva sem pausa ou continuação.
 
 A opção de classe `permitir-placeholders` existe exclusivamente para a suíte de regressão e para demonstrações públicas. Não a use em documentos reais.
 
@@ -339,7 +395,7 @@ Em texto LaTeX, alguns caracteres têm função especial. Quando necessários co
 
 A pasta `bases/` contém os anexos de referência em DOCX e uma cópia da EB10-IG-09.001 usada no desenvolvimento.
 
-Segundo essa referência, a autoridade instauradora fixa prazo inicial de trinta dias corridos, com possibilidade de prorrogação por vinte dias, mediante solicitação fundamentada e decisão da autoridade nomeante. A contagem exclui o dia do início, inclui o do vencimento e deve observar os dias de expediente da OM.
+Esta versão do projeto aplica a EB10-IG-09.001 (2ª edição, 2024) às portarias publicadas a partir de 1º de janeiro de 2025. Casos anteriores devem seguir o regime normativo anterior. A solicitação de prorrogação exige fundamentação, relação dos atos realizados e registro de antecedência mínima de 48 horas.
 
 Antes de usar essas informações em um caso real, confirme:
 
@@ -349,7 +405,7 @@ Antes de usar essas informações em um caso real, confirme:
 - o calendário de expediente da OM;
 - publicações e decisões sobre prorrogação.
 
-O projeto não calcula prazos automaticamente.
+O projeto registra e valida algumas condições objetivas, mas não substitui a conferência do calendário, dos marcos de contagem nem das normas especiais aplicáveis.
 
 ## Contribuições
 

@@ -6,6 +6,7 @@
 \pdfbookmark[1]{Notificação de Diligências Complementares}{notificacao-diligencias-complementares-\getNotificacaoDiligenciasNumero}
 
 \ValidarNotificacaoDiligencias
+\ValidarRegrasNotificacao
 
 \clearpage
 \thispagestyle{empty}
@@ -35,15 +36,19 @@ Assunto: notificação prévia
 
 \vspace{1cm}
 
-\noindent 1. Notifico Vossa Senhoria de que o \getNotificacaoDiligenciasAutoridadeFuncao\ determinou a realização de diligências complementares à sindicância instaurada para apurar os fatos (ou irregularidades) a que se refere a \getPortaria, na qual V. Sa. figurou na condição de sindicado, razão pela qual lhe é facultada, a partir da data de ciência (ou recebimento) deste documento, vista dos respectivos autos, no local \getNotificacaoDiligenciasLocalVista, bem como assegurado o direito de, pessoalmente ou por intermédio de advogado constituído, acompanhar a realização das diligências complementares determinadas (\getNotificacaoDiligenciasDescricao), bem como praticar todos os demais atos necessários ao exercício do contraditório e da ampla defesa.
+\ConteudoDocumentoFlexivel{%
+\noindent 1. Notifico Vossa Senhoria, pelo canal \getNotificacaoCanal, de que o \getNotificacaoDiligenciasAutoridadeFuncao\ determinou diligências complementares relativas aos seguintes fatos específicos: \getNotificacaoFatosEspecificos. É-lhe facultada vista dos autos no local \getNotificacaoDiligenciasLocalVista e assegurado o acompanhamento das diligências descritas como \getNotificacaoDiligenciasDescricao.
 
 \SeCampoPreenchido{notDilDataAudiencia}{%
 \vspace{1em}
 
-\noindent 2. A audiência para \getNotificacaoDiligenciasTipoAudiencia\ está marcada para o dia \getNotificacaoDiligenciasDataAudiencia, às \getNotificacaoDiligenciasHoraAudiencia, no \getNotificacaoDiligenciasLocalAudiencia.
+\noindent 2. A audiência para \getNotificacaoDiligenciasTipoAudiencia\ está marcada para o dia \getNotificacaoDiligenciasDataAudiencia, às \getNotificacaoDiligenciasHoraAudiencia, no \getNotificacaoDiligenciasLocalAudiencia, observada a antecedência de \getNotificacaoAntecedenciaDiasUteis\ dias úteis.
+}
 }
 
 \reciboCienciaSindicado
+
+\noindent\textbf{Forma de ciência:} \getNotificacaoFormaCiencia
 
 \assinaturaSindicante
 
