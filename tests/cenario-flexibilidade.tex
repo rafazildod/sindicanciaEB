@@ -1,0 +1,29 @@
+\documentclass[permitir-placeholders]{sindicancia}
+\input{tests/fixture-sem-sindicado.tex}
+\begin{document}
+\dataDocumento{1}{maio}{2026}{CIDADE/UF}
+\chaveCronologica{20260501}
+\novoDespacho
+\despachoNumero{001}
+\despachoTexto{texto padrão que será substituído}
+\modoDocumento{personalizado}
+\textoDocumentoPersonalizado{Determino diligência específica exigida pelas circunstâncias deste caso concreto, mantendo a identificação, a data e as assinaturas do documento.}
+\GerarDocumento{despacho}
+
+\dataDocumento{2}{maio}{2026}{CIDADE/UF}
+\chaveCronologica{20260502}
+\novaCertidao
+\certidaoTexto{Certifico a ocorrência processual específica registrada nos autos.}
+\modoDocumento{adaptado}
+\textoComplementarDocumento{A presente certidão foi adaptada à necessidade concreta sem alteração do arquivo do modelo.}
+\GerarDocumento{certidao}
+
+\registrarRecurso{pedido de reconsideração}{3 de maio de 2026}{INTERESSADO FICTÍCIO}{pendente de decisão}
+\registrarPrazo{pedido de reconsideração}{3 de maio de 2026}{8 de maio de 2026}{cinco dias úteis, sujeito à conferência do expediente}{em curso}
+\dataDocumento{3}{maio}{2026}{CIDADE/UF}
+\chaveCronologica{20260503}
+\novaCertidao
+\certidaoVariante{ocorrencia}
+\certidaoTexto{Foram efetuados os seguintes registros de controle: \QuadroRecursosRegistrados\QuadroPrazosRegistrados}
+\GerarDocumento{certidao}
+\end{document}

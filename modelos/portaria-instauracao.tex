@@ -1,0 +1,36 @@
+% ANEXO A - PORTARIA DE INSTAURACAO
+\pdfbookmark[1]{Portaria de Instauração \getPortariaNumero}{portaria-instauracao-\getPortariaNumero}
+\ValidarPortariaInstauracao
+
+\clearpage
+\OcultarCaixaFolha
+\thispagestyle{empty}
+\cabecalhoInstitucional
+\vspace{2em}
+
+\noindent\textbf{Portaria nº \getPortariaNumero}
+\begin{flushright}\localData\end{flushright}
+\noindent\textbf{Do} \getAutoridadePosto\ \getAutoridadeNome, \getAutoridadeFuncao
+\noindent\textbf{Ao Sr.} \getSindicantePosto\ \getSindicanteNome
+\noindent\textbf{Assunto:} instauração de sindicância
+\noindent\textbf{Anexo:} \getPortariaAnexoOrigem
+
+\vspace{1em}
+\ConteudoDocumentoFlexivel{%
+Tendo tomado conhecimento dos fatos constantes do(s) documento(s) anexo(s), que
+noticiaram \getPortariaSinteseFatos, instauro a respeito esta sindicância,
+delegando-vos, para esse fim, as atribuições que me competem, devendo os trabalhos
+ser concluídos no prazo de \getPortariaPrazoDias\ dias corridos, observado o termo
+inicial aplicável à data de recebimento desta portaria.
+
+\SeCampoPreenchido{portariaEscrivao}{%
+\par\vspace{1em}
+Designo \getPortariaEscrivao\ para servir como escrivão na presente sindicância,
+devendo ser lavrado o respectivo termo de compromisso.%
+}}
+
+\vspace{1em}
+\noindent\textbf{Publicação:} \getPortariaPublicacaoBI
+\assinaturaAutoridade
+\clearpage
+\MostrarCaixaFolha

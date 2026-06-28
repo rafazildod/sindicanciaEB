@@ -6,6 +6,7 @@
 \pdfbookmark[1]{Notificação Prévia \getNotificacaoNumero}{notificacao-previa-\getNotificacaoNumero}
 
 \ValidarNotificacaoPrevia
+\ValidarRegrasNotificacao
 
 \clearpage
 \thispagestyle{empty}
@@ -37,10 +38,11 @@
 
 \vspace{0.8em}
 
+\ConteudoDocumentoFlexivel{%
 \begin{enumerate}
-  \item Venho, por meio deste, notificar Vossa Senhoria sobre os fatos (ou irregularidades) a que se refere a sindicância instaurada para apurar \getObjeto, razão pela qual lhe é facultada, a partir da data de ciência (ou recebimento) deste documento, vista dos respectivos autos, no local \getNotificacaoLocalVista, bem como assegurado o direito de, pessoalmente ou por intermédio de advogado constituído, no prazo de três dias úteis contados de sua inquirição, oferecer defesa prévia, arrolar testemunhas, juntar documentos e requerer o que julgar de direito; podendo, ainda, assistir a depoimentos, oferecer alegações finais e praticar todos os demais atos necessários ao exercício do contraditório e da ampla defesa.
+  \item Venho, por meio deste, notificar Vossa Senhoria, pelo canal \getNotificacaoCanal, sobre os seguintes fatos específicos: \getNotificacaoFatosEspecificos. É-lhe facultada, a partir da ciência deste documento, vista dos autos no local \getNotificacaoLocalVista, bem como o exercício do contraditório e da ampla defesa, pessoalmente ou por intermédio de advogado constituído.
 
-  \item A audiência para sua inquirição está marcada para o dia \getDataInquiricao, às \getHoraInquiricao, no \getLocalInquiricao.
+  \item A audiência para sua inquirição está marcada para o dia \getDataInquiricao, às \getHoraInquiricao, no \getLocalInquiricao, observada a antecedência de \getNotificacaoAntecedenciaDiasUteis\ dias úteis.
 
   \SeCampoPreenchido{notificacaoTestemunhas}{%
   \item A audiência para inquirição do denunciante/ofendido e das testemunhas a seguir relacionadas dar-se-á conforme previsto no quadro abaixo, sendo-lhe facultado assistir aos referidos depoimentos:%
@@ -62,6 +64,7 @@
 \vspace{0.6em}
 \getNotificacaoTextoComplementar
 }
+}
 
 \vspace{0.7cm}
 
@@ -71,5 +74,7 @@ Sindicante
 \end{center}
 
 \reciboCienciaSindicado
+
+\noindent\textbf{Forma de ciência:} \getNotificacaoFormaCiencia
 
 \clearpage

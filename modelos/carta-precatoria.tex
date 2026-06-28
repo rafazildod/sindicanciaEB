@@ -7,6 +7,7 @@
 \pdfbookmark[1]{Carta Precatória \getCartaPrecatoriaNumero}{carta-precatoria-\getCartaPrecatoriaNumero}
 
 \ValidarCartaPrecatoria
+\ValidarRegrasCartaPrecatoria
 
 \clearpage
 \thispagestyle{empty}
@@ -38,10 +39,15 @@
 
 \noindent\textbf{Assunto:} \getCartaPrecatoriaAssunto
 
+\noindent\textbf{Finalidade:} \getExpedienteFinalidade
+
+\noindent\textbf{Prioridade:} \getExpedientePrioridade
+
 \SeCampoPreenchido{cartaPrecatoriaAnexos}{\noindent\textbf{Anexo:} \getCartaPrecatoriaAnexos\par}
 
 \vspace{1em}
 
+\ConteudoDocumentoFlexivel{%
 \begin{enumerate}
   \item Versa a presente sindicância sobre \getObjeto, instaurada por intermédio da \getPortaria.
 
@@ -52,7 +58,10 @@
 
 \begin{enumerate}
 \getCartaPrecatoriaQuesitos
+\SeCampoPreenchido{cartaPrecatoriaQuesitosDefesa}{\getCartaPrecatoriaQuesitosDefesa}
 \end{enumerate}
+
+\SeCampoPreenchido{cartaPrecatoriaNotificacaoQuesitos}{\par\noindent\textbf{Contraditório:} \getCartaPrecatoriaNotificacaoQuesitos}
 
 \SeCampoPreenchido{cartaPrecatoriaTextoComplementar}{%
 \vspace{0.8em}
@@ -65,6 +74,7 @@
   \setcounter{enumi}{3}
   \item Após o cumprimento da presente carta precatória, solicito que o respectivo termo, acompanhado de eventuais documentos produzidos ou apresentados, seja restituído a este sindicante, para juntada aos autos.
 \end{enumerate}
+}
 
 \assinaturaSindicante
 

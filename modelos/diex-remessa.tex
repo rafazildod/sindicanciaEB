@@ -36,18 +36,20 @@
 
 \vspace{0.5em}
 
-\noindent\textbf{Assunto:} sindicância com \rule{2.5cm}{0.4pt}\ folhas
+\noindent\textbf{Assunto:} sindicância com \getDiexRemessaFolhas\ folhas
 
 \noindent\textbf{Referência:} \SeCampoPreenchido{diexRemessaReferencia}{\getDiexRemessaReferencia}\SeCampoVazio{diexRemessaReferencia}{\getPortaria}
 
 \vspace{1em}
 
-Remeto os autos da sindicância instaurada por intermédio da \getPortaria, em que figura como sindicado \getSindicadoPosto\ \getSindicadoNome, integrante do(a) \getSindicadoOM.
+\ConteudoDocumentoFlexivel{%
+Remeto os autos da sindicância instaurada por intermédio da \getPortaria, contendo \getDiexRemessaFolhas\ folhas\SeCampoPreenchido{sindicadoNome}{, em que figura como sindicado \getSindicadoPosto\ \getSindicadoNome\SeCampoPreenchido{sindicadoOM}{, integrante do(a) \getSindicadoOM}}.
 
 \SeCampoPreenchido{diexRemessaTextoComplementar}{%
 \vspace{0.8em}
 
 \getDiexRemessaTextoComplementar
+}
 }
 
 \assinaturaSindicante

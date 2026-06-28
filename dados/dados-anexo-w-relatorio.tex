@@ -8,12 +8,13 @@
 % Deixe em branco para usar a data/local do termo de abertura.
 % Formato: \dataDocumento{dia}{mês}{ano}{cidade/UF}
 % ------------------------------------------------------------
-\dataDocumento{}{}{}{}
+\dataDocumento{21}{maio}{2026}{CIDADE/UF}
+\chaveCronologica{20260521}
 
 \novoRelatorio
 
 \relatorioIntroducao{%
-A presente sindicância foi instaurada, por determinação do Sr. \getAutoridadePosto\ \getAutoridadeNome, \getAutoridadeFuncao, por intermédio da \getPortaria, para apurar \getObjeto, conforme documentos constantes dos autos, tendo como sindicado \getSindicadoPosto\ \getSindicadoNome.
+A presente sindicância foi instaurada, por determinação do Sr. \getAutoridadePosto\ \getAutoridadeNome, \getAutoridadeFuncao, por intermédio da \getPortaria, para apurar \getObjeto, conforme documentos constantes dos autos\SeCampoPreenchido{sindicadoNome}{, tendo como sindicado \getSindicadoPosto\ \getSindicadoNome}.
 }
 
 \relatorioDiligencias{%
@@ -21,7 +22,7 @@ Com o escopo de reunir elementos probatórios que pudessem esclarecer o fato obj
 }
 
 \relatorioParteExpositiva{%
-Foi assegurado ao sindicado o direito ao contraditório e à ampla defesa, conforme preconizado nas Instruções Gerais para a Elaboração de Sindicância no Âmbito do Exército Brasileiro -- EB10-IG-09.001.
+\SeCampoPreenchido{sindicadoNome}{Foi assegurado ao sindicado o direito ao contraditório e à ampla defesa, conforme preconizado nas Instruções Gerais para a Elaboração de Sindicância no Âmbito do Exército Brasileiro -- EB10-IG-09.001.}
 
 Da análise de todas as peças que compõem a presente sindicância, restou apurado que: [INSERIR NARRATIVA ORDENADA, COERENTE E CIRCUNSTANCIADA DOS FATOS APURADOS, COM REFERÊNCIA ÀS FOLHAS DOS AUTOS, DEPOIMENTOS, DOCUMENTOS E OUTRAS DILIGÊNCIAS].
 }

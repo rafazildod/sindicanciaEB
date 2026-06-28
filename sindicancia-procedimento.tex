@@ -1,0 +1,748 @@
+% ============================================================
+% sindicancia-procedimento.tex
+% Estado processual e validacoes da EB10-IG-09.001 (2a ed., 2024)
+% Carregado por sindicancia.cls com \makeatletter ativo.
+% ============================================================
+
+% ------------------------------------------------------------
+% 1. REGIME NORMATIVO, RITO, NATUREZA E PARTE PRINCIPAL
+% ------------------------------------------------------------
+\gdef\@sindDataPublicacaoPortariaISO{}
+\gdef\@sindDataRecebimentoPortariaISO{}
+\ifsind@sumario
+  \gdef\@sindRito{sumario}
+\else
+  \gdef\@sindRito{ordinario}
+\fi
+\gdef\@sindNatureza{investigatoria}
+\gdef\@sindPartePrincipal{nenhuma}
+\gdef\@sindClassificacao{ostensiva}
+\gdef\@sindSigiloAutoridade{}
+\gdef\@sindSigiloFundamento{}
+\gdef\@sindSigiloData{}
+\gdef\@sindHistoricoTransicoes{}
+
+\newcommand{\dataPublicacaoPortariaISO}[1]{\gdef\@sindDataPublicacaoPortariaISO{#1}}
+\newcommand{\dataRecebimentoPortariaISO}[1]{\gdef\@sindDataRecebimentoPortariaISO{#1}}
+
+\newcommand{\ritoSindicancia}[1]{%
+  \ifstrequal{#1}{ordinario}{\gdef\@sindRito{ordinario}}{%
+    \ifstrequal{#1}{sumario}{\gdef\@sindRito{sumario}}{%
+      \ClassError{sindicancia}{Rito invalido: #1}{Use ordinario ou sumario.}%
+    }%
+  }%
+}
+
+\newcommand{\naturezaSindicancia}[1]{%
+  \ifstrequal{#1}{investigatoria}{\gdef\@sindNatureza{investigatoria}}{%
+    \ifstrequal{#1}{processual}{\gdef\@sindNatureza{processual}}{%
+      \ClassError{sindicancia}{Natureza invalida: #1}{Use investigatoria ou processual.}%
+    }%
+  }%
+}
+
+\newcommand{\partePrincipalSindicancia}[1]{%
+  \ifstrequal{#1}{nenhuma}{\gdef\@sindPartePrincipal{nenhuma}}{%
+    \ifstrequal{#1}{interessado}{\gdef\@sindPartePrincipal{interessado}}{%
+      \ifstrequal{#1}{sindicado}{\gdef\@sindPartePrincipal{sindicado}}{%
+        \ClassError{sindicancia}{Parte principal invalida: #1}{Use nenhuma, interessado ou sindicado.}%
+      }%
+    }%
+  }%
+}
+
+\newcommand{\classificacaoSindicancia}[1]{%
+  \ifstrequal{#1}{ostensiva}{\gdef\@sindClassificacao{ostensiva}}{%
+    \ifstrequal{#1}{sigilosa}{\gdef\@sindClassificacao{sigilosa}}{%
+      \ClassError{sindicancia}{Classificacao invalida: #1}{Use ostensiva ou sigilosa.}%
+    }%
+  }%
+}
+\newcommand{\sigiloAutoridade}[1]{\gdef\@sindSigiloAutoridade{#1}}
+\newcommand{\sigiloFundamento}[1]{\gdef\@sindSigiloFundamento{#1}}
+\newcommand{\sigiloData}[1]{\gdef\@sindSigiloData{#1}}
+
+\newcommand{\getRitoSindicancia}{\@sindRito}
+\newcommand{\getNaturezaSindicancia}{\@sindNatureza}
+\newcommand{\getPartePrincipalSindicancia}{\@sindPartePrincipal}
+\newcommand{\getClassificacaoSindicancia}{\@sindClassificacao}
+\newcommand{\getSigiloAutoridade}{\@sindSigiloAutoridade}
+\newcommand{\getSigiloFundamento}{\@sindSigiloFundamento}
+\newcommand{\getSigiloData}{\@sindSigiloData}
+\newcommand{\getHistoricoTransicoes}{\@sindHistoricoTransicoes}
+\renewcommand{\getTipoSindicancia}{\@sindRito}
+
+\newcommand{\registrarTransicao}[5]{%
+  \g@addto@macro\@sindHistoricoTransicoes{%
+    \item \textbf{#1}: #2, de #3 para #4. Fundamento: #5.%
+  }%
+}
+
+\newcommand{\converterParaProcessual}[2]{%
+  \ifdefstring{\@sindNatureza}{investigatoria}{}{%
+    \ClassError{sindicancia}{Conversao processual invalida}{A conversao exige natureza investigatoria anterior.}%
+  }%
+  \ValidarValorObrigatorio{#1}{data da conversao para natureza processual}%
+  \ValidarValorObrigatorio{#2}{fundamento da conversao para natureza processual}%
+  \registrarTransicao{#1}{natureza}{\@sindNatureza}{processual}{#2}%
+  \gdef\@sindNatureza{processual}%
+  \gdef\@sindPartePrincipal{sindicado}%
+}
+
+\newcommand{\converterRitoParaOrdinario}[2]{%
+  \ifdefstring{\@sindRito}{sumario}{}{%
+    \ClassError{sindicancia}{Mudanca de rito invalida}{A mudanca para ordinario exige rito sumario anterior.}%
+  }%
+  \ValidarValorObrigatorio{#1}{data da conversao para rito ordinario}%
+  \ValidarValorObrigatorio{#2}{fundamento da conversao para rito ordinario}%
+  \registrarTransicao{#1}{rito}{\@sindRito}{ordinario}{#2}%
+  \gdef\@sindRito{ordinario}%
+}
+
+\newcommand{\ValidarRegimeNormativo}{%
+  \ValidarValorObrigatorio{\@sindDataPublicacaoPortariaISO}{data de publicacao da portaria no formato AAAAMMDD}%
+  \ifnum\@sindDataPublicacaoPortariaISO<20250101\relax
+    \ClassError{sindicancia}
+      {Portaria anterior a 1 de janeiro de 2025}
+      {O caso e regido pela Portaria C Ex 107/2012 e nao por esta versao do projeto.}%
+  \fi
+  \ValidarValorObrigatorio{\@sindDataRecebimentoPortariaISO}{data de recebimento da portaria no formato AAAAMMDD}%
+}
+
+\newcommand{\ValidarEstadoSindicancia}{%
+  \ifdefstring{\@sindNatureza}{processual}{%
+    \ifdefstring{\@sindPartePrincipal}{sindicado}{}{%
+      \ClassError{sindicancia}{Estado processual sem sindicado}{Defina a parte principal como sindicado.}%
+    }%
+    \CampoObrigatorio{sindicadoNome}{nome do sindicado}%
+    \CampoObrigatorio{sindicadoPosto}{posto, graduacao ou qualificacao do sindicado}%
+  }{}%
+  \ifdefstring{\@sindPartePrincipal}{interessado}{%
+    \CampoObrigatorio{interessadoNome}{nome do interessado}%
+    \CampoObrigatorio{interessadoPosto}{posto, graduacao ou qualificacao do interessado}%
+  }{}%
+  \ifdefstring{\@sindClassificacao}{sigilosa}{%
+    \ValidarValorObrigatorio{\@sindSigiloAutoridade}{autoridade que classificou a sindicancia}%
+    \ValidarValorObrigatorio{\@sindSigiloFundamento}{fundamento da classificacao sigilosa}%
+    \ValidarValorObrigatorio{\@sindSigiloData}{data da classificacao sigilosa}%
+  }{}%
+}
+
+\newcommand{\sind@cabecalhoClassificacao}{%
+  \ifdefstring{\@sindClassificacao}{sigilosa}{%
+    \vspace{0.3em}\textbf{\MakeUppercase{Documento sigiloso -- acesso controlado}}\\%
+  }{}%
+}
+
+% ------------------------------------------------------------
+% 2. DATAS ESPECIFICAS E ORDEM CRONOLOGICA
+% ------------------------------------------------------------
+\gdef\@documentoChaveCronologica{}
+\gdef\@ultimaChaveCronologica{0}
+\newcommand{\chaveCronologica}[1]{\gdef\@documentoChaveCronologica{#1}}
+\newcommand{\getChaveCronologica}{\@documentoChaveCronologica}
+
+\newcommand{\ValidarDataDocumentoEspecifica}[1]{%
+  \ValidarValorObrigatorio{\@documentoDia}{dia de #1}%
+  \ValidarValorObrigatorio{\@documentoMes}{mes de #1}%
+  \ValidarValorObrigatorio{\@documentoAno}{ano de #1}%
+  \ValidarValorObrigatorio{\@documentoCidade}{cidade de #1}%
+  \ValidarValorObrigatorio{\@documentoChaveCronologica}{chave cronologica AAAAMMDD de #1}%
+}
+
+\newcommand{\ValidarCronologiaDocumento}[1]{%
+  \ifnum\@documentoChaveCronologica<\@ultimaChaveCronologica\relax
+    \ClassError{sindicancia}
+      {Documento fora da ordem cronologica: #1}
+      {Reordene os documentos no main.tex ou corrija a chave cronologica AAAAMMDD.}%
+  \fi
+  \xdef\@ultimaChaveCronologica{\@documentoChaveCronologica}%
+}
+
+\newcommand{\ValidarDataDocumentoParaModelo}[1]{%
+  \ifstrequal{#1}{capa}{}{%
+    \ValidarDataDocumentoEspecifica{#1}%
+    \ValidarCronologiaDocumento{#1}%
+  }%
+}
+
+\apptocmd{\limparDataDocumento}{\gdef\@documentoChaveCronologica{}}{}{}
+
+% ------------------------------------------------------------
+% 3. FLEXIBILIDADE DE CONTEUDO
+% ------------------------------------------------------------
+\gdef\@modoDocumento{padrao}
+\gdef\@textoDocumentoPersonalizado{}
+\gdef\@textoComplementarDocumento{}
+
+\newcommand{\modoDocumento}[1]{\gdef\@modoDocumento{#1}}
+\newcommand{\textoDocumentoPersonalizado}[1]{\gdef\@textoDocumentoPersonalizado{#1}}
+\newcommand{\textoComplementarDocumento}[1]{\gdef\@textoComplementarDocumento{#1}}
+
+\newcommand{\sind@limparFlexibilidade}{%
+  \gdef\@modoDocumento{padrao}%
+  \gdef\@textoDocumentoPersonalizado{}%
+  \gdef\@textoComplementarDocumento{}%
+}
+
+\newcommand{\ValidarModoDocumento}{%
+  \ifdefstring{\@modoDocumento}{padrao}{}{%
+    \ifdefstring{\@modoDocumento}{adaptado}{}{%
+      \ifdefstring{\@modoDocumento}{personalizado}{%
+        \ValidarValorObrigatorio{\@textoDocumentoPersonalizado}{texto personalizado do documento}%
+      }{%
+        \ClassError{sindicancia}{Modo de documento invalido: \@modoDocumento}{Use padrao, adaptado ou personalizado.}%
+      }%
+    }%
+  }%
+}
+
+\newcommand{\ConteudoDocumentoFlexivel}[1]{%
+  \ValidarModoDocumento
+  \ifdefstring{\@modoDocumento}{personalizado}{%
+    \@textoDocumentoPersonalizado
+  }{%
+    #1%
+    \ifdefstring{\@modoDocumento}{adaptado}{%
+      \SeCampoPreenchido{textoComplementarDocumento}{\par\vspace{0.8em}\@textoComplementarDocumento}%
+    }{}%
+  }%
+}
+
+\apptocmd{\limparDataDocumento}{\sind@limparFlexibilidade}{}{}
+
+% ------------------------------------------------------------
+% 4. CADASTRO ESTRUTURADO DE PARTICIPANTES
+% ------------------------------------------------------------
+\gdef\@participantesIds{}
+\newcommand{\registrarParticipante}[6]{%
+  \ifcsdef{sind@participante@#1@nome}{%
+    \ClassError{sindicancia}{Participante duplicado: #1}{Use um identificador unico para cada participante.}%
+  }{}%
+  \expandafter\gdef\csname sind@participante@#1@papel\endcsname{#2}%
+  \expandafter\gdef\csname sind@participante@#1@nome\endcsname{#3}%
+  \expandafter\gdef\csname sind@participante@#1@qualificacao\endcsname{#4}%
+  \expandafter\gdef\csname sind@participante@#1@vinculo\endcsname{#5}%
+  \expandafter\gdef\csname sind@participante@#1@observacoes\endcsname{#6}%
+  \listgadd{\@participantesIds}{#1}%
+}
+\newcommand{\getParticipantePapel}[1]{\csname sind@participante@#1@papel\endcsname}
+\newcommand{\getParticipanteNome}[1]{\csname sind@participante@#1@nome\endcsname}
+\newcommand{\getParticipanteQualificacao}[1]{\csname sind@participante@#1@qualificacao\endcsname}
+\newcommand{\getParticipanteVinculo}[1]{\csname sind@participante@#1@vinculo\endcsname}
+\newcommand{\getParticipantesIds}{\@participantesIds}
+
+\gdef\@quantTestemunhasDenunciante{0}
+\gdef\@quantTestemunhasSindicado{0}
+\newcommand{\quantidadeTestemunhasDenunciante}[1]{\gdef\@quantTestemunhasDenunciante{#1}}
+\newcommand{\quantidadeTestemunhasSindicado}[1]{\gdef\@quantTestemunhasSindicado{#1}}
+\newcommand{\ValidarLimiteTestemunhas}{%
+  \ifnum\@quantTestemunhasDenunciante>3\relax
+    \ClassError{sindicancia}{Mais de tres testemunhas indicadas pelo denunciante ou ofendido}{O art. 17 limita essa indicacao a tres testemunhas.}%
+  \fi
+  \ifnum\@quantTestemunhasSindicado>3\relax
+    \ClassError{sindicancia}{Mais de tres testemunhas indicadas pelo sindicado}{O art. 17 limita essa indicacao a tres testemunhas.}%
+  \fi
+}
+
+% ------------------------------------------------------------
+% 5. REGRAS DE INQUIRICAO
+% ------------------------------------------------------------
+\gdef\@testemunhaLocalTrabalho{}
+\gdef\@testemunhaParentesco{}
+\gdef\@testemunhaDispensaCompromisso{}
+\gdef\@testemunhaSegredoProfissional{}
+\gdef\@testemunhaDesobrigadaPor{}
+\gdef\@modalidadeInquiricao{presencial}
+\gdef\@regulamentoAtoRemoto{}
+\gdef\@inquiricaoInicioMinutos{}
+\gdef\@inquiricaoFimMinutos{}
+\gdef\@inquiricaoPausaMinutos{0}
+\gdef\@inquiricaoJustificativaHorario{}
+\gdef\@inquiricaoContinuacao{}
+\gdef\@assinaturaRogoNome{}
+\gdef\@assinaturaRogoMotivo{}
+\gdef\@assinaturaRogoTestemunhaA{}
+\gdef\@assinaturaRogoTestemunhaB{}
+\gdef\@sindicadoMenor{nao}
+\gdef\@responsavelMenorNome{}
+\gdef\@responsavelMenorQualificacao{}
+\gdef\@manifestacaoDefesaInquiricao{}
+
+\newcommand{\sind@limparRegrasInquiricao}{%
+  \gdef\@testemunhaLocalTrabalho{}%
+  \gdef\@testemunhaParentesco{}%
+  \gdef\@testemunhaDispensaCompromisso{}%
+  \gdef\@testemunhaSegredoProfissional{}%
+  \gdef\@testemunhaDesobrigadaPor{}%
+  \gdef\@modalidadeInquiricao{presencial}%
+  \gdef\@regulamentoAtoRemoto{}%
+  \gdef\@inquiricaoInicioMinutos{}%
+  \gdef\@inquiricaoFimMinutos{}%
+  \gdef\@inquiricaoPausaMinutos{0}%
+  \gdef\@inquiricaoJustificativaHorario{}%
+  \gdef\@inquiricaoContinuacao{}%
+  \gdef\@assinaturaRogoNome{}%
+  \gdef\@assinaturaRogoMotivo{}%
+  \gdef\@assinaturaRogoTestemunhaA{}%
+  \gdef\@assinaturaRogoTestemunhaB{}%
+  \gdef\@sindicadoMenor{nao}%
+  \gdef\@responsavelMenorNome{}%
+  \gdef\@responsavelMenorQualificacao{}%
+  \gdef\@manifestacaoDefesaInquiricao{}%
+}
+\apptocmd{\novaInquiricaoTestemunha}{\sind@limparRegrasInquiricao}{}{}
+\apptocmd{\novaInquiricaoSindicado}{\sind@limparRegrasInquiricao}{}{}
+
+\newcommand{\testemunhaLocalTrabalho}[1]{\gdef\@testemunhaLocalTrabalho{#1}}
+\newcommand{\testemunhaParentesco}[1]{\gdef\@testemunhaParentesco{#1}}
+\newcommand{\testemunhaDispensaCompromisso}[1]{\gdef\@testemunhaDispensaCompromisso{#1}}
+\newcommand{\testemunhaSegredoProfissional}[1]{\gdef\@testemunhaSegredoProfissional{#1}}
+\newcommand{\testemunhaDesobrigadaPor}[1]{\gdef\@testemunhaDesobrigadaPor{#1}}
+\newcommand{\modalidadeInquiricao}[1]{\gdef\@modalidadeInquiricao{#1}}
+\newcommand{\regulamentoAtoRemoto}[1]{\gdef\@regulamentoAtoRemoto{#1}}
+\newcommand{\inquiricaoHorarioMinutos}[2]{\gdef\@inquiricaoInicioMinutos{#1}\gdef\@inquiricaoFimMinutos{#2}}
+\newcommand{\inquiricaoPausaMinutos}[1]{\gdef\@inquiricaoPausaMinutos{#1}}
+\newcommand{\inquiricaoJustificativaHorario}[1]{\gdef\@inquiricaoJustificativaHorario{#1}}
+\newcommand{\inquiricaoContinuacao}[1]{\gdef\@inquiricaoContinuacao{#1}}
+\newcommand{\assinaturaRogo}[4]{%
+  \gdef\@assinaturaRogoNome{#1}%
+  \gdef\@assinaturaRogoMotivo{#2}%
+  \gdef\@assinaturaRogoTestemunhaA{#3}%
+  \gdef\@assinaturaRogoTestemunhaB{#4}%
+}
+\newcommand{\sindicadoMenor}[1]{\gdef\@sindicadoMenor{#1}}
+\newcommand{\responsavelMenor}[2]{\gdef\@responsavelMenorNome{#1}\gdef\@responsavelMenorQualificacao{#2}}
+\newcommand{\manifestacaoDefesaInquiricao}[1]{\gdef\@manifestacaoDefesaInquiricao{#1}}
+\newcommand{\getTestemunhaLocalTrabalho}{\@testemunhaLocalTrabalho}
+\newcommand{\getTestemunhaParentesco}{\@testemunhaParentesco}
+\newcommand{\getTestemunhaDispensaCompromisso}{\@testemunhaDispensaCompromisso}
+\newcommand{\getModalidadeInquiricao}{\@modalidadeInquiricao}
+\newcommand{\getRegulamentoAtoRemoto}{\@regulamentoAtoRemoto}
+\newcommand{\getManifestacaoDefesaInquiricao}{\@manifestacaoDefesaInquiricao}
+
+\newcommand{\TextoModalidadeInquiricao}{%
+  \ifdefstring{\@modalidadeInquiricao}{presencial}{presencialmente}{%
+    \ifdefstring{\@modalidadeInquiricao}{videoconferencia}{por videoconferência}{%
+      \ifdefstring{\@modalidadeInquiricao}{telepresencial}{de forma telepresencial}{%
+        por carta precatória%
+      }%
+    }%
+  }%
+}
+
+\newcommand{\TextoCompromissoTestemunha}{%
+  \ifcsempty{@testemunhaDispensaCompromisso}{%
+    prestou o compromisso de dizer a verdade sobre o que souber e lhe for perguntado%
+  }{%
+    não prestou compromisso, em razão de \@testemunhaDispensaCompromisso%
+  }%
+}
+\newcommand{\TextoSegredoProfissionalTestemunha}{%
+  \ifcsempty{@testemunhaSegredoProfissional}{}{%
+    Declarou estar sujeita a segredo profissional quanto a \@testemunhaSegredoProfissional\ e foi desobrigada por \@testemunhaDesobrigadaPor. %
+  }%
+}
+
+\newcommand{\ValidarRegrasInquiricao}{%
+  \ifdefstring{\@modalidadeInquiricao}{presencial}{}{%
+    \ifdefstring{\@modalidadeInquiricao}{videoconferencia}{}{%
+      \ifdefstring{\@modalidadeInquiricao}{telepresencial}{}{%
+        \ifdefstring{\@modalidadeInquiricao}{carta-precatoria}{}{%
+          \ClassError{sindicancia}{Modalidade de inquiricao invalida}{Use presencial, videoconferencia, telepresencial ou carta-precatoria.}%
+        }%
+      }%
+    }%
+  }%
+  \ifdefstring{\@modalidadeInquiricao}{videoconferencia}{\ValidarValorObrigatorio{\@regulamentoAtoRemoto}{regulamento do ato remoto}}{}%
+  \ifdefstring{\@modalidadeInquiricao}{telepresencial}{\ValidarValorObrigatorio{\@regulamentoAtoRemoto}{regulamento do ato remoto}}{}%
+  \ValidarValorObrigatorio{\@inquiricaoInicioMinutos}{horario inicial da inquiricao em minutos}%
+  \ValidarValorObrigatorio{\@inquiricaoFimMinutos}{horario final da inquiricao em minutos}%
+  \ifnum\@inquiricaoFimMinutos<\@inquiricaoInicioMinutos\relax
+    \ClassError{sindicancia}{Horario final anterior ao inicial}{Corrija os horarios da inquiricao.}%
+  \fi
+  \ifnum\@inquiricaoInicioMinutos<480\relax
+    \ValidarValorObrigatorio{\@inquiricaoJustificativaHorario}{justificativa para ato antes das 8h}%
+  \fi
+  \ifnum\@inquiricaoFimMinutos>1080\relax
+    \ValidarValorObrigatorio{\@inquiricaoJustificativaHorario}{justificativa para ato depois das 18h}%
+  \fi
+  \@tempcnta=\@inquiricaoFimMinutos\relax
+  \advance\@tempcnta by -\@inquiricaoInicioMinutos\relax
+  \ifnum\@tempcnta>240\relax
+    \ifnum\@inquiricaoPausaMinutos<30\relax
+      \ifcsempty{@inquiricaoContinuacao}{%
+        \ClassError{sindicancia}{Inquiricao superior a quatro horas sem pausa ou continuacao}{Registre pausa minima de 30 minutos ou a continuacao em outro dia.}%
+      }{}%
+    \fi
+  \fi
+  \ifcsempty{@assinaturaRogoNome}{}{%
+    \ValidarValorObrigatorio{\@assinaturaRogoMotivo}{motivo da assinatura a rogo}%
+    \ValidarValorObrigatorio{\@assinaturaRogoTestemunhaA}{primeira testemunha da assinatura a rogo}%
+    \ValidarValorObrigatorio{\@assinaturaRogoTestemunhaB}{segunda testemunha da assinatura a rogo}%
+  }%
+  \ifcsempty{@testemunhaInquiricaoBNome}{}{%
+    \CampoObrigatorio{testemunhaInquiricaoNome}{primeira testemunha instrumentaria}%
+  }%
+  \ifdefstring{\@sindicadoMenor}{sim}{%
+    \ValidarValorObrigatorio{\@responsavelMenorNome}{responsavel pelo sindicado menor}%
+    \ValidarValorObrigatorio{\@responsavelMenorQualificacao}{qualificacao do responsavel pelo sindicado menor}%
+  }{}%
+  \ifcsempty{@testemunhaSegredoProfissional}{}{%
+    \ValidarValorObrigatorio{\@testemunhaDesobrigadaPor}{parte que desobrigou a testemunha do segredo profissional}%
+  }%
+}
+
+\newcommand{\AssinaturasRogoSeHouver}{%
+  \ifcsempty{@assinaturaRogoNome}{}{%
+    \assinaturaCentral{\@assinaturaRogoNome}{Assinatura a rogo -- \@assinaturaRogoMotivo}%
+    \assinaturaCentral{\@assinaturaRogoTestemunhaA}{Testemunha da assinatura a rogo}%
+    \assinaturaCentral{\@assinaturaRogoTestemunhaB}{Testemunha da assinatura a rogo}%
+  }%
+}
+
+\newcommand{\ResponsavelMenorSeHouver}{%
+  \ifdefstring{\@sindicadoMenor}{sim}{%
+    \assinaturaCentral{\@responsavelMenorNome}{\@responsavelMenorQualificacao -- responsável legal}%
+  }{}%
+}
+\newcommand{\TextoResponsavelMenorSeHouver}{%
+  \ifdefstring{\@sindicadoMenor}{sim}{Compareceu também seu responsável legal. }{}%
+}
+
+% ------------------------------------------------------------
+% 6. NOTIFICACOES, EXPEDIENTES E CARTA PRECATORIA
+% ------------------------------------------------------------
+\gdef\@notificacaoCanal{direta}
+\gdef\@notificacaoAntecedenciaDiasUteis{3}
+\gdef\@notificacaoFatosEspecificos{}
+\gdef\@notificacaoFormaCiencia{}
+\newcommand{\notificacaoCanal}[1]{\gdef\@notificacaoCanal{#1}}
+\newcommand{\notificacaoAntecedenciaDiasUteis}[1]{\gdef\@notificacaoAntecedenciaDiasUteis{#1}}
+\newcommand{\notificacaoFatosEspecificos}[1]{\gdef\@notificacaoFatosEspecificos{#1}}
+\newcommand{\notificacaoFormaCiencia}[1]{\gdef\@notificacaoFormaCiencia{#1}}
+\newcommand{\getNotificacaoCanal}{\@notificacaoCanal}
+\newcommand{\getNotificacaoAntecedenciaDiasUteis}{\@notificacaoAntecedenciaDiasUteis}
+\newcommand{\getNotificacaoFatosEspecificos}{\@notificacaoFatosEspecificos}
+\newcommand{\getNotificacaoFormaCiencia}{\@notificacaoFormaCiencia}
+\newcommand{\ValidarRegrasNotificacao}{%
+  \ifnum\@notificacaoAntecedenciaDiasUteis<3\relax
+    \ClassError{sindicancia}{Antecedencia de notificacao inferior a tres dias uteis}{O art. 32 exige antecedencia minima de tres dias uteis para diligencias.}%
+  \fi
+  \ValidarValorObrigatorio{\@notificacaoFatosEspecificos}{descricao especifica dos fatos comunicados}%
+  \ValidarValorObrigatorio{\@notificacaoFormaCiencia}{forma de ciencia da notificacao}%
+}
+
+\gdef\@expedienteFinalidade{}
+\gdef\@expedientePrioridade{normal}
+\newcommand{\expedienteFinalidade}[1]{\gdef\@expedienteFinalidade{#1}}
+\newcommand{\expedientePrioridade}[1]{\gdef\@expedientePrioridade{#1}}
+\newcommand{\getExpedienteFinalidade}{\@expedienteFinalidade}
+\newcommand{\getExpedientePrioridade}{\@expedientePrioridade}
+\newcommand{\ValidarRegrasExpediente}{%
+  \ValidarValorObrigatorio{\@expedienteFinalidade}{finalidade do pedido ou requisicao}%
+  \ifdefstring{\@expedientePrioridade}{normal}{}{%
+    \ifdefstring{\@expedientePrioridade}{urgente}{}{%
+      \ifdefstring{\@expedientePrioridade}{urgentissima}{}{%
+        \ClassError{sindicancia}{Prioridade de expediente invalida}{Use normal, urgente ou urgentissima.}%
+      }%
+    }%
+  }%
+}
+
+\gdef\@cartaPrecatoriaQuesitosDefesa{}
+\gdef\@cartaPrecatoriaNotificacaoQuesitos{}
+\newcommand{\cartaPrecatoriaQuesitosDefesa}[1]{\gdef\@cartaPrecatoriaQuesitosDefesa{#1}}
+\newcommand{\cartaPrecatoriaNotificacaoQuesitos}[1]{\gdef\@cartaPrecatoriaNotificacaoQuesitos{#1}}
+\newcommand{\getCartaPrecatoriaQuesitosDefesa}{\@cartaPrecatoriaQuesitosDefesa}
+\newcommand{\getCartaPrecatoriaNotificacaoQuesitos}{\@cartaPrecatoriaNotificacaoQuesitos}
+\newcommand{\ValidarRegrasCartaPrecatoria}{%
+  \ValidarRegrasExpediente
+  \ifdefstring{\@sindPartePrincipal}{sindicado}{%
+    \ValidarValorObrigatorio{\@cartaPrecatoriaNotificacaoQuesitos}{notificacao do sindicado para apresentacao de quesitos}%
+  }{}%
+}
+
+% ------------------------------------------------------------
+% 7. ACAREACAO COM PARTICIPANTES DINAMICOS
+% ------------------------------------------------------------
+\newcounter{sindAcareados}
+\gdef\@acareacaoDeclaracoesDinamicas{}
+\gdef\@acareacaoAssinaturasDinamicas{}
+\newcommand{\novaAcareacaoDinamica}{%
+  \setcounter{sindAcareados}{0}%
+  \gdef\@acareacaoDeclaracoesDinamicas{}%
+  \gdef\@acareacaoAssinaturasDinamicas{}%
+}
+\newcommand{\adicionarParticipanteAcareacao}[3]{%
+  \stepcounter{sindAcareados}%
+  \g@addto@macro\@acareacaoDeclaracoesDinamicas{\par\textbf{#1 (#2):} #3}%
+  \g@addto@macro\@acareacaoAssinaturasDinamicas{\assinaturaCentral{#1}{#2}}%
+}
+\newcommand{\ValidarAcareacaoDinamica}{%
+  \ifnum\value{sindAcareados}<2\relax
+    \ClassError{sindicancia}{Acareacao com menos de dois participantes}{Registre ao menos dois depoentes com declaracoes divergentes.}%
+  \fi
+}
+\newcommand{\getAcareacaoDeclaracoesDinamicas}{\@acareacaoDeclaracoesDinamicas}
+\newcommand{\getAcareacaoAssinaturasDinamicas}{\@acareacaoAssinaturasDinamicas}
+
+% ------------------------------------------------------------
+% 8. FOLIACAO E RUBRICA
+% ------------------------------------------------------------
+\newif\ifsind@foliacaoautomatica
+\sind@foliacaoautomaticafalse
+\newcounter{sindfolha}
+\setcounter{sindfolha}{1}
+\newcommand{\foliacaoAutomatica}[1]{\sind@foliacaoautomaticatrue\setcounter{sindfolha}{#1}}
+\newcommand{\foliacaoManual}{\sind@foliacaoautomaticafalse}
+\newcommand{\sind@folhaValor}{\ifsind@foliacaoautomatica\arabic{sindfolha}\else\rule{0.9cm}{0.4pt}\fi}
+\newcommand{\sind@avancarFolha}{\ifsind@foliacaoautomatica\global\advance\c@sindfolha by 1\relax\fi}
+
+\renewcommand{\flbox}{%
+  \tikz[baseline=(F.base)]{%
+    \node[
+      draw=black,line width=0.4pt,minimum width=2.8cm,minimum height=1.5cm,
+      inner sep=2pt,align=left,font=\scriptsize
+    ] (F) {Fl.\ \sind@folhaValor\\Rubrica:\ \rule{1.1cm}{0.4pt}};%
+  }%
+}
+
+\renewcommand{\sind@desenharflbox}{%
+  \ifsind@mostrarflbox
+    \begin{tikzpicture}[remember picture,overlay]
+      \node[
+        anchor=north east,draw=black,line width=0.4pt,
+        minimum width=2.8cm,minimum height=1.5cm,inner sep=2pt,
+        align=left,font=\scriptsize
+      ] at ([xshift=-2.5cm,yshift=-1.0cm]current page.north east)
+      {Fl.\ \sind@folhaValor\\Rubrica:\ \rule{1.1cm}{0.4pt}};
+    \end{tikzpicture}%
+    \sind@avancarFolha
+  \fi
+}
+
+\renewcommand{\sind@desenharflboxpdfpages}{%
+  \ifsind@mostrarflbox
+    \put(\strip@pt\dimexpr\paperwidth-5.3cm\relax,\strip@pt\dimexpr\paperheight-2.5cm\relax){\flbox}%
+    \sind@avancarFolha
+  \fi
+}
+
+% ------------------------------------------------------------
+% 9. CAMPOS DOS ANEXOS A, B, Z E AA
+% ------------------------------------------------------------
+\gdef\@portariaNumero{}
+\gdef\@portariaAnexoOrigem{}
+\gdef\@portariaSinteseFatos{}
+\gdef\@portariaPrazoDias{30}
+\gdef\@portariaEscrivao{}
+\gdef\@portariaPublicacaoBI{}
+\gdef\@portariaAnonimaDocumentoVerificacao{}
+\gdef\@portariaAnonimaEnvolvido{}
+\gdef\@portariaAnonimaOM{}
+\gdef\@portariaAnonimaIrregularidade{}
+\gdef\@portariaAnonimaInteressePublico{}
+\newif\ifsind@denunciaanonimanaojuntada
+\sind@denunciaanonimanaojuntadafalse
+
+\newcommand{\portariaNumero}[1]{\gdef\@portariaNumero{#1}}
+\newcommand{\portariaAnexoOrigem}[1]{\gdef\@portariaAnexoOrigem{#1}}
+\newcommand{\portariaSinteseFatos}[1]{\gdef\@portariaSinteseFatos{#1}}
+\newcommand{\portariaPrazoDias}[1]{\gdef\@portariaPrazoDias{#1}}
+\newcommand{\portariaEscrivao}[1]{\gdef\@portariaEscrivao{#1}}
+\newcommand{\portariaPublicacaoBI}[1]{\gdef\@portariaPublicacaoBI{#1}}
+\newcommand{\portariaAnonimaDocumentoVerificacao}[1]{\gdef\@portariaAnonimaDocumentoVerificacao{#1}}
+\newcommand{\portariaAnonimaEnvolvido}[1]{\gdef\@portariaAnonimaEnvolvido{#1}}
+\newcommand{\portariaAnonimaOM}[1]{\gdef\@portariaAnonimaOM{#1}}
+\newcommand{\portariaAnonimaIrregularidade}[1]{\gdef\@portariaAnonimaIrregularidade{#1}}
+\newcommand{\portariaAnonimaInteressePublico}[1]{\gdef\@portariaAnonimaInteressePublico{#1}}
+\newcommand{\confirmarDenunciaAnonimaNaoJuntada}{\sind@denunciaanonimanaojuntadatrue}
+\newcommand{\getPortariaNumero}{\@portariaNumero}
+\newcommand{\getPortariaAnexoOrigem}{\@portariaAnexoOrigem}
+\newcommand{\getPortariaSinteseFatos}{\@portariaSinteseFatos}
+\newcommand{\getPortariaPrazoDias}{\@portariaPrazoDias}
+\newcommand{\getPortariaEscrivao}{\@portariaEscrivao}
+\newcommand{\getPortariaPublicacaoBI}{\@portariaPublicacaoBI}
+\newcommand{\getPortariaAnonimaDocumentoVerificacao}{\@portariaAnonimaDocumentoVerificacao}
+\newcommand{\getPortariaAnonimaEnvolvido}{\@portariaAnonimaEnvolvido}
+\newcommand{\getPortariaAnonimaOM}{\@portariaAnonimaOM}
+\newcommand{\getPortariaAnonimaIrregularidade}{\@portariaAnonimaIrregularidade}
+\newcommand{\getPortariaAnonimaInteressePublico}{\@portariaAnonimaInteressePublico}
+
+\newcommand{\ValidarPortariaInstauracao}{%
+  \CampoObrigatorio{autoridadeNome}{nome da autoridade instauradora}%
+  \CampoObrigatorio{autoridadePosto}{posto da autoridade instauradora}%
+  \CampoObrigatorio{autoridadeFuncao}{funcao da autoridade instauradora}%
+  \CampoObrigatorio{sindicanteNome}{nome do sindicante}%
+  \CampoObrigatorio{sindicantePosto}{posto ou graduacao do sindicante}%
+  \ValidarValorObrigatorio{\@portariaNumero}{numero da portaria}%
+  \ValidarValorObrigatorio{\@portariaAnexoOrigem}{documento que motivou a sindicancia}%
+  \ValidarValorObrigatorio{\@portariaSinteseFatos}{sintese dos fatos}%
+  \ValidarValorObrigatorio{\@portariaPublicacaoBI}{publicacao da portaria em BI}%
+}
+
+\newcommand{\ValidarPortariaDenunciaAnonima}{%
+  \ValidarPortariaInstauracao
+  \ValidarValorObrigatorio{\@portariaAnonimaDocumentoVerificacao}{documento produzido na verificacao de plausibilidade}%
+  \ValidarValorObrigatorio{\@portariaAnonimaIrregularidade}{irregularidade verificada}%
+  \ValidarValorObrigatorio{\@portariaAnonimaInteressePublico}{interesse publico na apuracao}%
+  \ifsind@denunciaanonimanaojuntada\else
+    \ClassError{sindicancia}{Confirmacao ausente sobre denuncia anonima}{Use \string\confirmarDenunciaAnonimaNaoJuntada depois de verificar que a peca anonima nao integra os autos.}%
+  \fi
+}
+
+\gdef\@solucaoTipo{acolhe}
+\gdef\@solucaoParecer{}
+\gdef\@solucaoFundamentos{}
+\gdef\@solucaoProvidencias{}
+\gdef\@solucaoPublicacaoBI{}
+\gdef\@solucaoNotificados{}
+\newcommand{\solucaoTipo}[1]{\gdef\@solucaoTipo{#1}}
+\newcommand{\solucaoParecer}[1]{\gdef\@solucaoParecer{#1}}
+\newcommand{\solucaoFundamentos}[1]{\gdef\@solucaoFundamentos{#1}}
+\newcommand{\solucaoProvidencias}[1]{\gdef\@solucaoProvidencias{#1}}
+\newcommand{\solucaoPublicacaoBI}[1]{\gdef\@solucaoPublicacaoBI{#1}}
+\newcommand{\solucaoNotificados}[1]{\gdef\@solucaoNotificados{#1}}
+\newcommand{\getSolucaoTipo}{\@solucaoTipo}
+\newcommand{\getSolucaoParecer}{\@solucaoParecer}
+\newcommand{\getSolucaoFundamentos}{\@solucaoFundamentos}
+\newcommand{\getSolucaoProvidencias}{\@solucaoProvidencias}
+\newcommand{\getSolucaoPublicacaoBI}{\@solucaoPublicacaoBI}
+\newcommand{\getSolucaoNotificados}{\@solucaoNotificados}
+\newcommand{\ValidarSolucao}{%
+  \CampoObrigatorio{autoridadeNome}{nome da autoridade instauradora}%
+  \CampoObrigatorio{autoridadePosto}{posto da autoridade instauradora}%
+  \ValidarValorObrigatorio{\@solucaoParecer}{parecer acolhido, parcialmente acolhido ou rejeitado}%
+  \ValidarValorObrigatorio{\@solucaoFundamentos}{fundamentos da solucao}%
+  \ValidarValorObrigatorio{\@solucaoProvidencias}{providencias da solucao}%
+  \ValidarValorObrigatorio{\@solucaoPublicacaoBI}{publicacao da solucao em BI}%
+  \ValidarValorObrigatorio{\@solucaoNotificados}{pessoas notificadas da solucao}%
+}
+
+\gdef\@mudancaRitoAutoridade{}
+\gdef\@mudancaRitoFundamento{}
+\gdef\@mudancaRitoNovasProvas{}
+\newcommand{\mudancaRitoAutoridade}[1]{\gdef\@mudancaRitoAutoridade{#1}}
+\newcommand{\mudancaRitoFundamento}[1]{\gdef\@mudancaRitoFundamento{#1}}
+\newcommand{\mudancaRitoNovasProvas}[1]{\gdef\@mudancaRitoNovasProvas{#1}}
+\newcommand{\getMudancaRitoAutoridade}{\@mudancaRitoAutoridade}
+\newcommand{\getMudancaRitoFundamento}{\@mudancaRitoFundamento}
+\newcommand{\getMudancaRitoNovasProvas}{\@mudancaRitoNovasProvas}
+\newcommand{\ValidarMudancaRito}{%
+  \ValidarValorObrigatorio{\@mudancaRitoAutoridade}{autoridade que decidiu a mudanca de rito}%
+  \ValidarValorObrigatorio{\@mudancaRitoFundamento}{fundamento da mudanca de rito}%
+  \ValidarValorObrigatorio{\@mudancaRitoNovasProvas}{novas investigacoes ou provas necessarias}%
+  \ifdefstring{\@sindRito}{ordinario}{}{%
+    \ClassError{sindicancia}{Anexo AA sem conversao para rito ordinario}{Execute \string\converterRitoParaOrdinario antes de gerar a certidao.}%
+  }%
+  \ValidarValorObrigatorio{\@sindHistoricoTransicoes}{historico da mudanca de rito}%
+}
+
+% ------------------------------------------------------------
+% 10. DOCUMENTOS PROCEDIMENTAIS ADICIONAIS
+% ------------------------------------------------------------
+\gdef\@relatorioComplementarDiligencias{}
+\gdef\@relatorioComplementarConclusoes{}
+\gdef\@relatorioComplementarResultado{ratifica}
+\newcommand{\relatorioComplementarDiligencias}[1]{\gdef\@relatorioComplementarDiligencias{#1}}
+\newcommand{\relatorioComplementarConclusoes}[1]{\gdef\@relatorioComplementarConclusoes{#1}}
+\newcommand{\relatorioComplementarResultado}[1]{\gdef\@relatorioComplementarResultado{#1}}
+\newcommand{\getRelatorioComplementarDiligencias}{\@relatorioComplementarDiligencias}
+\newcommand{\getRelatorioComplementarConclusoes}{\@relatorioComplementarConclusoes}
+\newcommand{\getRelatorioComplementarResultado}{\@relatorioComplementarResultado}
+\newcommand{\ValidarRelatorioComplementar}{%
+  \ValidarValorObrigatorio{\@relatorioComplementarDiligencias}{diligencias complementares realizadas}%
+  \ValidarValorObrigatorio{\@relatorioComplementarConclusoes}{conclusoes do relatorio complementar}%
+}
+
+\gdef\@notificacaoSolucaoNumero{}
+\gdef\@notificacaoSolucaoDestinatario{}
+\gdef\@notificacaoSolucaoResumo{}
+\gdef\@notificacaoSolucaoPrazoRecursoDias{5}
+\gdef\@notificacaoSolucaoFormaCiencia{}
+\newcommand{\notificacaoSolucaoNumero}[1]{\gdef\@notificacaoSolucaoNumero{#1}}
+\newcommand{\notificacaoSolucaoDestinatario}[1]{\gdef\@notificacaoSolucaoDestinatario{#1}}
+\newcommand{\notificacaoSolucaoResumo}[1]{\gdef\@notificacaoSolucaoResumo{#1}}
+\newcommand{\notificacaoSolucaoPrazoRecursoDias}[1]{\gdef\@notificacaoSolucaoPrazoRecursoDias{#1}}
+\newcommand{\notificacaoSolucaoFormaCiencia}[1]{\gdef\@notificacaoSolucaoFormaCiencia{#1}}
+\newcommand{\getNotificacaoSolucaoNumero}{\@notificacaoSolucaoNumero}
+\newcommand{\getNotificacaoSolucaoDestinatario}{\@notificacaoSolucaoDestinatario}
+\newcommand{\getNotificacaoSolucaoResumo}{\@notificacaoSolucaoResumo}
+\newcommand{\getNotificacaoSolucaoPrazoRecursoDias}{\@notificacaoSolucaoPrazoRecursoDias}
+\newcommand{\getNotificacaoSolucaoFormaCiencia}{\@notificacaoSolucaoFormaCiencia}
+\newcommand{\ValidarNotificacaoSolucao}{%
+  \ValidarValorObrigatorio{\@notificacaoSolucaoNumero}{numero da notificacao da solucao}%
+  \ValidarValorObrigatorio{\@notificacaoSolucaoDestinatario}{destinatario da notificacao da solucao}%
+  \ValidarValorObrigatorio{\@notificacaoSolucaoResumo}{resumo da solucao}%
+  \ifnum\@notificacaoSolucaoPrazoRecursoDias<5\relax
+    \ClassError{sindicancia}{Prazo recursal inferior a cinco dias uteis}{O art. 40 assegura cinco dias uteis.}%
+  \fi
+}
+
+% ------------------------------------------------------------
+% 11. RECURSOS E DEPENDENCIAS DE OUTRAS NORMAS
+% ------------------------------------------------------------
+\gdef\@sindRecursosRegistrados{}
+\gdef\@sindDependenciasNormativas{}
+\gdef\@sindPrazosRegistrados{}
+\newcommand{\registrarRecurso}[4]{%
+  \ValidarValorObrigatorio{#1}{tipo do recurso}%
+  \ValidarValorObrigatorio{#2}{data do recurso}%
+  \ValidarValorObrigatorio{#3}{recorrente}%
+  \ValidarValorObrigatorio{#4}{situacao ou resultado do recurso}%
+  \g@addto@macro\@sindRecursosRegistrados{\item \textbf{#1}, em #2, por #3: #4.}%
+}
+\newcommand{\registrarDependenciaNormativa}[3]{%
+  \ValidarValorObrigatorio{#1}{identificacao da norma dependente}%
+  \ValidarValorObrigatorio{#2}{tema regulado pela norma dependente}%
+  \ValidarValorObrigatorio{#3}{observacao de aplicabilidade normativa}%
+  \g@addto@macro\@sindDependenciasNormativas{\item \textbf{#1} -- #2. #3.}%
+}
+\newcommand{\registrarPrazo}[5]{%
+  \ValidarValorObrigatorio{#1}{ato sujeito a prazo}%
+  \ValidarValorObrigatorio{#2}{marco inicial do prazo}%
+  \ValidarValorObrigatorio{#3}{vencimento do prazo}%
+  \ValidarValorObrigatorio{#4}{criterio de contagem do prazo}%
+  \ValidarValorObrigatorio{#5}{situacao do prazo}%
+  \g@addto@macro\@sindPrazosRegistrados{\item \textbf{#1}: de #2 a #3; #4; situação: #5.}%
+}
+\newcommand{\getRecursosRegistrados}{\@sindRecursosRegistrados}
+\newcommand{\getDependenciasNormativas}{\@sindDependenciasNormativas}
+\newcommand{\getPrazosRegistrados}{\@sindPrazosRegistrados}
+\newcommand{\QuadroRecursosRegistrados}{%
+  \ifcsempty{@sindRecursosRegistrados}{Nenhum recurso registrado.}{\begin{itemize}\@sindRecursosRegistrados\end{itemize}}%
+}
+\newcommand{\QuadroDependenciasNormativas}{%
+  \ifcsempty{@sindDependenciasNormativas}{Nenhuma dependência normativa registrada.}{\begin{itemize}\@sindDependenciasNormativas\end{itemize}}%
+}
+\newcommand{\QuadroPrazosRegistrados}{%
+  \ifcsempty{@sindPrazosRegistrados}{Nenhum prazo registrado.}{\begin{itemize}\@sindPrazosRegistrados\end{itemize}}%
+}
+
+% ------------------------------------------------------------
+% 12. APLICABILIDADE DOS MODELOS AO ESTADO PROCESSUAL
+% ------------------------------------------------------------
+\newcommand{\sind@ExigirSindicado}[1]{%
+  \ifdefstring{\@sindNatureza}{processual}{}{%
+    \ClassError{sindicancia}{Documento #1 exige natureza processual}{Converta a apuracao para processual e registre a certidao correspondente.}%
+  }%
+  \ifdefstring{\@sindPartePrincipal}{sindicado}{}{%
+    \ClassError{sindicancia}{Documento #1 exige sindicado}{Defina a parte principal como sindicado.}%
+  }%
+}
+
+\newcommand{\ValidarEstadoDocumento}[1]{%
+  \ValidarRegimeNormativo
+  \ValidarEstadoSindicancia
+  \ifstrequal{#1}{notificacao-previa}{\sind@ExigirSindicado{#1}}{}%
+  \ifstrequal{#1}{notificacao-novo-sindicado}{\sind@ExigirSindicado{#1}}{}%
+  \ifstrequal{#1}{notificacao-diligencias-complementares}{\sind@ExigirSindicado{#1}}{}%
+  \ifstrequal{#1}{comparecimento-sindicado}{\sind@ExigirSindicado{#1}}{}%
+  \ifstrequal{#1}{termo-inquiricao-sindicado}{\sind@ExigirSindicado{#1}}{}%
+  \ifstrequal{#1}{vista-alegacoes-finais}{\sind@ExigirSindicado{#1}}{}%
+  \ifstrequal{#1}{termo-consentimento-prontuario}{\sind@ExigirSindicado{#1}}{}%
+}
+
+% Estado inicial dos auxiliares dinamicos.
+\novaAcareacaoDinamica

@@ -22,6 +22,13 @@ jobs:
         with:
           root_file: |
             tests/all-models.tex
+            tests/cenario-sem-sindicado.tex
+            tests/cenario-conversao-sindicado.tex
+            tests/cenario-sumario.tex
+            tests/cenario-sumario-ordinario.tex
+            tests/cenario-sigiloso.tex
+            tests/cenario-inquiricao-especial.tex
+            tests/cenario-flexibilidade.tex
             examples/demo.tex
           latexmk_use_lualatex: true
           texlive_version: 2026
@@ -51,6 +58,33 @@ jobs:
 
             check_rejected tests/placeholder-validation.tex placeholder-validation "cidade"
             check_rejected tests/medical-consent-validation.tex medical-consent-validation "finalidade"
+
+            check_rule_rejected() {
+              file="$1"
+              name="$2"
+              expected="$3"
+              console_log="build/${name}-console.txt"
+
+              if lualatex --file-line-error --halt-on-error --interaction=nonstopmode --output-directory=build "$file" >"$console_log" 2>&1; then
+                cat "$console_log"
+                echo "::error ::O teste normativo $file foi aceito indevidamente."
+                return 1
+              fi
+
+              if ! grep -Fq "$expected" "$console_log"; then
+                cat "$console_log"
+                echo "::error ::O teste normativo $file falhou por uma razão inesperada."
+                return 1
+              fi
+
+              echo "Regra normativa confirmada: $file"
+            }
+
+            check_rule_rejected tests/falha-sem-sindicado-documento-processual.tex falha-sem-sindicado "notificacao-previa exige natureza processual"
+            check_rule_rejected tests/falha-regime-anterior.tex falha-regime-anterior "Portaria anterior"
+            check_rule_rejected tests/falha-cronologia.tex falha-cronologia "cronologica: despacho"
+            check_rule_rejected tests/falha-prorrogacao-48h.tex falha-prorrogacao-48h "antecedencia inferior a 48 horas"
+            check_rule_rejected tests/falha-inquiricao-duracao.tex falha-inquiricao-duracao "superior a quatro horas"
           args: -file-line-error -halt-on-error -interaction=nonstopmode -outdir=build
 
       - name: Publicar PDFs da compilação

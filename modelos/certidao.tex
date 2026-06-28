@@ -5,7 +5,7 @@
 % Modelo conforme o anexo V de referência.
 % ============================================================
 
-\pdfbookmark[1]{Certidão}{certidao}
+\pdfbookmark[1]{Certidão}{certidao-\getChaveCronologica}
 
 \ValidarCertidao
 
@@ -22,16 +22,31 @@
 
 \vspace{3em}
 
-\noindent
-Certifico que, em \getCertidaoDataTerminoPrazo, decorreu o prazo concedido por meio do
-\getCertidaoTipoDocumento{} nº \getCertidaoNumeroDocumento, de
-\getCertidaoDataDocumento, sem que o sindicado apresentasse suas razões de defesa
-escritas.
+\ConteudoDocumentoFlexivel{%
+\SeCampoPreenchido{certidaoTexto}{%
+  \noindent\getCertidaoTexto
+}{%
+  \SeCertidaoVariante{ausencia-sindicado}{%
+    \noindent Certifico que, até a presente data, não foi identificada pessoa na condição de sindicada, permanecendo a apuração voltada à elucidação objetiva do fato.
+  }{%
+    \SeCertidaoVariante{ciencia}{%
+      \noindent Certifico que foi realizada a seguinte ciência nos autos: \getCertidaoCiencia.
+    }{%
+      \noindent Certifico que, em \getCertidaoDataTerminoPrazo, decorreu o prazo concedido por meio do
+      \getCertidaoTipoDocumento{} nº \getCertidaoNumeroDocumento, de
+      \getCertidaoDataDocumento, sem que o sindicado apresentasse suas razões de defesa
+      escritas.
+    }%
+  }%
+}%
 
 \vspace{1em}
 
 \noindent
 Do que para constar, lavrei o presente termo.
+
+\SeCampoPreenchido{certidaoCiencia}{\par\vspace{1em}\noindent\getCertidaoCiencia}
+}
 
 \vspace{3em}
 

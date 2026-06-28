@@ -6,6 +6,7 @@
 \pdfbookmark[1]{Notificação de Novo Sindicado}{notificacao-novo-sindicado-\getNotificacaoNovoSindicadoNumero}
 
 \ValidarNotificacaoNovoSindicado
+\ValidarRegrasNotificacao
 
 \clearpage
 \thispagestyle{empty}
@@ -36,15 +37,19 @@ Anexo: \getNotificacaoNovoSindicadoAnexos
 
 \vspace{1cm}
 
-Venho, por meio deste, notificar Vossa Senhoria que, a partir da data de ciência (ou recebimento) deste documento, passará à condição de sindicado na sindicância instaurada para apurar os fatos (ou irregularidades) a que se refere a \getPortaria, razão pela qual lhe é facultada vista dos respectivos autos, no local \getNotificacaoNovoSindicadoLocalVista, bem como assegurado o direito de, pessoalmente ou por intermédio de advogado constituído, no prazo de três dias úteis contados de sua inquirição, oferecer defesa prévia, arrolar testemunhas, juntar documentos e requerer o que julgar de direito; podendo, ainda, assistir a depoimentos, oferecer alegações finais e praticar todos os demais atos necessários ao exercício do contraditório e da ampla defesa.
+\ConteudoDocumentoFlexivel{%
+Venho, por meio deste, notificar Vossa Senhoria, pelo canal \getNotificacaoCanal, que passa à condição de sindicado em razão dos seguintes fatos específicos: \getNotificacaoFatosEspecificos. A partir da ciência, é-lhe facultada vista dos autos no local \getNotificacaoNovoSindicadoLocalVista e assegurado o exercício do contraditório e da ampla defesa.
 
 \SeCampoPreenchido{notNovoSindDataReinquiricao}{%
 \vspace{1em}
 
-A audiência para sua reinquirição está marcada para o dia \getNotificacaoNovoSindicadoDataReinquiricao, às \getNotificacaoNovoSindicadoHoraReinquiricao, no \getNotificacaoNovoSindicadoLocalReinquiricao.
+A audiência para sua reinquirição está marcada para o dia \getNotificacaoNovoSindicadoDataReinquiricao, às \getNotificacaoNovoSindicadoHoraReinquiricao, no \getNotificacaoNovoSindicadoLocalReinquiricao, observada a antecedência de \getNotificacaoAntecedenciaDiasUteis\ dias úteis.
+}
 }
 
 \reciboCienciaSindicado
+
+\noindent\textbf{Forma de ciência:} \getNotificacaoFormaCiencia
 
 \assinaturaSindicante
 

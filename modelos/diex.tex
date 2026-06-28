@@ -7,6 +7,7 @@
 \pdfbookmark[1]{DIEx \getDiexNumero}{diex-\getDiexNumero}
 
 \ValidarDiex
+\ValidarRegrasExpediente
 
 \clearpage
 \thispagestyle{empty}
@@ -38,12 +39,16 @@
 
 \noindent\textbf{Assunto:} \getDiexAssunto
 
+\noindent\textbf{Finalidade:} \getExpedienteFinalidade
+
+\noindent\textbf{Prioridade:} \getExpedientePrioridade
+
 \SeCampoPreenchido{diexReferencia}{\noindent\textbf{Referência:} \getDiexReferencia\par}
 \SeCampoPreenchido{diexAnexos}{\noindent\textbf{Anexo:} \getDiexAnexos\par}
 
 \vspace{1em}
 
-\getDiexTexto
+\ConteudoDocumentoFlexivel{\getDiexTexto}
 
 \assinaturaSindicante
 

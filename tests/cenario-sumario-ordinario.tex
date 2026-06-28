@@ -1,0 +1,10 @@
+\documentclass[sumario,permitir-placeholders]{sindicancia}
+\input{tests/fixture-sem-sindicado.tex}
+\ritoSindicancia{sumario}
+\begin{document}
+\input{dados/dados-anexo-a-portaria-instauracao.tex}
+\GerarDocumento{portaria-instauracao}
+\converterRitoParaOrdinario{2 de maio de 2026}{necessidade de instrução incompatível com a simplicidade do rito sumário}
+\input{dados/dados-anexo-aa-certidao-modificacao-rito.tex}
+\GerarDocumento{certidao-modificacao-rito}
+\end{document}
