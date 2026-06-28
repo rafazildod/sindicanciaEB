@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -86,6 +86,8 @@ jobs:
             check_rule_rejected tests/falha-cronologia.tex falha-cronologia "cronologica: despacho"
             check_rule_rejected tests/falha-prorrogacao-48h.tex falha-prorrogacao-48h "antecedencia inferior a 48 horas"
             check_rule_rejected tests/falha-inquiricao-duracao.tex falha-inquiricao-duracao "superior a quatro horas"
+
+            cp build/demo.pdf build/sindicanciaEB-demo.pdf
           args: -file-line-error -halt-on-error -interaction=nonstopmode -outdir=build
 
       - name: Publicar PDFs da compilação
@@ -95,3 +97,13 @@ jobs:
           path: build/*.pdf
           if-no-files-found: error
           retention-days: 14
+
+      - name: Criar release da versão
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Versão ${{ github.ref_name }}
+          body_path: CHANGELOG.md
+          files: build/sindicanciaEB-demo.pdf
+          fail_on_unmatched_files: true
+          make_latest: true
