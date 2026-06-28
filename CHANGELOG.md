@@ -9,6 +9,8 @@ Versão principal de adequação à Portaria C Ex nº 2.394/2024 e às EB10-IG-0
 - estado formal de rito, natureza, parte principal, sigilo e transições;
 - suporte a sindicância sem sindicado e posterior conversão processual;
 - implementação dos anexos A, B, Z e AA;
+- cabeçalhos das portarias A e B organizados em linhas próprias, no padrão visual de DIEx;
+- PDF demonstrativo público com exemplos de todos os anexos, do A ao AA;
 - certidões genéricas e variantes normativas;
 - modos de documento padrão, adaptado e personalizado;
 - participantes, prazos, recursos e dependências normativas estruturados;
