@@ -99,10 +99,14 @@ jobs:
           retention-days: 14
 
       - name: Criar release da versão
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: >-
+          startsWith(github.ref, 'refs/tags/v') ||
+          (github.ref == 'refs/heads/codex/conformidade-portaria-2024' &&
+           github.event.head_commit.message == 'Publica release v2.0.0')
         uses: softprops/action-gh-release@v2
         with:
-          name: Versão ${{ github.ref_name }}
+          tag_name: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || 'v2.0.0' }}
+          name: Versão ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || 'v2.0.0' }}
           body_path: CHANGELOG.md
           files: build/sindicanciaEB-demo.pdf
           fail_on_unmatched_files: true
