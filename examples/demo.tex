@@ -1,16 +1,16 @@
-% PDF demonstrativo público. Todos os nomes e números são fictícios.
-\documentclass{sindicancia}
+% PDF demonstrativo público. Todos os nomes, números e fatos são fictícios.
+% A opção permitir-placeholders é exclusiva desta demonstração e dos testes.
+\documentclass[permitir-placeholders]{sindicancia}
 
-\dataPublicacaoPortariaISO{20260610}
-\dataRecebimentoPortariaISO{20260615}
-\ritoSindicancia{ordinario}
+\dataPublicacaoPortariaISO{20260501}
+\dataRecebimentoPortariaISO{20260502}
+\ritoSindicancia{sumario}
 \naturezaSindicancia{processual}
 \partePrincipalSindicancia{sindicado}
 \classificacaoSindicancia{ostensiva}
-\foliacaoAutomatica{1}
 
-\dia{15}
-\mes{junho}
+\dia{2}
+\mes{maio}
 \ano{2026}
 \cidade{Salvador/BA}
 
@@ -20,7 +20,7 @@
 \omNomeHistorico{Unidade-Modelo}
 
 \nup{00001.000001/2026-11}
-\portaria{Portaria nº 12, de 10 de junho de 2026, do Comandante do 1º Batalhão de Demonstração}
+\portaria{Portaria nº 12, de 1º de maio de 2026, do Comandante do 1º Batalhão de Demonstração}
 \objeto{apurar, em cenário inteiramente fictício, divergência no registro de entrega de material de expediente}
 
 \autoridadeNome{Carlos Exemplo}
@@ -29,14 +29,25 @@
 
 \sindicanteNome{Ana Modelo}
 \sindicantePosto{Capitão}
-\sindicanteOM{\getOm}
+\sindicanteOM{1º Batalhão de Demonstração}
 
 \sindicadoNome{João Fictício}
 \sindicadoPosto{2º Sargento}
 \sindicadoSU{Seção Administrativa}
-\sindicadoOM{\getOm}
+\sindicadoOM{1º Batalhão de Demonstração}
+\sindicadoIdentidade{000000000 MD/EB}
+\sindicadoCPF{000.000.000-00}
+\sindicadoNascimento{1º de janeiro de 1990}
+\sindicadoNaturalidade{Salvador/BA}
+\sindicadoEstadoCivil{casado}
+\sindicadoFiliacao{Pedro Fictício e Maria Fictícia}
+\sindicadoResidencia{Rua do Exemplo, nº 100, Salvador/BA}
+\sindicadoCelular{(00) 00000-0000}
 
-% Marca todas as páginas para impedir uso acidental como documento real.
+\escrivaoNome{Marcos Demonstração}
+\escrivaoPosto{1º Tenente}
+\prazo{3 (três) dias úteis}
+
 \AddToHook{shipout/background}{%
   \begin{tikzpicture}[remember picture,overlay]
     \node[rotate=45,scale=4.2,text opacity=0.08] at (current page.center)
@@ -46,47 +57,185 @@
 
 \begin{document}
 
+\pdfbookmark[0]{Guia demonstrativo dos anexos}{guia-demonstrativo}
+\thispagestyle{empty}
+\cabecalhoInstitucional
+\vspace{1.5em}
+\begin{center}
+  {\Large\textbf{DEMONSTRAÇÃO COMPLETA DOS ANEXOS, DO A AO AA}}\\[0.5em]
+  {\large EB10-IG-09.001 - versão 2.0.0 do projeto}
+\end{center}
+\vspace{1em}
+
+Este PDF é a porta de entrada visual do projeto. Ele reúne um exemplo fictício de
+cada anexo implementado, preservando a ordem normativa. Os anexos A, B, Z e AA
+são mostrados apenas como referência da Seção de Apoio Jurídico e não são
+elaborados pelo sindicante.
+
+\vspace{1em}
+\noindent
+\begin{minipage}[t]{0.48\textwidth}
+\textbf{Anexos A a N}
+\begin{itemize}
+  \item[A] Portaria de instauração
+  \item[B] Portaria por denúncia anônima
+  \item[C] Capa dos autos
+  \item[D] Termo de abertura
+  \item[E] Juntada inicial
+  \item[F] Designação de escrivão
+  \item[G] Compromisso de escrivão
+  \item[H] Despacho
+  \item[I] Notificação prévia
+  \item[J] Notificação de novo sindicado
+  \item[K] Diligências complementares
+  \item[L] Juntada posterior
+  \item[M] Comparecimento de sindicado
+  \item[N] Comparecimento de testemunha
+\end{itemize}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\textbf{Anexos O a AA}
+\begin{itemize}
+  \item[O] Carta precatória
+  \item[P] Inquirição de testemunha
+  \item[Q] Inquirição de sindicado
+  \item[R] Substituição de sindicante
+  \item[S] Acareação
+  \item[T] Encerramento da instrução
+  \item[U] Vista para alegações finais
+  \item[V] Certidão
+  \item[W] Relatório
+  \item[X] Termo de encerramento
+  \item[Y] DIEx de remessa
+  \item[Z] Solução
+  \item[AA] Modificação do rito
+\end{itemize}
+\end{minipage}
+
+\vfill
+\begin{center}
+\textbf{Material exclusivamente demonstrativo - sem validade administrativa.}
+\end{center}
+\clearpage
+
+% ANEXO A - referência da Seção de Apoio Jurídico
+\input{dados/dados-anexo-a-portaria-instauracao.tex}
+\GerarDocumento{portaria-instauracao}
+
+% ANEXO B - referência da Seção de Apoio Jurídico
+\input{dados/dados-anexo-b-portaria-denuncia-anonima.tex}
+\GerarDocumento{portaria-denuncia-anonima}
+
+% ANEXO C
+\input{dados/dados-anexo-c-capa.tex}
 \GerarDocumento{capa}
 
-\dataDocumento{15}{junho}{2026}{Salvador/BA}
-\chaveCronologica{20260615}
+% ANEXO D
+\input{dados/dados-anexo-d-termo-abertura.tex}
 \GerarDocumento{termo-abertura}
 
-\dataDocumento{16}{junho}{2026}{Salvador/BA}
-\chaveCronologica{20260616}
-\novoDespacho
-\despachoNumero{1}
-\despachoTexto{%
-Juntar aos autos o relatório fictício de conferência do material e solicitar à
-Seção Administrativa a relação de cautelas emitidas no período de 1º a 10 de
-junho de 2026.
-}
+% ANEXO E
+\input{dados/dados-anexo-e-l-juntada1.tex}
+\GerarDocumento{juntada}
+
+% ANEXO F
+\input{dados/dados-anexo-f-designacao-escrivao.tex}
+\GerarDocumento{designacao-escrivao}
+
+% ANEXO G
+\input{dados/dados-anexo-g-compromisso-escrivao.tex}
+\GerarDocumento{compromisso-escrivao}
+
+% ANEXO H
+\input{dados/dados-anexo-h-despacho1.tex}
 \GerarDocumento{despacho}
 
-\dataDocumento{25}{junho}{2026}{Salvador/BA}
-\chaveCronologica{20260625}
-\novoRelatorio
-\relatorioIntroducao{%
-Esta demonstração reproduz a estrutura de um relatório sem utilizar fatos ou
-pessoas reais. A apuração fictícia trata de \getObjeto.
+% ANEXO I
+\input{dados/dados-anexo-i-notificacao-previa1.tex}
+\GerarDocumento{notificacao-previa}
+
+% ANEXO J
+\input{dados/dados-anexo-j-notificacao-novo-sindicado.tex}
+\GerarDocumento{notificacao-novo-sindicado}
+
+% ANEXO K
+\input{dados/dados-anexo-k-notificacao-diligencias-complementares.tex}
+\GerarDocumento{notificacao-diligencias-complementares}
+
+% ANEXO L - segunda aplicação do modelo de juntada
+\dataDocumento{8}{maio}{2026}{Salvador/BA}
+\chaveCronologica{20260508}
+\novaJuntada
+\juntadaNumero{2}
+\juntadaArquivo{documentos/docjuntada1.pdf}
+\juntadaItens{%
+  \item Alegações e documentos fictícios apresentados para demonstração do Anexo L.
 }
-\relatorioDiligencias{%
-Foram simuladas a conferência dos registros, a juntada das cautelas e a oitiva
-dos envolvidos, sem vínculo com autos administrativos reais.
-}
-\relatorioParteExpositiva{%
-A comparação fictícia identificou uma divergência de lançamento posteriormente
-corrigida, sem indícios de extravio, dano ao erário ou conduta disciplinar.
-}
-\relatorioParteConclusiva{%
-Conclui-se, no cenário demonstrativo, pela inexistência de irregularidade e pela
-padronização do registro de entrega de material.
-}
+\GerarDocumento{juntada}
+
+% ANEXO M
+\input{dados/dados-anexo-m-comparecimento-sindicado.tex}
+\GerarDocumento{comparecimento-sindicado}
+
+% ANEXO N
+\input{dados/dados-anexo-n-comparecimento-testemunha.tex}
+\GerarDocumento{comparecimento-testemunha}
+
+% ANEXO O
+\input{dados/dados-anexo-o-carta-precatoria1.tex}
+\GerarDocumento{carta-precatoria}
+
+% ANEXO P
+\input{dados/dados-anexo-p-inquiricao-testemunha1.tex}
+\GerarDocumento{termo-inquiricao-testemunha}
+
+% ANEXO Q
+\input{dados/dados-anexo-q-inquiricao-sindicado1.tex}
+\GerarDocumento{termo-inquiricao-sindicado}
+
+% ANEXO R
+\input{dados/dados-anexo-r-substituicao-sindicante.tex}
+\GerarDocumento{substituicao-sindicante}
+
+% ANEXO S
+\input{dados/dados-anexo-s-acareacao.tex}
+\dataDocumento{13}{maio}{2026}{Salvador/BA}
+\chaveCronologica{20260513}
+\GerarDocumento{acareacao}
+
+% ANEXO T
+\input{dados/dados-anexo-t-encerramento-instrucao.tex}
+\GerarDocumento{termo-encerramento-instrucao}
+
+% ANEXO U
+\input{dados/dados-anexo-u-vista-alegacoes-finais.tex}
+\GerarDocumento{vista-alegacoes-finais}
+
+% ANEXO V
+\input{dados/dados-anexo-v-certidao.tex}
+\GerarDocumento{certidao}
+
+% ANEXO W
+\input{dados/dados-anexo-w-relatorio.tex}
 \GerarDocumento{relatorio}
 
-\dataDocumento{26}{junho}{2026}{Salvador/BA}
-\chaveCronologica{20260626}
-\novoTermoEncerramento
+% ANEXO X
+\input{dados/dados-anexo-x-termo-encerramento.tex}
 \GerarDocumento{termo-encerramento}
+
+% ANEXO Y - encerra o intervalo da foliação do sindicante
+\input{dados/dados-anexo-y-diex-remessa.tex}
+\GerarDocumento{diex-remessa}
+
+% ANEXO Z - referência da Seção de Apoio Jurídico
+\input{dados/dados-anexo-z-solucao.tex}
+\GerarDocumento{solucao-sindicancia}
+
+% ANEXO AA - referência da Seção de Apoio Jurídico
+\converterRitoParaOrdinario{26 de maio de 2026}{necessidade fictícia de novas provas incompatíveis com o rito sumário}
+\input{dados/dados-anexo-aa-certidao-modificacao-rito.tex}
+\dataDocumento{26}{maio}{2026}{Salvador/BA}
+\chaveCronologica{20260526}
+\GerarDocumento{certidao-modificacao-rito}
 
 \end{document}

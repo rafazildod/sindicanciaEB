@@ -128,7 +128,8 @@
 % 6. CAIXA "Fl. ____" GLOBAL
 % ============================================================
 \newif\ifsind@mostrarflbox
-\sind@mostrarflboxtrue
+\sind@mostrarflboxfalse
+\newif\ifsind@mostrarflboxanterior
 
 % Usada para evitar caixa duplicada em páginas importadas por pdfpages.
 % Nessas páginas, a caixa é aplicada diretamente pelo picturecommand do \incluirDocumento.
@@ -137,6 +138,13 @@
 
 \newcommand{\MostrarCaixaFolha}{\sind@mostrarflboxtrue}
 \newcommand{\OcultarCaixaFolha}{\sind@mostrarflboxfalse}
+\newcommand{\SuspenderCaixaFolha}{%
+  \ifsind@mostrarflbox\sind@mostrarflboxanteriortrue\else\sind@mostrarflboxanteriorfalse\fi
+  \OcultarCaixaFolha
+}
+\newcommand{\RestaurarCaixaFolha}{%
+  \ifsind@mostrarflboxanterior\MostrarCaixaFolha\else\OcultarCaixaFolha\fi
+}
 
 % Caixa com dimensão externa controlada: 2 cm x 1.5 cm.
 \newcommand{\flbox}{%

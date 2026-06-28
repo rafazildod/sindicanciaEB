@@ -1,19 +1,21 @@
 % ANEXO B - PORTARIA DE INSTAURACAO DECORRENTE DE DENUNCIA ANONIMA
+% Referência da Seção de Apoio Jurídico; não é elaborado pelo sindicante.
+\AvisoModeloApoioJuridico{B}
 \pdfbookmark[1]{Portaria por Denúncia Anônima \getPortariaNumero}{portaria-anonima-\getPortariaNumero}
 \ValidarPortariaDenunciaAnonima
 
 \clearpage
-\OcultarCaixaFolha
+\SuspenderCaixaFolha
 \thispagestyle{empty}
 \cabecalhoInstitucional
 \vspace{2em}
 
-\noindent\textbf{Portaria nº \getPortariaNumero}
+\noindent\textbf{Portaria nº \getPortariaNumero}\par
 \begin{flushright}\localData\end{flushright}
-\noindent\textbf{Do} \getAutoridadePosto\ \getAutoridadeNome, \getAutoridadeFuncao
-\noindent\textbf{Ao Sr.} \getSindicantePosto\ \getSindicanteNome
-\noindent\textbf{Assunto:} instauração de sindicância
-\noindent\textbf{Anexo:} \getPortariaAnonimaDocumentoVerificacao
+\noindent\textbf{Do} \getAutoridadePosto\ \getAutoridadeNome, \getAutoridadeFuncao\par
+\noindent\textbf{Ao Sr.} \getSindicantePosto\ \getSindicanteNome\par
+\noindent\textbf{Assunto:} instauração de sindicância\par
+\noindent\textbf{Anexos:} \getPortariaAnonimaDocumentoVerificacao\par
 
 \vspace{1em}
 \ConteudoDocumentoFlexivel{%
@@ -31,4 +33,4 @@ ser concluídos no prazo de \getPortariaPrazoDias\ dias corridos.
 \noindent\textbf{Publicação:} \getPortariaPublicacaoBI
 \assinaturaAutoridade
 \clearpage
-\MostrarCaixaFolha
+\RestaurarCaixaFolha

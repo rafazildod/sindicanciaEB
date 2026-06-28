@@ -8,7 +8,7 @@ Modelos em LaTeX para produzir e padronizar peças de sindicância no âmbito do
 
 O projeto separa o conteúdo da formatação: o usuário preenche arquivos simples na pasta `dados/`, escolhe as peças no `main.tex` e compila um PDF. Não é necessário alterar os modelos nem a classe LaTeX para o uso normal.
 
-[Consultar o PDF demonstrativo](https://github.com/rafazildod/sindicanciaEB/releases/latest/download/sindicanciaEB-demo.pdf), produzido somente com dados fictícios.
+[Consultar o PDF demonstrativo completo](https://github.com/rafazildod/sindicanciaEB/releases/latest/download/sindicanciaEB-demo.pdf), produzido somente com dados fictícios e com um exemplo de cada anexo, do A ao AA.
 
 > [!IMPORTANT]
 > Este é um projeto independente e não oficial. Ele auxilia na preparação material dos documentos, mas não substitui a norma vigente, a orientação da autoridade competente nem a revisão jurídica e administrativa de cada caso.
@@ -26,7 +26,7 @@ As incompatibilidades e orientações de migração da versão 2.0.0 estão no [
 - modos de texto padrão, adaptado e personalizado sem editar `modelos/*.tex`;
 - validação de datas, cronologia, prazos, aplicabilidade e placeholders;
 - inclusão de PDFs digitalizados nas juntadas;
-- foliação automática ou manual, com campo de rubrica;
+- caixa `Fl. ____` para preenchimento manual pelo sindicante, no intervalo correto dos autos;
 - matriz de testes com cenários normativos positivos e negativos.
 
 ## Antes de começar: proteja os dados
@@ -187,6 +187,8 @@ sindicanciaEB/
 | Z | Solução | `dados/dados-anexo-z-solucao.tex` | `modelos/solucao-sindicancia.tex` |
 | AA | Certidão de modificação do rito | `dados/dados-anexo-aa-certidao-modificacao-rito.tex` | `modelos/certidao-modificacao-rito.tex` |
 
+Os anexos **A, B, Z e AA são de competência da Seção de Apoio Jurídico**. Eles permanecem no repositório somente como referência e para validação técnica; não devem ser produzidos pelo sindicante.
+
 ### Modelos auxiliares
 
 | Documento | Dados | Modelo |
@@ -264,6 +266,18 @@ Cada documento deve informar sua data própria e uma chave cronológica:
 ```
 
 O projeto rejeita peças sem data específica ou colocadas antes de outra com chave anterior. A capa é a exceção, pois não representa um ato cronológico.
+
+## Foliação manual
+
+A numeração é preenchida manualmente pelo sindicante no quadro `Fl. ____`:
+
+- a capa não recebe quadro nem número de folha;
+- o quadro começa no termo de abertura;
+- permanece nas peças e nos documentos juntados durante a instrução;
+- termina antes do DIEx de remessa, que não recebe o quadro;
+- os anexos A, B, Z e AA também não recebem o quadro, pois pertencem à Seção de Apoio Jurídico.
+
+O LaTeX não numera nem incrementa as folhas automaticamente.
 
 Nos termos em formato de ata, alguns campos aceitam a data por extenso. Se o campo textual ficar vazio, o modelo tenta montá-la a partir de `\dataDocumento` ou da data geral.
 
@@ -351,7 +365,7 @@ latexmk -lualatex -halt-on-error -interaction=nonstopmode -outdir=build tests/al
 
 O PDF de teste será criado em `build/all-models.pdf`. O teste confirma que os modelos compilam em conjunto com os dados fictícios; ele não valida juridicamente o conteúdo.
 
-O GitHub Actions executa também cenários sem sindicado, de conversão, dos dois ritos, de sigilo, de inquirição especial e dos três modos de texto. Testes negativos confirmam que o projeto rejeita uso processual sem sindicado, regime anterior a 2025, cronologia invertida, prorrogação intempestiva e inquirição excessiva sem pausa ou continuação.
+O GitHub Actions executa também cenários sem sindicado, de conversão, dos dois ritos, de sigilo, de inquirição especial, dos três modos de texto e do intervalo da foliação manual. Testes negativos confirmam que o projeto rejeita uso processual sem sindicado, regime anterior a 2025, cronologia invertida, prorrogação intempestiva e inquirição excessiva sem pausa ou continuação.
 
 A opção de classe `permitir-placeholders` existe exclusivamente para a suíte de regressão e para demonstrações públicas. Não a use em documentos reais.
 

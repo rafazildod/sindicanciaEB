@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -29,6 +29,7 @@ jobs:
             tests/cenario-sigiloso.tex
             tests/cenario-inquiricao-especial.tex
             tests/cenario-flexibilidade.tex
+            tests/cenario-foliacao-manual.tex
             examples/demo.tex
           latexmk_use_lualatex: true
           texlive_version: 2026
@@ -85,6 +86,8 @@ jobs:
             check_rule_rejected tests/falha-cronologia.tex falha-cronologia "cronologica: despacho"
             check_rule_rejected tests/falha-prorrogacao-48h.tex falha-prorrogacao-48h "antecedencia inferior a 48 horas"
             check_rule_rejected tests/falha-inquiricao-duracao.tex falha-inquiricao-duracao "superior a quatro horas"
+
+            cp build/demo.pdf build/sindicanciaEB-demo.pdf
           args: -file-line-error -halt-on-error -interaction=nonstopmode -outdir=build
 
       - name: Publicar PDFs da compilação
@@ -94,3 +97,28 @@ jobs:
           path: build/*.pdf
           if-no-files-found: error
           retention-days: 14
+
+      - name: Posicionar tag da versão no commit validado
+        if: >-
+          github.ref == 'refs/heads/codex/conformidade-portaria-2024' &&
+          (github.event.head_commit.message == 'Publica release v2.0.0' ||
+           github.event.head_commit.message == 'Corrige alvo do release v2.0.0')
+        run: |
+          git tag -f v2.0.0 "${GITHUB_SHA}"
+          git push origin refs/tags/v2.0.0 --force
+
+      - name: Criar release da versão
+        if: >-
+          startsWith(github.ref, 'refs/tags/v') ||
+          (github.ref == 'refs/heads/codex/conformidade-portaria-2024' &&
+           (github.event.head_commit.message == 'Publica release v2.0.0' ||
+            github.event.head_commit.message == 'Corrige alvo do release v2.0.0'))
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || 'v2.0.0' }}
+          target_commitish: ${{ github.sha }}
+          name: Versão ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || 'v2.0.0' }}
+          body_path: CHANGELOG.md
+          files: build/sindicanciaEB-demo.pdf
+          fail_on_unmatched_files: true
+          make_latest: true

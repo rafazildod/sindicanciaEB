@@ -1,19 +1,21 @@
 % ANEXO A - PORTARIA DE INSTAURACAO
+% Referência da Seção de Apoio Jurídico; não é elaborado pelo sindicante.
+\AvisoModeloApoioJuridico{A}
 \pdfbookmark[1]{Portaria de Instauração \getPortariaNumero}{portaria-instauracao-\getPortariaNumero}
 \ValidarPortariaInstauracao
 
 \clearpage
-\OcultarCaixaFolha
+\SuspenderCaixaFolha
 \thispagestyle{empty}
 \cabecalhoInstitucional
 \vspace{2em}
 
-\noindent\textbf{Portaria nº \getPortariaNumero}
+\noindent\textbf{Portaria nº \getPortariaNumero}\par
 \begin{flushright}\localData\end{flushright}
-\noindent\textbf{Do} \getAutoridadePosto\ \getAutoridadeNome, \getAutoridadeFuncao
-\noindent\textbf{Ao Sr.} \getSindicantePosto\ \getSindicanteNome
-\noindent\textbf{Assunto:} instauração de sindicância
-\noindent\textbf{Anexo:} \getPortariaAnexoOrigem
+\noindent\textbf{Do} \getAutoridadePosto\ \getAutoridadeNome, \getAutoridadeFuncao\par
+\noindent\textbf{Ao Sr.} \getSindicantePosto\ \getSindicanteNome\par
+\noindent\textbf{Assunto:} instauração de sindicância\par
+\noindent\textbf{Anexos:} \getPortariaAnexoOrigem\par
 
 \vspace{1em}
 \ConteudoDocumentoFlexivel{%
@@ -33,4 +35,4 @@ devendo ser lavrado o respectivo termo de compromisso.%
 \noindent\textbf{Publicação:} \getPortariaPublicacaoBI
 \assinaturaAutoridade
 \clearpage
-\MostrarCaixaFolha
+\RestaurarCaixaFolha

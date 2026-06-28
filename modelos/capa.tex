@@ -3,8 +3,6 @@
 % Arquivo: modelos/capa.tex
 % ============================================================
 
-\OcultarCaixaFolha
-
 \pdfbookmark[1]{Capa - Autos de Sindicância}{capa-autos}
 
 \CampoObrigatorio{nup}{NUP da sindicância}
@@ -13,6 +11,7 @@
 \CampoObrigatorio{objeto}{objeto da sindicância}
 
 \clearpage
+\SuspenderCaixaFolha
 \thispagestyle{empty}
 
 \cabecalhoInstitucional
@@ -42,4 +41,4 @@
 \noindent\textbf{OBJETO:} \getObjeto
 
 \clearpage
-\MostrarCaixaFolha
+\RestaurarCaixaFolha
